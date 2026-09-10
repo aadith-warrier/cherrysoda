@@ -29,3 +29,6 @@ wandb/
 .env
 *.key
 secrets.yaml
+# pixi environments
+.pixi/*
+!.pixi/config.toml

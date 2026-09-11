@@ -1,9 +1,8 @@
-# Config for Dream-7B (second base DLM, optional — only pursue once LLaDA is solid)
 name: dream_7b
 wrapper: dream
-hf_repo_id: "Dream-org/Dream-v0-Instruct-7B"   # VERIFY exact repo id before first run
+hf_repo_id: "Dream-org/Dream-v0-Instruct-7B"  
 dtype: bfloat16
-device: "cuda:1"                    # separate GPU from LLaDA so they can run concurrently
+device: "cuda:1"                   
 
 generation:
   max_new_tokens: 512

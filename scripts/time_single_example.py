@@ -1,14 +1,3 @@
-"""
-RUN THIS FIRST, before anything else in Week 1.
-
-Times a single example end-to-end so you can set realistic sample sizes
-for the prelim runs. Also doubles as the "does intermediate state
-extraction actually work" sanity check, since that's the riskiest unknown.
-
-Usage:
-    python scripts/time_single_example.py --model configs/model/llada_8b.yaml --dataset configs/dataset/gsm8k.yaml
-"""
-
 import argparse
 import time
 

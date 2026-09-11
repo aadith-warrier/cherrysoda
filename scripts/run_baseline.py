@@ -1,13 +1,3 @@
-"""
-Single entrypoint for every baseline run.
-
-Usage:
-    python scripts/run_baseline.py --config configs/run/prelim_vanilla_gsm8k.yaml
-
-This is deliberately the ONLY way runs should be launched — no hand-edited
-one-off scripts — so every run is reproducible from its config file alone.
-"""
-
 import argparse
 import importlib
 import json
@@ -27,7 +17,6 @@ def load_yaml(path):
 
 
 def get_baseline_module(baseline_name: str):
-    # maps "vanilla" -> baselines/vanilla.py, "dapd" -> baselines/dapd.py, etc.
     return importlib.import_module(f"baselines.{baseline_name}")
 
 
@@ -44,7 +33,6 @@ def main():
     log_dir = os.path.join("logs", run_id)
     os.makedirs(log_dir, exist_ok=True)
 
-    # Snapshot exact configs used, for reproducibility
     with open(os.path.join(log_dir, "config_used.yaml"), "w") as f:
         yaml.dump({"run": run_cfg, "model": model_cfg}, f)
 

@@ -1,6 +1,6 @@
 import time
 import torch
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.models.base import BaseDLMWrapper, GenerationResult, DenoisingStepRecord
 
@@ -12,11 +12,11 @@ class LLaDAWrapper(BaseDLMWrapper):
         dtype = getattr(torch, self.config.get("dtype", "bfloat16"))
 
         self.tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
-        self.model = AutoModel.from_pretrained(
-            repo_id, torch_dtype=dtype, trust_remote_code=True
+        self.model = AutoModelForCausalLM.from_pretrained(
+            repo_id, trust_remote_code=True, torch_dtype=dtype
         ).to(self.device).eval()
 
-        self.mask_token_id = getattr(self.tokenizer, "mask_token_id", None)
+        self.mask_token_id = self.config.get("mask_token_id", 126336)
         if self.mask_token_id is None:
             raise ValueError(
                 "Could not find mask_token_id on tokenizer — check LLaDA's tokenizer config; "

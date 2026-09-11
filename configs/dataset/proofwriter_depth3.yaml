@@ -1,8 +1,8 @@
 name: proofwriter_depth3
-source: "allenai_download"           # not on HF Hub — official AllenAI direct download
+source: "allenai_download"           
 download_page: "https://allenai.org/data/proofwriter"
-raw_data_path: "data/raw/proofwriter/"  # path after manual download + unzip (see scripts/download_data.sh comment)
-depth: 3                             # fixed choice per project plan — decided in prelim setup, don't change without team discussion
+raw_data_path: "data/raw/proofwriter/"  
+depth: 3                             
 loader: proofwriter
 
 prelim_sample_size: 100

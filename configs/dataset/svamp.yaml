@@ -1,7 +1,7 @@
 name: svamp
-source: "github"                     # not on HF Hub — pulled directly from the authors' repo
+source: "github"                    
 github_repo: "https://github.com/arkilpatel/SVAMP.git"
-raw_json_path: "data/raw/SVAMP/SVAMP.json"  # path after scripts/download_data.sh clones + copies it
+raw_json_path: "data/raw/SVAMP/SVAMP.json"  
 loader: svamp
 
 prelim_sample_size: 100

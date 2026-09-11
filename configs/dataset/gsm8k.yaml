@@ -1,0 +1,16 @@
+name: gsm8k
+hf_repo_id: "openai/gsm8k"
+hf_subset: "main"
+split: "test"
+loader: gsm8k                       # maps to a function in data/loaders.py
+
+prelim_sample_size: 100             # used during Weeks 1-3; bump up for final eval
+full_sample_size: null              # null = use full split, set later once feasible
+
+prompt_template: |
+  Solve the following grade school math problem step by step.
+  Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+  Problem: {question}
+
+  Solution:

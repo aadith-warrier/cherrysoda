@@ -1,0 +1,17 @@
+# Config for LLaDA-8B base DLM
+# Fill in the exact HF hub repo id once confirmed (check HuggingFace for the released checkpoint name)
+name: llada_8b
+wrapper: llada                     # maps to src/models/model_registry.py key
+hf_repo_id: "GSAI-ML/LLaDA-8B-Instruct"   # CONFIRMED correct — base model, not the d3LLM distilled variant
+dtype: bfloat16
+device: "cuda:0"                    # pin one GPU per model process so 3 GPUs = 3 parallel jobs
+
+generation:
+  max_new_tokens: 512               # adjust after timing check on real reasoning traces
+  num_denoising_steps: 64           # T in the diffusion schedule; tune after Day-1 timing test
+  block_length: null                # set if using block/semi-AR diffusion decoding, else null
+  temperature: 0.0                  # deterministic for reproducibility in prelim runs
+  remasking_strategy: "low_confidence"  # vanilla baseline default
+
+# Whether this wrapper can expose per-step logits/confidence (needed by Track D)
+supports_intermediate_states: true

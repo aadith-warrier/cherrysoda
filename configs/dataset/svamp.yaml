@@ -1,0 +1,16 @@
+name: svamp
+source: "github"                     # not on HF Hub — pulled directly from the authors' repo
+github_repo: "https://github.com/arkilpatel/SVAMP.git"
+raw_json_path: "data/raw/SVAMP/SVAMP.json"  # path after scripts/download_data.sh clones + copies it
+loader: svamp
+
+prelim_sample_size: 100
+full_sample_size: null
+
+prompt_template: |
+  Solve the following math word problem step by step.
+  Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+  Problem: {question}
+
+  Solution:

@@ -1,0 +1,15 @@
+# Run config: vanilla (no correction, no dependency-aware scheduling) baseline on GSM8K
+run_id: "prelim_vanilla_gsm8k"       # used as the logs/ subfolder name — keep unique per run
+
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/gsm8k.yaml"
+baseline: "vanilla"                  # maps to baselines/vanilla.py
+
+sample_size: null                    # null = use dataset config's prelim_sample_size
+seed: 42
+
+logging:
+  save_generations: true             # dumps logs/{run_id}/generations.jsonl
+  save_intermediate_states: false    # set true only when Track D needs per-step traces (large files!)
+  wandb_project: "cherrysoda-dlm-reasoning"   # set to null to disable WandB
+  wandb_run_name: null               # defaults to run_id if null

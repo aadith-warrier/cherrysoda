@@ -51,7 +51,7 @@ logs/             # per-run outputs (gitignored — see below)
 ## Running a baseline
 
 ```bash
-python scripts/run_baseline.py --config configs/run/prelim_vanilla_gsm8k.yaml
+python scripts/run_baseline.py --config configs/run/prelim_vanilla_gsm8k_{model}.yaml
 ```
 
 Every run is defined entirely by its config file under `configs/run/`. Do not

@@ -1,0 +1,34 @@
+Loading model dream_7b...
+Model load time: 18.6s
+
+Example prompt:
+Solve the following grade school math problem step by step.
+Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+Problem: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+
+Solution:
+
+
+--- Generation WITHOUT intermediate state capture ---
+Wall time: 6.95s
+Forward passes: 64
+Generated text:
+1. Janet's ducks lay 16 eggs per day.
+2. She eats 3 eggs for breakfast.
+3. She bakes muffins with her friends using 4 eggs.
+4. The remaining eggs are 16 - 3 - 4 = 9 eggs.
+5. She sells each remaining eggs $ $2.
+6. Therefore, she makes 9 * $2 = $18 per day.
+
+--- Generation WITH intermediate state capture (checks Track D dependency) ---
+Wall time: 4.86s
+Captured 64 intermediate steps. CONFIRMED: intermediate state extraction works.
+Example step record: step_index=0, num confidences=0
+
+--- Sizing guidance ---
+  20 examples x 1 baseline ≈ 2.3 min
+  50 examples x 1 baseline ≈ 5.8 min
+  100 examples x 1 baseline ≈ 11.6 min
+  300 examples x 1 baseline ≈ 34.8 min
+  Full prelim (100 examples x 3 datasets x 4 baselines) ≈ 2.3 hours on ONE GPU (divide by 3 if parallelized across your 3 GPUs)

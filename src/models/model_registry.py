@@ -1,10 +1,10 @@
 
 from src.models.llada_wrapper import LLaDAWrapper
-# from src.models.dream_wrapper import DreamWrapper  # uncomment once implemented
+from src.models.dream_wrapper import DreamWrapper
 
 REGISTRY = {
     "llada": LLaDAWrapper,
-    # "dream": DreamWrapper,
+    "dream": DreamWrapper,
 }
 
 

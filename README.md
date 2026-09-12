@@ -73,7 +73,7 @@ instead, so every run stays reproducible from git history alone.
 
 ## Experiment tracking
 
-WandB project: `cherrysoda-dlm-reasoning` — [link once created]
+WandB project: `cherrysoda` — [link once created]
 
 HuggingFace models/datasets used: [add links here once confirmed]
 

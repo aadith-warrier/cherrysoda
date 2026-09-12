@@ -1,4 +1,4 @@
-run_id: "prelim_vanilla_gsm8k_llada"       
+run_id: "vanilla_gsm8k_llada"       
 
 model_config: "configs/model/llada_8b.yaml"
 dataset_config: "configs/dataset/gsm8k.yaml"

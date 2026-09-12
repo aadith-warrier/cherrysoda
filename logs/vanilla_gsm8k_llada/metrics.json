@@ -1,0 +1,6 @@
+{
+  "run_id": "vanilla_gsm8k_llada",
+  "num_examples": 1319,
+  "avg_wall_time_sec": 5.4730574161017636,
+  "avg_forward_passes": 128.0
+}

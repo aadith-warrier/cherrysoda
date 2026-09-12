@@ -1,4 +1,4 @@
-run_id: "prelim_vanilla_gsm8k_dream"
+run_id: "vanilla_gsm8k_dream"
 
 model_config: "configs/model/dream_7b.yaml"
 dataset_config: "configs/dataset/gsm8k.yaml"
@@ -10,6 +10,6 @@ seed: 42
 logging:
   save_generations: true
   save_intermediate_states: false
-  wandb_project: "cherrysoda-dlm-reasoning"
+  wandb_project: "cherrysoda"
   wandb_run_name: null
 

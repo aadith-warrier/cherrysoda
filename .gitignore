@@ -19,7 +19,6 @@ checkpoints/
 *.ckpt
 models_cache/
 .cache/huggingface/
-logs/*
 !logs/.gitkeep
 wandb/
 .DS_Store
@@ -28,4 +27,3 @@ wandb/
 *.swp
 .env
 *.key
-secrets.yaml

@@ -34,6 +34,7 @@ class DreamWrapper(BaseDLMWrapper):
         remasking_strategy="low_confidence",
         return_intermediate_states=False,
         eligibility_fn=None,
+        block_length=None,
     ) -> GenerationResult:
         if eligibility_fn is not None:
             raise NotImplementedError(

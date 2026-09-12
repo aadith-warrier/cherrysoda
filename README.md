@@ -1,6 +1,6 @@
 # Graph-Guided Reasoning and Refinement in Diffusion Language Models
 
-CherrySoda — Sriharini Margapuri, Arkaprava Gaine, Aadith Warrier, Tarun R
+CherrySoda
 
 ## Setup (conda)
 
@@ -37,12 +37,12 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_coun
 
 ```
 configs/          # model / dataset / run configs (YAML, single source of truth per run)
-src/models/       # base DLM wrappers (Track A) — implements BaseDLMWrapper interface
-src/graph/        # dependency graph extraction (Track B)
-src/verify/       # deterministic + NLI verifiers (Track C)
-src/schedule/     # dependency-aware denoising scheduler (Track D)
-src/correct/      # subgraph identification + localized remasking (Track D/B)
-baselines/        # vanilla, correction baselines, scheduling baselines (Track A)
+src/models/       # base DLM wrappers — implements BaseDLMWrapper interface
+src/graph/        # dependency graph extraction
+src/verify/       # deterministic + NLI verifiers
+src/schedule/     # dependency-aware denoising scheduler
+src/correct/      # subgraph identification + localized remasking 
+baselines/        # vanilla, correction baselines, scheduling baselines 
 data/             # dataset loaders, unified schema output
 scripts/          # entrypoints (run_baseline.py, download_data.sh, timing check)
 logs/             # per-run outputs (gitignored — see below)
@@ -58,7 +58,7 @@ Every run is defined entirely by its config file under `configs/run/`. Do not
 hand-edit Python to change model/dataset/baseline combos — add a new run config
 instead, so every run stays reproducible from git history alone.
 
-## First-time setup checklist (Week 1)
+## First-time setup checklist
 
 1. `bash scripts/download_data.sh` — confirm all 3 datasets download cleanly;
    fix `hf_repo_id` in `configs/dataset/*.yaml` if a mirror has moved.
@@ -77,25 +77,20 @@ WandB project: `cherrysoda` — [link once created]
 
 HuggingFace models/datasets used: [add links here once confirmed]
 
-## Status (updated per mid-sem submission)
+## Status
 
-| Component | Status | Owner |
-|---|---|---|
-| Base DLM (LLaDA) running + intermediate states confirmed | TODO | Track A |
-| Second base DLM (optional) | TODO | Track A |
-| Dataset loaders (GSM8K/SVAMP/ProofWriter) | TODO | Track A |
-| Vanilla baseline | TODO | Track A |
-| Remask-Don't-Replace baseline | TODO | Track A |
-| DAPD scheduling baseline | TODO | Track A |
-| RemeDi / ProSeCo baselines | TODO | Track A |
-| Oracle baseline (GSM8K/SVAMP) | TODO | Track A |
-| Graph extraction (Tiers 1-3) | TODO | Track B |
-| Gold graph annotation | TODO | Track B |
-| Deterministic verifier | TODO | Track C |
-| NLI verifier + calibration | TODO | Track C |
-| Dependency-aware scheduler | TODO | Track D |
-| Subgraph correction + remasking | TODO | Track D |
-
-## Access
-
-Repo is [public / TA mentors granted access — update before mid-sem deadline].
+| Component 
+|---
+| Base DLM (LLaDA) running + intermediate states confirmed 
+| Second base DLM (optional) 
+| Dataset loaders (GSM8K/SVAMP/ProofWriter) 
+| Vanilla baseline 
+| Remask-Don't-Replace baseline 
+| DAPD scheduling baseline 
+| RemeDi / ProSeCo baselines 
+| Oracle baseline (GSM8K/SVAMP) 
+| Gold graph annotation 
+| Deterministic verifier
+| NLI verifier + calibration
+| Dependency-aware scheduler
+| Subgraph correction + remasking 

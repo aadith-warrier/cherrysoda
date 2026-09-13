@@ -1,0 +1,27 @@
+model:
+  device: cuda:1
+  dtype: bfloat16
+  generation:
+    alg_temp: 0.0
+    block_length: null
+    max_new_tokens: 256
+    num_denoising_steps: 256
+    remasking_strategy: low_confidence
+    temperature: 0.2
+    top_p: 0.95
+  hf_repo_id: Dream-org/Dream-v0-Instruct-7B
+  name: dream_7b
+  supports_intermediate_states: true
+  wrapper: dream
+run:
+  baseline: vanilla
+  dataset_config: configs/dataset/gsm8k.yaml
+  logging:
+    save_generations: true
+    save_intermediate_states: false
+    wandb_project: cherrysoda
+    wandb_run_name: null
+  model_config: configs/model/dream_7b.yaml
+  run_id: vanilla_gsm8k_dream
+  sample_size: full
+  seed: 42

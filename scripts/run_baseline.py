@@ -3,7 +3,7 @@ import importlib
 import json
 import os
 import time
-
+import torch
 import yaml
 from tqdm import tqdm
 
@@ -26,6 +26,7 @@ def main():
     args = parser.parse_args()
 
     run_cfg = load_yaml(args.config)
+    torch.manual_seed(run_cfg.get("seed", 42))
     model_cfg = load_yaml(run_cfg["model_config"])
     dataset_cfg_path = run_cfg["dataset_config"]
 

@@ -54,6 +54,7 @@ class DreamWrapper(BaseDLMWrapper):
         input_ids = inputs.input_ids.to(self.device)
         attention_mask = inputs.attention_mask.to(self.device)
 
+        gen_params = self.config.get("generation", {})
         output = self.model.diffusion_generate(
             input_ids,
             attention_mask=attention_mask,
@@ -61,10 +62,10 @@ class DreamWrapper(BaseDLMWrapper):
             steps=num_denoising_steps,
             output_history=return_intermediate_states,
             return_dict_in_generate=True,
-            temperature=0.0,
-            top_p=None,
+            temperature=gen_params.get("temperature", 0.2),
+            top_p=gen_params.get("top_p", 0.95),
             alg="entropy",
-            alg_temp=0.0,
+            alg_temp=gen_params.get("alg_temp", 0.0),
         )
 
         prompt_len = input_ids.shape[1]

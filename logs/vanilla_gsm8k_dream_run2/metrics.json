@@ -1,0 +1,6 @@
+{
+  "run_id": "vanilla_gsm8k_dream",
+  "num_examples": 1319,
+  "avg_wall_time_sec": 15.689142878621341,
+  "avg_forward_passes": 256.0
+}

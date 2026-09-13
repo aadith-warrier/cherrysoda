@@ -2,11 +2,13 @@ model:
   device: cuda:1
   dtype: bfloat16
   generation:
+    alg_temp: 0.0
     block_length: null
-    max_new_tokens: 512
-    num_denoising_steps: 64
+    max_new_tokens: 256
+    num_denoising_steps: 256
     remasking_strategy: low_confidence
-    temperature: 0.0
+    temperature: 0.2
+    top_p: 0.95
   hf_repo_id: Dream-org/Dream-v0-Instruct-7B
   name: dream_7b
   supports_intermediate_states: true

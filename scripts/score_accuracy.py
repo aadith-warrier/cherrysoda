@@ -10,12 +10,17 @@ from src.eval.scoring import score_record, summarize  # noqa: E402
  
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("generations", nargs="+", help="generations.jsonl file(s)")
+    parser.add_argument("generations", nargs="+", help="generations.jsonl file(s) or run folder(s)")
     parser.add_argument("--show_errors", type=int, default=0, help="Print N wrong examples per file")
     args = parser.parse_args()
  
     rows = []
     for path in args.generations:
+        if os.path.isdir(path):
+            path = os.path.join(path, "generations.jsonl")
+        if not os.path.isfile(path):
+            print(f"skip {path}: not found")
+            continue
         with open(path) as f:
             records = [json.loads(line) for line in f if line.strip()]
         s = summarize(records)
@@ -50,3 +55,4 @@ def main():
  
 if __name__ == "__main__":
     main()
+ 

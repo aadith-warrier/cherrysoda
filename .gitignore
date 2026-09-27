@@ -1,10 +1,8 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
-logs/
 data/raw/
 wandb/
-third_party/
 .venv/
 venv/
 *.egg-info/

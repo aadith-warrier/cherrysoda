@@ -1,0 +1,26 @@
+{
+  "run_id": "check_remedi",
+  "model": "remedi_rl",
+  "dataset": "gsm8k",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence"
+  },
+  "num_examples": 100,
+  "accuracy": 0.83,
+  "num_correct": 83,
+  "extraction_pattern": 87,
+  "extraction_vote": 0,
+  "extraction_fallback": 13,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 9,
+  "avg_forward_passes": 265.0,
+  "avg_wall_time_sec": 13.939378843307495,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 174.6
+}

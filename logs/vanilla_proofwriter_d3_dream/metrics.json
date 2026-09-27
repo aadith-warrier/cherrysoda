@@ -1,0 +1,39 @@
+{
+  "run_id": "vanilla_proofwriter_d3_dream",
+  "model": "dream_7b",
+  "dataset": "proofwriter_depth3",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": null,
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "alg_temp": 0.0,
+    "remasking_strategy": "entropy",
+    "suppress_endoftext": false
+  },
+  "num_examples": 600,
+  "accuracy": 0.44333333333333336,
+  "num_correct": 266,
+  "extraction_pattern": 430,
+  "extraction_fallback": 2,
+  "extraction_none": 168,
+  "empty_generations": 0,
+  "hit_length_limit": 12,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 21.090094124873477,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 196.71666666666667,
+  "accuracy_by_label": {
+    "False": 0.655,
+    "True": 0.65,
+    "Unknown": 0.025
+  },
+  "predicted_label_counts": {
+    "True": 195,
+    "None": 168,
+    "False": 223,
+    "Unknown": 14
+  }
+}

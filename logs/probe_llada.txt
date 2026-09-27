@@ -1,0 +1,76 @@
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  7.37it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  8.56it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  8.60it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00,  8.80it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00,  9.04it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  9.23it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  8.90it/s]
+Loaded llada_8b (GSAI-ML/LLaDA-8B-Instruct) on cuda:0
+
+--- A default: first generation ---
+1. Janet's ducks lay 16 eggs per day.
+2. She eats 3 eggs for breakfast every morning.
+3. She bakes 4 eggs for her friends every day.
+4. First, calculate the total number of eggs she uses for breakfast and baking:
+   \[
+   3 \text{ (breakfast)} + 4 \text{ (baking)} = 7 \text{ eggs}
+   \]
+5. Subtract the number of eggs used from the total number of eggs laid to find out how many eggs she has left to sell:
+   \[
+   16 \text{ (total eggs)} - 7 \text{ (eggs used)} = 9 \text{ eggs}
+   \]
+6. Janet sells each egg for $2.
+7. Calculate the total amount of money she makes by multiplying the number of eggs sold by the price per egg:
+   \[
+   9 \text{ eggs} \times 2 \text{ dollars/egg} = 18 \text{ dollars}
+   \]
+
+The answer is: $18
+
+
+--- B defer_eos_eot: first generation ---
+1. Janet's ducks lay 16 eggs per day.
+2. She eats 3 eggs for breakfast every morning.
+3. She bakes 4 eggs for her friends every day.
+4. First, calculate the total number of eggs she uses for breakfast and baking:
+   \[
+   3 \text{ (breakfast)} + 4 \text{ (baking)} = 7 \text{ eggs}
+   \]
+5. Subtract the number of eggs used from the total number of eggs laid to find out how many eggs she has left to sell:
+   \[
+   16 \text{ (total eggs)} - 7 \text{ (eggs used)} = 9 \text{ eggs}
+   \]
+6. Janet sells each egg for $2.
+7. Calculate the total amount of money she makes by multiplying the number of eggs sold by the price per egg:
+   \[
+   9 \text{ eggs} \times 2 \text{ dollars/egg} = 18 \text{ dollars}
+   \]
+
+So, Janet makes $18 every day.
+
+The answer is: 18
+
+
+--- E reason-first prompt: first generation ---
+To determine how much Janet makes every day at the farmers' market, we need to follow these steps:
+
+1. **Calculate the total number of eggs laid per day:**
+   Janet's ducks lay 16 eggs per day.
+
+2. **Calculate the number of eggs used for breakfast and baking:**
+   - Janet eats 3 eggs for breakfast.
+   - She bakes 4 eggs for her friends.
+   - Total eggs used for breakfast and baking = 3 + 4 = 7 eggs.
+
+3. **Calculate the number of eggs remaining for selling:**
+   - Total eggs laid per day = 16
+   - Eggs used for breakfast and baking = 7
+   - Eggs remaining for selling = 16 - 7 = 9 eggs.
+
+4. **Calculate the revenue from selling the remaining eggs:**
+   - Janet sells each egg for $2.
+   - Total revenue from selling 9 eggs = 9 eggs * $2/egg = $18.
+
+So, Janet makes $18 every day at the farmers' market.
+
+The answer is: $18
+
+
+variant                                acc mean_tok min_tok at_256 pattern
+A default                            6/10       222     150      0       9
+B defer_eos_eot                      6/10       224     154      0      10
+E reason-first prompt                7/10       240     171      0       9

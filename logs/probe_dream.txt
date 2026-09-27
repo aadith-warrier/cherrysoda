@@ -1,0 +1,73 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:00,  8.71it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:00<00:00,  8.75it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:00<00:00,  8.83it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  9.11it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:00<00:00,  8.98it/s]
+/home/sriharinim/miniconda3/envs/cherrysoda/lib/python3.10/site-packages/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`. This was detected when initializing the generation config instance, which means the corresponding file may hold incorrect parameterization and should be fixed.
+  warnings.warn(
+/home/sriharinim/miniconda3/envs/cherrysoda/lib/python3.10/site-packages/transformers/generation/configuration_utils.py:590: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+Loaded dream_7b (Dream-org/Dream-v0-Instruct-7B) on cuda:2
+
+--- A default (entropy): first generation ---
+16 - 3 = 13
+13 - 4 = 9
+9 * 2 = 18
+
+The answer is: 18
+
+
+--- B low_confidence: first generation ---
+16 - 3 - 4 = 9
+9 * 2 = 18
+The answer is: 18
+
+
+--- C entropy + suppress_endoftext: first generation ---
+1. Janet's ducks lay 16 eggs per day.
+2. She eats 3 eggs for breakfast every morning.
+3. She bakes muffins for her friends every day with 4 eggs.
+4. She sells the remainder at the farmers' market daily for $2 per fresh duck egg.
+
+Step 1: Calculate the number of eggs remaining.
+remaining_eggs = eggs_ducks_lays_per_day - eggsaten_for_breakfast - eggs_used_for_muffins
+eggs_ducks_lays_per_day = 16
+eggsaten_for_breakfast = 3
+eggs_used_for_muffins = 4
+remaining_eggs = eggs_ducks_lays_per_day - eggsaten_for_breakfast - eggs_used_for_muffins
+remaining_eggs = 16 - 3 - 4
+remaining_eggs = 13 - 4
+remaining_eggs = 9
+
+Step 2: Calculate the earnings per day at the farmers' market.
+earnings_per_day = remaining_eggs * price_per_egg
+remaining_eggs = 9
+price_per_egg = 2
+earnings_per_day = remaining_eggs * price_per_egg
+
+
+--- D README sampling t=0.2 p=0.95: first generation ---
+1. Janet's ducks lay 16 eggs per day.
+2. She eats 3 eggs for breakfast every morning.
+3. She bakes muffins for her friends every day with 4 eggs.
+4. She sells the remainder at the farmers' market daily for $2 per fresh duck egg.
+
+Step 1: Calculate the total number of eggs Janet uses per day.
+16 eggs (total) - 3 eggs (breakfast) - 4 eggs (muffins) = 9 eggs used
+
+Step 2: Calculate the number of eggs Janet sells per day.
+16 eggs (total) - 9 eggs (used) = ? eggs sold
+16 - 9 = 7 eggs sold
+
+Step 3: Calculate the total amount of money Janet makes per day at the farmers' market.
+7 eggs sold * $2 per egg = $14
+
+The answer is: $14
+
+
+--- E reason-first prompt: first generation ---
+The answer is: 18.
+
+
+variant                                acc mean_tok min_tok at_256 pattern
+A default (entropy)                  4/10        16       7      0      10
+B low_confidence                     4/10        18       7      0      10
+C entropy + suppress_endoftext       6/10       256     256     10       9
+D README sampling t=0.2 p=0.95       6/10       160      58      0      10
+E reason-first prompt                5/10        14       7      0      10

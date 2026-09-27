@@ -1,0 +1,72 @@
+{
+  "num_examples": 600,
+  "num_correct": 405,
+  "no_answer": 0,
+  "looping": 22,
+  "looping_and_wrong": 4,
+  "confusion": {
+    "True": {
+      "Unknown": 51,
+      "True": 139,
+      "False": 10
+    },
+    "False": {
+      "True": 5,
+      "False": 172,
+      "Unknown": 23
+    },
+    "Unknown": {
+      "False": 70,
+      "Unknown": 94,
+      "True": 36
+    }
+  },
+  "accuracy_by_depth": {
+    "0": 0.7235023041474654,
+    "1": 0.6272189349112426,
+    "2": 0.736,
+    "3": 0.5764705882352941,
+    "4": 0.3333333333333333,
+    "5": 0.0
+  },
+  "accuracy_by_depth_true_false_only": {
+    "0": 0.9484536082474226,
+    "1": 0.7788461538461539,
+    "2": 0.7606837606837606,
+    "3": 0.5975609756097561
+  },
+  "unknown_gold_by_depth": {
+    "0": 120,
+    "1": 65,
+    "2": 8,
+    "3": 3,
+    "4": 3,
+    "5": 1
+  },
+  "example_ids": {
+    "looping": [
+      "proofwriter_d3_00006",
+      "proofwriter_d3_00012",
+      "proofwriter_d3_00061",
+      "proofwriter_d3_00125",
+      "proofwriter_d3_00153",
+      "proofwriter_d3_00156",
+      "proofwriter_d3_00187",
+      "proofwriter_d3_00192",
+      "proofwriter_d3_00202",
+      "proofwriter_d3_00215",
+      "proofwriter_d3_00218",
+      "proofwriter_d3_00280",
+      "proofwriter_d3_00303",
+      "proofwriter_d3_00388",
+      "proofwriter_d3_00389",
+      "proofwriter_d3_00439",
+      "proofwriter_d3_00486",
+      "proofwriter_d3_00546",
+      "proofwriter_d3_00556",
+      "proofwriter_d3_00561",
+      "proofwriter_d3_00581",
+      "proofwriter_d3_00597"
+    ]
+  }
+}

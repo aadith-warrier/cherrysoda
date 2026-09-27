@@ -278,3 +278,68 @@ def test_run_lock_blocks_second_process(tmp_path):
         assert len(open(os.path.join(log_dir, "generations.jsonl")).readlines()) == 2
     finally:
         os.chdir(cwd); shutil.rmtree(log_dir, ignore_errors=True)
+
+# ---------- analysis scripts (compare_runs, error_analysis, arith_check) ----------
+from src.eval.arith_check import check_equations
+
+@pytest.mark.parametrize("text,expected", [
+    ("16 - 3 = 13", [True]),
+    ("13 - 4 = 8", [False]),
+    ("9 × 2 = 18 dollars", [True]),
+    ("\\[ 16 \\text{ (total eggs)} - 7 \\text{ (eggs used)} = 9 \\text{ eggs} \\]", [True]),
+    ("Half of 2 is 2 ÷ 2 = 1 bolt of white fiber.", [True]),
+    ("So 12 + 3 = 15, and 15 * 2 = 31.", [True, False]),
+    ("y = x + 5 = 15", []),          # variables are never judged
+    ("2x + 5 = 15", []),
+    ("20% of 50 = 10", []),
+    ("10 / 3 = 3.33", [True]),       # rounding to shown decimals
+    ("1,200 + 300 = 1,500", [True]),
+    ("The answer is: 18", []),
+])
+def test_arith_check(text, expected):
+    assert [r["ok"] for r in check_equations(text)] == expected
+
+def _write_run(root, name, rows):
+    d = root / name; d.mkdir(parents=True)
+    with open(d / "generations.jsonl", "w") as f:
+        for r in rows:
+            f.write(json.dumps(r) + "\n")
+    return str(d)
+
+def test_compare_runs_counts_and_mcnemar(tmp_path):
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
+    import importlib; cr = importlib.import_module("compare_runs")
+    base = [{"example_id": f"e{i}", "dataset": "svamp", "model": "llada_8b", "reference_answer": "1",
+             "generation": f"The answer is: {1 if i < 6 else 2}", "num_forward_passes": 256, "wall_time_sec": 10}
+            for i in range(10)]                                    # 6/10 right
+    meth = [{**r, "generation": f"The answer is: {1 if i in (0,1,2,3,4,6,7,8) else 2}", "num_forward_passes": 60,
+             "wall_time_sec": 3} for i, r in enumerate(base)]       # fixes 6,7,8 ; breaks 5 -> 8/10
+    b = _write_run(tmp_path, "vanilla_svamp_llada", base)
+    m = _write_run(tmp_path, "dapd_svamp_llada", meth)
+    res = cr.compare(cr.load_run(b), cr.load_run(m))
+    assert (res["n"], res["fixed"], res["broken"]) == (10, 3, 1)
+    assert abs(res["diff"] - 0.2) < 1e-9 and res["method_nfe"] == 60
+    assert abs(res["p_mcnemar"] - 0.625) < 1e-9                    # exact binomial, n=4, k=1
+    assert cr.auto_pairs(str(tmp_path)) == [(b, m)]
+
+def test_error_analysis_categories(tmp_path):
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
+    import importlib; ea = importlib.import_module("error_analysis")
+    rows = [
+        {"example_id": "ok", "dataset": "gsm8k", "reference_answer": "9", "generation": "13 - 4 = 9\nThe answer is: 9"},
+        {"example_id": "slip", "dataset": "gsm8k", "reference_answer": "9", "generation": "16 - 3 = 13\n13 - 4 = 8\nThe answer is: 8"},
+        {"example_id": "logic", "dataset": "gsm8k", "reference_answer": "9", "generation": "16 - 4 = 12\nThe answer is: 12"},
+        {"example_id": "none", "dataset": "gsm8k", "reference_answer": "9", "generation": ""},
+    ]
+    summary, ids = ea.analyse_numeric(rows)
+    assert summary["wrong_breakdown"] == {"arith_slip": 1, "no_slip": 1, "no_answer": 1}
+    assert summary["arith_slip_num_wrong_calcs"] == {"1": 1}
+    assert summary["arith_slip_first_error_position"] == {"late": 1}
+    loop = "Since the cat is red, the cat is big. " * 4
+    pw = [{"example_id": "p1", "dataset": "proofwriter", "reference_answer": "True", "generation": loop,
+           "metadata": {"qdep": 2}},
+          {"example_id": "p2", "dataset": "proofwriter", "reference_answer": "Unknown",
+           "generation": "The answer is: Unknown", "metadata": {"qdep": 0}}]
+    s2, ids2 = ea.analyse_label(pw)
+    assert s2["looping"] == 1 and s2["no_answer"] == 1 and s2["num_correct"] == 1
+    assert s2["accuracy_by_depth"] == {"0": 1.0, "2": 0.0}

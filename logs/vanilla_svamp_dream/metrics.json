@@ -1,0 +1,28 @@
+{
+  "run_id": "vanilla_svamp_dream",
+  "model": "dream_7b",
+  "dataset": "svamp",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": null,
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "alg_temp": 0.0,
+    "remasking_strategy": "entropy",
+    "suppress_endoftext": false
+  },
+  "num_examples": 1000,
+  "accuracy": 0.854,
+  "num_correct": 854,
+  "extraction_pattern": 978,
+  "extraction_fallback": 22,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 2,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 21.299912182569503,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 111.607
+}

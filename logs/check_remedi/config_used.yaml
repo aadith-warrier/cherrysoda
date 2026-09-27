@@ -1,0 +1,49 @@
+run:
+  run_id: check_remedi
+  model_config: configs/model/remedi_rl.yaml
+  dataset_config: configs/dataset/gsm8k.yaml
+  baseline: vanilla
+  sample_size: 100
+  seed: 42
+  generation_overrides: {}
+  logging:
+    save_generations: true
+    save_intermediate_states: false
+    wandb_project: cherrysoda
+    wandb_run_name: null
+model:
+  name: remedi_rl
+  wrapper: remedi
+  hf_repo_id: maple-research-lab/RemeDi-RL
+  tokenizer_repo_id: GSAI-ML/LLaDA-8B-Instruct
+  dtype: bfloat16
+  device: cuda:1
+  generation:
+    max_new_tokens: 256
+    num_denoising_steps: 256
+    block_length: 32
+    temperature: 0.0
+    remasking_strategy: low_confidence
+dataset:
+  name: gsm8k
+  hf_repo_id: openai/gsm8k
+  hf_subset: main
+  split: test
+  loader: gsm8k
+  answer_type: numeric
+  prelim_sample_size: 100
+  full_sample_size: null
+  prompt_template: 'Solve the following grade school math problem step by step.
+
+    Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+    At the end, write the final answer on its own line in the form "The answer is:
+    <number>".
+
+
+    Problem: {question}
+
+
+    Solution:
+
+    '

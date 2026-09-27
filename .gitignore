@@ -32,3 +32,5 @@ secrets.yaml
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+CLAUDE.md
+tests/

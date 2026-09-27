@@ -1,0 +1,15 @@
+{
+  "num_answers": 100,
+  "accuracy": 0.68,
+  "mean_steps": 9.33,
+  "mean_equations": 4.89,
+  "mean_edges": 11.1,
+  "edge_reasons": {
+    "value_flow": 1085,
+    "shared_entity": 25
+  },
+  "answers_without_steps": 0.0,
+  "mean_isolated_calcs": 0.09,
+  "mean_unsourced_numbers": 0.63,
+  "answers_with_warnings": 0.0
+}

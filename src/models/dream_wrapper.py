@@ -34,7 +34,13 @@ class DreamWrapper(BaseDLMWrapper):
         remasking_strategy="low_confidence",
         return_intermediate_states=False,
         eligibility_fn=None,
+        block_length=None,
+        temperature=0.0,
+        logits_eos_inf=False,
+        confidence_eos_eot_inf=False,
     ) -> GenerationResult:
+        if logits_eos_inf or confidence_eos_eot_inf:
+            raise NotImplementedError("End-of-text controls are only implemented for LLaDA.")
         if eligibility_fn is not None:
             raise NotImplementedError(
                 "Dependency-aware scheduling (eligibility_fn) is not yet supported "
@@ -46,7 +52,7 @@ class DreamWrapper(BaseDLMWrapper):
 
         start_time = time.time()
 
-        messages = [{"role": "user", "content": prompt}]
+        messages = prompt if isinstance(prompt, list) else [{"role": "user", "content": prompt}]
         inputs = self.tokenizer.apply_chat_template(
             messages, return_tensors="pt", return_dict=True, add_generation_prompt=True
         )
@@ -60,7 +66,7 @@ class DreamWrapper(BaseDLMWrapper):
             steps=num_denoising_steps,
             output_history=return_intermediate_states,
             return_dict_in_generate=True,
-            temperature=0.0,
+            temperature=temperature,
             top_p=None,
             alg="entropy",
             alg_temp=0.0,
@@ -99,8 +105,3 @@ class DreamWrapper(BaseDLMWrapper):
             num_denoising_steps_used=num_denoising_steps,
             intermediate_states=intermediate_states,
         )
-
-    def get_token_confidences(self, logits) -> list:
-        probs = torch.softmax(logits, dim=-1)
-        max_probs = probs.max(dim=-1).values
-        return max_probs.tolist()

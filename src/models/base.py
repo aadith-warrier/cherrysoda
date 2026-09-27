@@ -28,7 +28,6 @@ class BaseDLMWrapper(ABC):
         self.config = model_config
         self.name = model_config["name"]
         self.device = model_config.get("device", "cuda:0")
-        self.supports_intermediate_states = model_config.get("supports_intermediate_states", False)
 
     @abstractmethod
     def load(self):
@@ -37,18 +36,15 @@ class BaseDLMWrapper(ABC):
     @abstractmethod
     def generate(
         self,
-        prompt: str,
+        prompt,  # a string (one user turn) or a list of chat messages
         max_new_tokens: int,
         num_denoising_steps: int,
         remasking_strategy: str = "low_confidence",
         return_intermediate_states: bool = False,
-        eligibility_fn: Optional[callable] = None,  
+        eligibility_fn: Optional[callable] = None,
+        block_length: Optional[int] = None,
+        temperature: float = 0.0,
+        logits_eos_inf: bool = False,
+        confidence_eos_eot_inf: bool = False,
     ) -> GenerationResult:
         raise NotImplementedError
-
-    @abstractmethod
-    def get_token_confidences(self, logits) -> list:
-        raise NotImplementedError
-
-    def unload(self):
-        pass

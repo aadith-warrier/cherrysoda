@@ -4,10 +4,12 @@ hf_repo_id: "GSAI-ML/LLaDA-8B-Instruct"
 dtype: bfloat16
 device: "cuda:0"                    
 generation:
-  max_new_tokens: 512             
-  num_denoising_steps: 64           
-  block_length: null                
-  temperature: 0.0                 
-  remasking_strategy: "low_confidence"  
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: null            # null = one block spanning the whole answer, i.e. no blocks
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+  confidence_eos_eot_inf: true
+  logits_eos_inf: false
 
-supports_intermediate_states: true
+use_chat_template: true

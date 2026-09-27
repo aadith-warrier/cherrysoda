@@ -27,6 +27,7 @@ def main():
 
     run_cfg = load_yaml(args.config)
     model_cfg = load_yaml(run_cfg["model_config"])
+    model_cfg["generation"] = {**model_cfg["generation"], **run_cfg.get("generation_overrides", {})}
     dataset_cfg_path = run_cfg["dataset_config"]
 
     run_id = run_cfg["run_id"]

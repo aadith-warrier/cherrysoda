@@ -1,7 +1,7 @@
 run_id: "prelim_vanilla_gsm8k_llada"       
 
 model_config: "configs/model/llada_8b.yaml"
-dataset_config: "configs/dataset/gsm8k.yaml"
+dataset_config: "configs/dataset/gsm8k_paper.yaml"
 baseline: "vanilla"                  
 
 sample_size: "full"                   

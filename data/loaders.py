@@ -1,3 +1,5 @@
+import re
+
 import yaml
 from datasets import load_dataset
 
@@ -7,18 +9,41 @@ def _load_config(dataset_config_path: str) -> dict:
         return yaml.safe_load(f)
 
 
+def _gsm8k_fewshot_prefix(cfg: dict) -> str:
+    """Worked examples from the first `num_fewshot` train problems, calculator annotations removed."""
+    k = cfg.get("num_fewshot", 0)
+    if not k:
+        return ""
+    train = load_dataset(cfg["hf_repo_id"], cfg["hf_subset"], split="train").select(range(k))
+    shots = []
+    for row in train:
+        solution = re.sub(r"<<[^>]*>>", "", row["answer"]).strip()
+        shots.append(cfg["prompt_template"].format(question=row["question"]).rstrip() + "\n" + solution)
+    return "\n\n".join(shots) + "\n\n"
+
+
+def _gsm8k_prompt(cfg: dict, question: str, prefix: str):
+    """A plain string prompt, or a list of chat messages when the config defines few-shot chat turns."""
+    if "fewshot_turns" in cfg:
+        return [dict(t) for t in cfg["fewshot_turns"]] + [
+            {"role": "user", "content": cfg["question_template"].format(question=question)}
+        ]
+    return prefix + cfg["prompt_template"].format(question=question)
+
+
 def load_gsm8k(dataset_config_path: str, sample_size: int = None) -> list:
     cfg = _load_config(dataset_config_path)
     ds = load_dataset(cfg["hf_repo_id"], cfg["hf_subset"], split=cfg["split"])
     if sample_size:
         ds = ds.select(range(min(sample_size, len(ds))))
+    prefix = _gsm8k_fewshot_prefix(cfg)
 
     examples = []
     for i, row in enumerate(ds):
         reference_answer = row["answer"].split("####")[-1].strip()
         examples.append({
             "example_id": f"gsm8k_{i:05d}",
-            "prompt": cfg["prompt_template"].format(question=row["question"]),
+            "prompt": _gsm8k_prompt(cfg, row["question"], prefix),
             "reference_answer": reference_answer,
             "reference_solution": row["answer"],
             "metadata": {"dataset": "gsm8k"},

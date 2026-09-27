@@ -4,6 +4,8 @@ import re
 
 
 def extract_final_number(text: str):
+    # As in the LLaDA authors' OpenCompass scorer: ignore anything after the model starts a new "Question:".
+    text = text.split("Question:")[0]
     numbers = re.findall(r"-?\d[\d,]*\.?\d*", text)
     if not numbers:
         return None

@@ -10,5 +10,3 @@ generation:
   block_length: null
   temperature: 0.0
   remasking_strategy: "low_confidence"
-
-supports_intermediate_states: true

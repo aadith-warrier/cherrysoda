@@ -36,17 +36,95 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_coun
 ## Repo structure
 
 ```
-configs/          # model / dataset / run configs (YAML, single source of truth per run)
-src/models/       # base DLM wrappers — implements BaseDLMWrapper interface
-src/graph/        # dependency graph extraction
-src/verify/       # deterministic + NLI verifiers
-src/schedule/     # dependency-aware denoising scheduler
-src/correct/      # subgraph identification + localized remasking 
-baselines/        # vanilla, correction baselines, scheduling baselines 
-data/             # dataset loaders, unified schema output
-scripts/          # entrypoints (run_baseline.py, download_data.sh, timing check)
-logs/             # per-run outputs (gitignored — see below)
+.
+├── baselines/                         # Baseline implementations.
+│   ├── temporal_vote.py               # Temporal voting baseline.
+│   └── vanilla.py                     # Vanilla generation baseline.
+├── configs/                           # Reproducible YAML experiment configuration.
+│   ├── dataset/                       # GSM8K, SVAMP, and ProofWriter settings.
+│   │   ├── gsm8k.yaml
+│   │   ├── proofwriter_depth3.yaml
+│   │   └── svamp.yaml
+│   ├── model/                         # Base and fine-tuned model settings.
+│   │   ├── dapd_dream.yaml
+│   │   ├── dapd_llada.yaml
+│   │   ├── dream_7b.yaml
+│   │   ├── llada_8b.yaml
+│   │   ├── proseco_llada_sft.yaml
+│   │   ├── proseco_sampler_llada_instruct.yaml
+│   │   ├── remedi_instruct.yaml
+│   │   └── remedi_rl.yaml
+│   └── run/                           # Model, dataset, and method combinations.
+│       ├── dapd_gsm8k_dream.yaml
+│       ├── dapd_gsm8k_llada.yaml
+│       ├── dapd_proofwriter_d3_dream.yaml
+│       ├── dapd_proofwriter_d3_llada.yaml
+│       ├── dapd_svamp_dream.yaml
+│       ├── dapd_svamp_llada.yaml
+│       ├── proseco_gsm8k.yaml
+│       ├── proseco_nocorr_gsm8k.yaml
+│       ├── proseco_nocorr_proofwriter_d3.yaml
+│       ├── proseco_nocorr_svamp.yaml
+│       ├── proseco_proofwriter_d3.yaml
+│       ├── proseco_sampler_llada_gsm8k.yaml
+│       ├── proseco_sampler_llada_proofwriter_d3.yaml
+│       ├── proseco_sampler_llada_svamp.yaml
+│       ├── proseco_svamp.yaml
+│       ├── remedi_rl_gsm8k.yaml
+│       ├── remedi_rl_proofwriter_d3.yaml
+│       ├── remedi_rl_svamp.yaml
+│       ├── vanilla_gsm8k_dream.yaml
+│       ├── vanilla_gsm8k_llada.yaml
+│       ├── vanilla_proofwriter_d3_dream.yaml
+│       ├── vanilla_proofwriter_d3_llada.yaml
+│       ├── vanilla_svamp_dream.yaml
+│       ├── vanilla_svamp_llada.yaml
+│       ├── vote_gsm8k_dream.yaml
+│       ├── vote_gsm8k_llada.yaml
+│       ├── vote_proofwriter_d3_dream.yaml
+│       ├── vote_proofwriter_d3_llada.yaml
+│       └── vote_svamp_dream.yaml
+├── data/                              # Dataset loading and normalization.
+│   ├── __init__.py
+│   └── loaders.py                     # Unified dataset loader interface.
+├── scripts/                           # Command-line experiment utilities.
+│   ├── compare_generations.py         # Compare saved generations.
+│   ├── download_data.sh               # Download or describe required datasets.
+│   ├── inspect_generations.py         # Inspect generated answers.
+│   ├── probe_short_answers.py         # Probe short-answer generation behavior.
+│   ├── run_baseline.py                # Run a configured baseline experiment.
+│   ├── score_accuracy.py              # Score generated answers.
+│   ├── setup_third_party.sh           # Set up external baseline repositories.
+│   └── time_single_example.py         # Measure one-example model runtime.
+├── src/                               # Core library code.
+│   ├── eval/                          # Evaluation and scoring utilities.
+│   │   ├── __init__.py
+│   │   └── scoring.py
+│   ├── methods/                       # Correction and refinement methods.
+│   │   ├── __init__.py
+│   │   └── correction.py
+│   └── models/                        # Base DLM wrappers and model registry.
+│       ├── __init__.py
+│       ├── base.py
+│       ├── dapd_wrapper.py
+│       ├── dream_wrapper.py
+│       ├── llada_wrapper.py
+│       ├── model_registry.py
+│       ├── proseco_wrapper.py
+│       └── remedi_wrapper.py
+├── tests/                             # Unit and pipeline tests.
+│   ├── fake_wrapper.py                # Lightweight model wrapper for tests.
+│   └── test_pipeline.py               # End-to-end pipeline coverage.
+├── .gitignore                         # Generated, local, and external files to ignore.
+├── README.md                          # Project setup, usage, and experiment notes.
+├── requirements.txt                   # Python dependencies.
+└── log.txt                            # Small local log file kept in the repository.
 ```
+
+The following directories are intentionally omitted from this overview because
+they are generated, downloaded, vendored, or otherwise too large for the source
+tree: `logs/`, `wandb/`, `data/raw/`, `third_party/`, `.git/`, `.pytest_cache/`,
+and Python `__pycache__/` directories.
 
 ## Running a baseline
 

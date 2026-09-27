@@ -1,6 +1,7 @@
 name: remedi_rl
 wrapper: remedi
 hf_repo_id: "maple-research-lab/RemeDi-RL"     # built on LLaDA-8B-Instruct; ~9B params
+tokenizer_repo_id: "GSAI-ML/LLaDA-8B-Instruct"
 dtype: bfloat16
 device: "cuda:0"            # override per run with --device
 

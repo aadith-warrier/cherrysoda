@@ -50,6 +50,7 @@ def test_svamp_real():
 
 @pytest.fixture
 def pw_cfg(tmp_path):
+    """Fake ProofWriter tree in the real AllenAI layout."""
     d = tmp_path / "proofwriter-dataset-V2020.12.3" / "OWA" / "depth-3"
     d.mkdir(parents=True)
     (tmp_path / "proofwriter-dataset-V2020.12.3" / "OWA" / "depth-2").mkdir()
@@ -231,6 +232,7 @@ def test_dapd_configs():
             assert g["max_new_tokens"] == 256
 
 def test_load_package_does_not_shadow_baselines(tmp_path):
+    """Reproduces the DAPD clash: a third-party repo with its own `baselines/` folder."""
     from src.models.base import load_package_from_dir
     repo = tmp_path / "FakeRepo"
     (repo / "fakepkg_dapd").mkdir(parents=True)
@@ -247,3 +249,32 @@ def test_load_package_does_not_shadow_baselines(tmp_path):
         assert hasattr(importlib.import_module("baselines.vanilla"), "run")   # ours, not the fake repo's
     finally:
         os.chdir(cwd)
+
+def test_run_lock_blocks_second_process(tmp_path):
+    """A live lock (this test's own pid) must stop a second run into the same folder."""
+    import runpy, shutil
+    from src.models import model_registry
+    model_registry.REGISTRY["fake"] = ("tests.fake_wrapper", "FakeWrapper")
+    mcfg = tmp_path / "fake.yaml"
+    mcfg.write_text(yaml.dump({"name": "fake", "wrapper": "fake", "device": "cpu", "generation": {
+        "max_new_tokens": 256, "num_denoising_steps": 4, "block_length": 32,
+        "temperature": 0.0, "remasking_strategy": "low_confidence"}}))
+    rcfg = yaml.safe_load(open(os.path.join(ROOT, "configs/run/vanilla_svamp_llada.yaml")))
+    rcfg["model_config"] = str(mcfg)
+    rpath = tmp_path / "run.yaml"; rpath.write_text(yaml.dump(rcfg))
+    run_id = "pytest_lock_run"
+    log_dir = os.path.join(ROOT, "logs", run_id)
+    shutil.rmtree(log_dir, ignore_errors=True); os.makedirs(log_dir)
+    open(os.path.join(log_dir, ".lock"), "w").write(str(os.getpid()))    # "another" live process
+    cwd = os.getcwd(); os.chdir(ROOT)
+    try:
+        sys.argv = ["run_baseline.py", "--config", str(rpath), "--run_id", run_id, "--sample_size", "2", "--no_wandb"]
+        with pytest.raises(SystemExit):
+            runpy.run_path("scripts/run_baseline.py", run_name="__main__")
+        assert not os.path.exists(os.path.join(log_dir, "generations.jsonl"))
+        # stale lock (dead pid) must NOT block
+        open(os.path.join(log_dir, ".lock"), "w").write("999999")
+        runpy.run_path("scripts/run_baseline.py", run_name="__main__")
+        assert len(open(os.path.join(log_dir, "generations.jsonl")).readlines()) == 2
+    finally:
+        os.chdir(cwd); shutil.rmtree(log_dir, ignore_errors=True)

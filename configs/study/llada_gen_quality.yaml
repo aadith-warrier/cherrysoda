@@ -1,0 +1,76 @@
+study_id: "study_llada_gen_quality"
+
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/gsm8k.yaml"
+sample_size: 50
+baseline: "vanilla"
+
+# Shared by every variant; each variant overrides some of these keys.
+# Official LLaDA defaults: chat template on, low-confidence remasking, greedy (temperature 0).
+base_generation:
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+  # Pinned off so variants don't inherit later changes to the model config's defaults;
+  # variants that test the end-of-text options turn them on explicitly.
+  confidence_eos_eot_inf: false
+  logits_eos_inf: false
+
+# Stage 1: answer length x block length, 1 token committed per round (steps = length).
+# block_length == max_new_tokens means a single block, i.e. fully free-order decoding.
+variants:
+  - name: len128_blk8
+    generation: {max_new_tokens: 128, num_denoising_steps: 128, block_length: 8}
+  - name: len128_blk32
+    generation: {max_new_tokens: 128, num_denoising_steps: 128, block_length: 32}
+  - name: len128_blkoff
+    generation: {max_new_tokens: 128, num_denoising_steps: 128, block_length: 128}
+  - name: len256_blk8
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 8}
+  - name: len256_blk32
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 32}
+  - name: len256_blkoff
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 256}
+  - name: len512_blk8
+    generation: {max_new_tokens: 512, num_denoising_steps: 512, block_length: 8}
+  - name: len512_blk32
+    generation: {max_new_tokens: 512, num_denoising_steps: 512, block_length: 32}
+  # len512_blkoff (block_length 512) was stopped at 23/50 with 5/23 correct: without blocks the model
+  # commits end-of-text padding first and answers collapse (one answer was a single token).
+
+# Stage 2: fewer denoising steps (more tokens committed per round) on the two best Stage 1 settings.
+# Steps must divide by the number of blocks (256/8 = 32 blocks, 256/32 = 8 blocks).
+  - name: len256_blk8_steps128
+    generation: {max_new_tokens: 256, num_denoising_steps: 128, block_length: 8}
+  - name: len256_blk8_steps64
+    generation: {max_new_tokens: 256, num_denoising_steps: 64, block_length: 8}
+  - name: len256_blk8_steps32
+    generation: {max_new_tokens: 256, num_denoising_steps: 32, block_length: 8}
+  - name: len256_blk32_steps128
+    generation: {max_new_tokens: 256, num_denoising_steps: 128, block_length: 32}
+  - name: len256_blk32_steps64
+    generation: {max_new_tokens: 256, num_denoising_steps: 64, block_length: 32}
+  - name: len256_blk32_steps32
+    generation: {max_new_tokens: 256, num_denoising_steps: 32, block_length: 32}
+
+# Stage 2b: the paper's free-order (no blocks) setup at length 256: end-of-text committed last
+# (confidence_eos_eot_inf), end-of-text not banned (logits_eos_inf off), 4-shot prompt.
+  - name: len256_blkoff_paper
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 256,
+                 confidence_eos_eot_inf: true, logits_eos_inf: false}
+    dataset_config: "configs/dataset/gsm8k_4shot.yaml"
+  # Same as len256_blkoff_paper but zero-shot, to separate the end-of-text option from the worked examples.
+  - name: len256_blkoff_eoslast
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 256,
+                 confidence_eos_eot_inf: true, logits_eos_inf: false}
+
+# Stage 2c: the authors' exact GSM8K prompt (4-shot multi-turn chat, from their OpenCompass config)
+# with their two published settings: block 8 (paper: 78.6%) and no blocks + end-of-text last (paper: 69.4%).
+  - name: paperprompt_len256_blk8
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 8}
+    dataset_config: "configs/dataset/gsm8k_paper.yaml"
+  # paperprompt_len512_blkoff_eoslast (512 slots, no blocks, end-of-text last; paper: 69.4%) was dropped:
+  # ~150 s/problem with the 1,528-token prompt, and 512 slots never beat 256 in Stage 1.
+  - name: paperprompt_len256_blkoff_eoslast
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 256,
+                 confidence_eos_eot_inf: true, logits_eos_inf: false}
+    dataset_config: "configs/dataset/gsm8k_paper.yaml"

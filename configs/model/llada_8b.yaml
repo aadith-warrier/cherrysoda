@@ -19,3 +19,16 @@ generation:
   defer_eos_eot: false
 
 supports_intermediate_states: true
+
+# Graph params (graph-dev branch): free-order decoding used for the graph-guided method.
+# These need the LLaDA wrapper changes on graph-dev (`confidence_eos_eot_inf`, `logits_eos_inf`,
+# `use_chat_template`), so they are left commented out here.
+# generation:
+#   max_new_tokens: 256
+#   num_denoising_steps: 256
+#   block_length: null            # null = one block spanning the whole answer, i.e. no blocks
+#   temperature: 0.0
+#   remasking_strategy: "low_confidence"
+#   confidence_eos_eot_inf: true
+#   logits_eos_inf: false
+# use_chat_template: true

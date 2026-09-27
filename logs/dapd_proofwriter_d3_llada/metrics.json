@@ -1,0 +1,40 @@
+{
+  "run_id": "dapd_proofwriter_d3_llada",
+  "model": "dapd_llada",
+  "dataset": "proofwriter_depth3",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 64,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "dapd_alg": "dapd_direct",
+    "tau_min": 0.005,
+    "tau_max": 0.05,
+    "layer_ratio": 0.3
+  },
+  "num_examples": 600,
+  "accuracy": 0.7133333333333334,
+  "num_correct": 428,
+  "extraction_pattern": 600,
+  "extraction_vote": 0,
+  "extraction_fallback": 0,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 88.73,
+  "avg_wall_time_sec": 10.611878493626913,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 248.285,
+  "accuracy_by_label": {
+    "False": 0.88,
+    "True": 0.725,
+    "Unknown": 0.535
+  },
+  "predicted_label_counts": {
+    "True": 180,
+    "False": 254,
+    "Unknown": 166
+  }
+}

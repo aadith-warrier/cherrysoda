@@ -1,0 +1,20 @@
+name: dapd_dream
+wrapper: dapd
+base: dream
+hf_repo_id: "Dream-org/Dream-v0-Instruct-7B"
+device: "cuda:1"            # override per run with --device
+
+# Official DAPD settings for Dream GSM8K (README + exp/dapd/_run_dream_task.sh):
+# DAPD-Direct, tau 0.005 -> 0.01, layer_ratio 0.3, 256 tokens, one block
+# (58.8% at 60.0 steps in their README). Dream DAPD decodes greedily (their code).
+# ProofWriter has no official setting; we use the GSM8K one.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256   # not used by DAPD
+  block_length: null
+  temperature: 0.0
+  remasking_strategy: "entropy"          # not used by DAPD
+  dapd_alg: "dapd_direct"
+  tau_min: 0.005
+  tau_max: 0.01
+  layer_ratio: 0.3

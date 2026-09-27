@@ -2,13 +2,18 @@ import argparse
 import importlib
 import json
 import os
+import random
+import sys
 import time
-import torch
-import yaml
-from tqdm import tqdm
+import zlib
 
-from src.models.model_registry import get_model_wrapper
-from data.loaders import load_dataset_unified
+import yaml
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from data.loaders import load_dataset_unified  # noqa: E402
+from src.eval.scoring import score_record, summarize  # noqa: E402
+from src.models.model_registry import get_model_wrapper  # noqa: E402
 
 
 def load_yaml(path):
@@ -16,38 +21,81 @@ def load_yaml(path):
         return yaml.safe_load(f)
 
 
-def get_baseline_module(baseline_name: str):
-    return importlib.import_module(f"baselines.{baseline_name}")
+def seed_everything(seed: int):
+    random.seed(seed)
+    try:
+        import numpy as np
+        np.random.seed(seed)
+    except ImportError:
+        pass
+    try:
+        import torch
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+    except ImportError:
+        pass
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True, help="Path to a configs/run/*.yaml file")
+    parser.add_argument("--device", default=None, help="Override the model config's device, e.g. cuda:2")
+    parser.add_argument("--sample_size", default=None, help='Override run sample_size: "full", "prelim" or an integer')
+    parser.add_argument("--run_id", default=None, help="Override run_id (log folder name)")
+    parser.add_argument("--resume", action="store_true", help="Skip examples already in generations.jsonl")
+    parser.add_argument("--seed", type=int, default=None, help="Override run seed (use with a new --run_id per seed)")
+    parser.add_argument("--no_wandb", action="store_true")
     args = parser.parse_args()
 
     run_cfg = load_yaml(args.config)
-    torch.manual_seed(run_cfg.get("seed", 42))
+    if args.run_id:
+        run_cfg["run_id"] = args.run_id
+    if args.sample_size is not None:
+        run_cfg["sample_size"] = None if args.sample_size == "prelim" else (
+            "full" if args.sample_size == "full" else int(args.sample_size))
+    if args.seed is not None:
+        run_cfg["seed"] = args.seed
+    base_seed = run_cfg.get("seed", 42)
+    seed_everything(base_seed)
+
     model_cfg = load_yaml(run_cfg["model_config"])
+    if args.device:
+        model_cfg["device"] = args.device
+    # Per-run overrides are merged into the model config itself so the wrapper and
+    # the baseline see the same values.
+    model_cfg["generation"].update(run_cfg.get("generation_overrides") or {})
+    gen_cfg = model_cfg["generation"]
     dataset_cfg_path = run_cfg["dataset_config"]
+    dataset_cfg = load_yaml(dataset_cfg_path)
 
     run_id = run_cfg["run_id"]
     log_dir = os.path.join("logs", run_id)
     os.makedirs(log_dir, exist_ok=True)
+    generations_path = os.path.join(log_dir, "generations.jsonl")
+
+    if os.path.exists(generations_path) and not args.resume and os.path.getsize(generations_path) > 0:
+        sys.exit(f"{generations_path} already exists. Use --resume to continue it, or a new --run_id.")
 
     with open(os.path.join(log_dir, "config_used.yaml"), "w") as f:
-        yaml.dump({"run": run_cfg, "model": model_cfg}, f)
-
-    print(f"[{run_id}] Loading model: {model_cfg['name']} on {model_cfg.get('device')}")
-    model = get_model_wrapper(model_cfg)
+        yaml.dump({"run": run_cfg, "model": model_cfg, "dataset": dataset_cfg}, f, sort_keys=False)
 
     print(f"[{run_id}] Loading dataset: {dataset_cfg_path}")
     examples = load_dataset_unified(dataset_cfg_path, sample_size=run_cfg.get("sample_size"))
     print(f"[{run_id}] Loaded {len(examples)} examples")
 
-    baseline_module = get_baseline_module(run_cfg["baseline"])
+    done_ids = set()
+    if args.resume and os.path.exists(generations_path):
+        with open(generations_path) as f:
+            done_ids = {json.loads(line)["example_id"] for line in f if line.strip()}
+        print(f"[{run_id}] Resuming: {len(done_ids)} already done")
+    todo = [ex for ex in examples if ex["example_id"] not in done_ids]
+
+    print(f"[{run_id}] Loading model: {model_cfg['name']} on {model_cfg.get('device')}")
+    model = get_model_wrapper(model_cfg)
+    baseline_module = importlib.import_module(f"baselines.{run_cfg['baseline']}")
 
     wandb_run = None
-    if run_cfg.get("logging", {}).get("wandb_project"):
+    if run_cfg.get("logging", {}).get("wandb_project") and not args.no_wandb:
         import wandb
         wandb_run = wandb.init(
             project=run_cfg["logging"]["wandb_project"],
@@ -55,51 +103,69 @@ def main():
             config={"run": run_cfg, "model": model_cfg},
         )
 
-    generations_path = os.path.join(log_dir, "generations.jsonl")
-    results = []
-
-    with open(generations_path, "w") as out_f:
-        for example in tqdm(examples, desc=run_id):
-            start = time.time()
-            result = baseline_module.run(model, example, model_cfg["generation"])
-            elapsed = time.time() - start
-
+    try:
+        from tqdm import tqdm
+    except ImportError:
+        def tqdm(x, **_):
+            return x
+    running_correct = 0
+    with open(generations_path, "a") as out_f:
+        for i, example in enumerate(tqdm(todo, desc=run_id)):
+            # Per-example seed from (run seed, example_id): sampled runs give the same
+            # output for an example regardless of order, sample size or --resume.
+            example_seed = (base_seed * 1_000_003 + zlib.crc32(example["example_id"].encode())) % (2**31)
+            seed_everything(example_seed)
+            result = baseline_module.run(model, example, gen_cfg)
+            meta = result.raw_metadata or {}
             record = {
                 "example_id": example["example_id"],
+                "dataset": example["metadata"].get("dataset"),
+                "answer_type": example["metadata"].get("answer_type"),
+                "model": model_cfg["name"],
+                "baseline": run_cfg["baseline"],
                 "prompt": example["prompt"],
                 "generation": result.generated_text,
                 "reference_answer": example["reference_answer"],
                 "num_forward_passes": result.num_forward_passes,
-                "wall_time_sec": result.wall_time_sec,
                 "num_denoising_steps_used": result.num_denoising_steps_used,
-                "model": model_cfg["name"],
-                "baseline": run_cfg["baseline"],
-                "dataset": example["metadata"].get("dataset"),
+                "num_remasked_tokens": result.num_remasked_tokens,
+                "wall_time_sec": result.wall_time_sec,
+                "answer_num_tokens": meta.get("answer_num_tokens"),
+                "hit_length_limit": meta.get("hit_length_limit"),
+                "raw_head": meta.get("raw_head"),
+                "seed": example_seed,
+                "voted_answer": meta.get("voted_answer"),
+                "vote_top": meta.get("vote_top"),
+                "num_votes": meta.get("num_votes"),
+                "metadata": example["metadata"],
             }
+            record.update(score_record(record))
             out_f.write(json.dumps(record) + "\n")
-            results.append(record)
+            out_f.flush()
+            running_correct += record["correct"]
 
             if wandb_run:
                 wandb_run.log({
                     "wall_time_sec": result.wall_time_sec,
                     "num_forward_passes": result.num_forward_passes,
+                    "running_accuracy": running_correct / (i + 1),
                 })
 
-    avg_time = sum(r["wall_time_sec"] for r in results) / len(results)
-    avg_passes = sum(r["num_forward_passes"] for r in results) / len(results)
-    summary = {
-        "run_id": run_id,
-        "num_examples": len(results),
-        "avg_wall_time_sec": avg_time,
-        "avg_forward_passes": avg_passes,
-    }
+    with open(generations_path) as f:
+        all_records = [json.loads(line) for line in f if line.strip()]
+    summary = {"run_id": run_id, "model": model_cfg["name"], "dataset": dataset_cfg["name"],
+               "baseline": run_cfg["baseline"], "generation": gen_cfg, **summarize(all_records)}
     with open(os.path.join(log_dir, "metrics.json"), "w") as f:
         json.dump(summary, f, indent=2)
 
-    print(f"[{run_id}] Done. Avg time/example: {avg_time:.2f}s, avg forward passes: {avg_passes:.1f}")
-    print(f"[{run_id}] Generations saved to: {generations_path}")
+    print(f"[{run_id}] Done. accuracy={summary['accuracy']:.2%}  "
+          f"(format fallback {summary['extraction_fallback']}, no answer {summary['extraction_none']}, "
+          f"empty {summary['empty_generations']})  avg NFE={summary['avg_forward_passes']:.1f}  "
+          f"avg time={summary['avg_wall_time_sec']:.2f}s")
+    print(f"[{run_id}] Generations: {generations_path}")
 
     if wandb_run:
+        wandb_run.summary.update({k: v for k, v in summary.items() if isinstance(v, (int, float))})
         wandb_run.finish()
 
 

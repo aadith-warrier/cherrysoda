@@ -1,0 +1,16 @@
+run_id: "proseco_proofwriter_d3"
+
+model_config: "configs/model/proseco_llada_sft.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+baseline: "vanilla"         # the method lives in the model and its official sampler
+
+sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+seed: 42
+
+generation_overrides: {}
+
+logging:
+  save_generations: true
+  save_intermediate_states: false
+  wandb_project: "cherrysoda"
+  wandb_run_name: null

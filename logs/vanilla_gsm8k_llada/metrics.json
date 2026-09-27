@@ -1,6 +1,26 @@
 {
   "run_id": "vanilla_gsm8k_llada",
+  "model": "llada_8b",
+  "dataset": "gsm8k",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "defer_eos_eot": false
+  },
   "num_examples": 1319,
-  "avg_wall_time_sec": 5.4730574161017636,
-  "avg_forward_passes": 128.0
+  "accuracy": 0.8059135708870356,
+  "num_correct": 1063,
+  "extraction_pattern": 1256,
+  "extraction_fallback": 63,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 26.797260393420345,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 223.5284306292646
 }

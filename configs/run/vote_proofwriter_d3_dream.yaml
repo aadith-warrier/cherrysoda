@@ -1,0 +1,17 @@
+run_id: "vote_proofwriter_d3_dream"
+
+model_config: "configs/model/dream_7b.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+baseline: "temporal_vote"
+
+sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+seed: 42
+
+# Paper defaults; everything else matches the vanilla run.
+generation_overrides: {vote_weighting: exp, vote_alpha: 5.0}
+
+logging:
+  save_generations: true
+  save_intermediate_states: false
+  wandb_project: "cherrysoda"
+  wandb_run_name: null

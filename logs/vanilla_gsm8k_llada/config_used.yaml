@@ -1,25 +1,51 @@
-model:
-  device: cuda:0
-  generation:
-    block_length: 32
-    max_new_tokens: 128
-    num_denoising_steps: 128
-    remasking_strategy: low_confidence
-    temperature: 0.0
-  hf_repo_id: GSAI-ML/LLaDA-8B-Instruct
-  mask_token_id: 126336
-  name: llada_8b
-  supports_intermediate_states: true
-  wrapper: llada
 run:
-  baseline: vanilla
+  run_id: vanilla_gsm8k_llada
+  model_config: configs/model/llada_8b.yaml
   dataset_config: configs/dataset/gsm8k.yaml
+  baseline: vanilla
+  sample_size: full
+  seed: 42
+  generation_overrides: {}
   logging:
     save_generations: true
     save_intermediate_states: false
     wandb_project: cherrysoda
     wandb_run_name: null
-  model_config: configs/model/llada_8b.yaml
-  run_id: vanilla_gsm8k_llada
-  sample_size: full
-  seed: 42
+model:
+  name: llada_8b
+  wrapper: llada
+  hf_repo_id: GSAI-ML/LLaDA-8B-Instruct
+  dtype: bfloat16
+  device: cuda:0
+  mask_token_id: 126336
+  generation:
+    max_new_tokens: 256
+    num_denoising_steps: 256
+    block_length: 32
+    temperature: 0.0
+    remasking_strategy: low_confidence
+    defer_eos_eot: false
+  supports_intermediate_states: true
+dataset:
+  name: gsm8k
+  hf_repo_id: openai/gsm8k
+  hf_subset: main
+  split: test
+  loader: gsm8k
+  answer_type: numeric
+  prelim_sample_size: 100
+  full_sample_size: null
+  prompt_template: 'Solve the following grade school math problem step by step.
+
+    Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+    At the end, write the final answer on its own line in the form "The answer is:
+    <number>".
+
+
+    Problem: {question}
+
+
+    Solution:
+
+    '

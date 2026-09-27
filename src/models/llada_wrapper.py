@@ -1,23 +1,50 @@
+import random
 import time
+
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
- 
-from src.models.base import BaseDLMWrapper, GenerationResult, DenoisingStepRecord
- 
- 
+from transformers import AutoModel, AutoTokenizer
+
+from src.models.base import (
+    BaseDLMWrapper,
+    DenoisingStepRecord,
+    GenerationResult,
+    build_chat_input_ids,
+    truncate_at_stop,
+)
+
+LLADA_STOP_TOKENS = ("<|eot_id|>", "<|endoftext|>")
+LLADA_EOS_ID = 126081   # <|endoftext|>, as hard-coded in the official generate.py
+LLADA_EOT_ID = 126348   # <|eot_id|>
+
+
+def get_num_transfer_tokens(num_masked: int, steps: int) -> list:
+    base, remainder = divmod(num_masked, steps)
+    return [base + (1 if i < remainder else 0) for i in range(steps)]
+
+
 class LLaDAWrapper(BaseDLMWrapper):
- 
+
     def load(self):
         repo_id = self.config["hf_repo_id"]
         dtype = getattr(torch, self.config.get("dtype", "bfloat16"))
- 
+
         self.tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
-        self.model = AutoModelForCausalLM.from_pretrained(
+        # Official README loads with AutoModel (LLaDAModelLM via trust_remote_code).
+        self.model = AutoModel.from_pretrained(
             repo_id, trust_remote_code=True, torch_dtype=dtype
         ).to(self.device).eval()
 
         self.mask_token_id = self.config.get("mask_token_id", 126336)
- 
+
+        stop_ids = set()
+        for tok in LLADA_STOP_TOKENS:
+            tid = self.tokenizer.convert_tokens_to_ids(tok)
+            if tid is not None and tid != self.tokenizer.unk_token_id:
+                stop_ids.add(tid)
+        if self.tokenizer.eos_token_id is not None:
+            stop_ids.add(self.tokenizer.eos_token_id)
+        self.stop_token_ids = stop_ids
+
     @torch.no_grad()
     def generate(
         self,
@@ -28,89 +55,123 @@ class LLaDAWrapper(BaseDLMWrapper):
         return_intermediate_states=False,
         eligibility_fn=None,
         block_length=None,
+        step_observer=None,
     ) -> GenerationResult:
+        if remasking_strategy not in ("low_confidence", "random"):
+            raise ValueError(
+                f"LLaDA supports remasking_strategy 'low_confidence' or 'random', got '{remasking_strategy}'."
+            )
 
         start_time = time.time()
- 
-        block_length = block_length or self.config.get("block_length") or max_new_tokens
+
+        block_length = block_length or self.config.get("generation", {}).get("block_length") or max_new_tokens
         if max_new_tokens % block_length != 0:
-            raise ValueError(
-                f"max_new_tokens ({max_new_tokens}) must be divisible by block_length ({block_length})."
-            )
+            raise ValueError(f"max_new_tokens ({max_new_tokens}) must be divisible by block_length ({block_length}).")
         num_blocks = max_new_tokens // block_length
-        steps_per_block = max(1, num_denoising_steps // num_blocks)
- 
-        prompt_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(self.device)
+        if num_denoising_steps % num_blocks != 0:
+            raise ValueError(
+                f"num_denoising_steps ({num_denoising_steps}) must be divisible by the number of blocks ({num_blocks})."
+            )
+        steps_per_block = num_denoising_steps // num_blocks
+        defer_eos_eot = bool(self.config.get("generation", {}).get("defer_eos_eot", False))
+
+        prompt_ids = build_chat_input_ids(self.tokenizer, prompt, self.device)
+        prompt_len = prompt_ids.shape[1]
         gen_ids = torch.full((1, max_new_tokens), self.mask_token_id, dtype=torch.long, device=self.device)
         input_ids = torch.cat([prompt_ids, gen_ids], dim=1)
-        prompt_len = prompt_ids.shape[1]
- 
+
         intermediate_states = [] if return_intermediate_states else None
         num_forward_passes = 0
         global_step = 0
- 
+        forward_count = [0]
+
+        def forward_block(bs, be):
+            all_logits = self.model(input_ids).logits[0]
+            if step_observer is not None:
+                gen = input_ids[0, prompt_len:]
+                guess = torch.where(gen == self.mask_token_id, all_logits[prompt_len:].argmax(dim=-1), gen)
+                step_observer(forward_count[0], guess.tolist())
+            forward_count[0] += 1
+            probs = torch.softmax(all_logits[bs:be].to(torch.float64), dim=-1)
+            conf, pred = probs.max(dim=-1)
+            if defer_eos_eot:
+                is_end = (pred == LLADA_EOS_ID) | (pred == LLADA_EOT_ID)
+                conf = conf.masked_fill(is_end, float("-inf"))
+            return conf, pred
+
         for block_idx in range(num_blocks):
-            block_start = prompt_len + block_idx * block_length
-            block_end = prompt_len + (block_idx + 1) * block_length
- 
-            for _ in range(steps_per_block):
-                block_masked = (input_ids[0, block_start:block_end] == self.mask_token_id).nonzero(as_tuple=True)[0]
-                if len(block_masked) == 0:
-                    break  
- 
-                logits = self.model(input_ids).logits
+            bs = prompt_len + block_idx * block_length
+            be = bs + block_length
+            n_masked = int((input_ids[0, bs:be] == self.mask_token_id).sum())
+            schedule = get_num_transfer_tokens(n_masked, steps_per_block)
+
+            for k in schedule:
+                masked = (input_ids[0, bs:be] == self.mask_token_id).nonzero(as_tuple=True)[0].tolist()
+                if not masked:
+                    break
+                if k == 0:
+                    continue  # would be a no-op step; skip it rather than spend a forward pass
+
+                conf, pred = forward_block(bs, be)
                 num_forward_passes += 1
- 
-                block_logits = logits[0, block_start:block_end]
-                confidences = self.get_token_confidences(block_logits)
- 
-                eos_id = getattr(self.tokenizer, "eos_token_id", None)
-                predicted_ids = block_logits.argmax(dim=-1)
-                if eos_id is not None:
-                    for pos in block_masked.tolist():
-                        if predicted_ids[pos].item() == eos_id:
-                            confidences[pos] = -1.0  
- 
-                candidate_positions = block_masked.tolist()
+
+                candidates = masked
                 if eligibility_fn is not None:
-                    eligible = eligibility_fn(global_step, candidate_positions, None, None)
-                    eligible_set = set(eligible)
-                    candidate_positions = [p for p in candidate_positions if p in eligible_set]
-                    if not candidate_positions:
+                    eligible = set(eligibility_fn(global_step, candidates, None, None))
+                    candidates = [p for p in candidates if p in eligible]
+                    if not candidates:
                         global_step += 1
                         continue
- 
-                tokens_this_step = max(1, len(block_masked) // steps_per_block)
-                ranked = sorted(candidate_positions, key=lambda p: confidences[p], reverse=True)
-                commit_positions = ranked[:tokens_this_step]
- 
-                for p in commit_positions:
-                    input_ids[0, block_start + p] = predicted_ids[p]
- 
+
+                if remasking_strategy == "low_confidence":
+                    ranked = sorted(candidates, key=lambda p: conf[p].item(), reverse=True)
+                else:
+                    ranked = random.sample(candidates, len(candidates))
+                commit = ranked[:min(k, len(ranked))]
+                for p in commit:
+                    input_ids[0, bs + p] = pred[p]
+
                 if return_intermediate_states:
+                    committed = set(commit)
                     intermediate_states.append(DenoisingStepRecord(
                         step_index=global_step,
-                        token_ids=input_ids[0].tolist(),
-                        confidences=confidences,
-                        newly_unmasked_positions=[block_start - prompt_len + p for p in commit_positions],
-                        still_masked_positions=[block_start - prompt_len + p for p in candidate_positions if p not in commit_positions],
+                        token_ids=input_ids[0, prompt_len:].tolist(),
+                        confidences=conf.tolist(),
+                        newly_unmasked_positions=[bs - prompt_len + p for p in commit],
+                        still_masked_positions=[bs - prompt_len + p for p in masked if p not in committed],
                     ))
                 global_step += 1
- 
-        generated_text = self.tokenizer.decode(input_ids[0, prompt_len:], skip_special_tokens=True)
+
+            # Only reachable when eligibility_fn held positions back: finish the block
+            # so no [MASK] tokens leak into the output.
+            leftover = (input_ids[0, bs:be] == self.mask_token_id).nonzero(as_tuple=True)[0].tolist()
+            if leftover:
+                conf, pred = forward_block(bs, be)
+                num_forward_passes += 1
+                for p in leftover:
+                    input_ids[0, bs + p] = pred[p]
+                global_step += 1
+
+        gen_token_ids = input_ids[0, prompt_len:].tolist()
+        answer_ids = truncate_at_stop(gen_token_ids, self.stop_token_ids)
+        generated_text = self.tokenizer.decode(answer_ids, skip_special_tokens=True).strip()
         wall_time = time.time() - start_time
- 
+
         return GenerationResult(
             prompt=prompt,
             generated_text=generated_text,
             num_forward_passes=num_forward_passes,
             wall_time_sec=wall_time,
             num_denoising_steps_used=global_step,
+            num_remasked_tokens=0,
             intermediate_states=intermediate_states,
+            raw_metadata={
+                "prompt_num_tokens": prompt_len,
+                "answer_num_tokens": len(answer_ids),
+                "hit_length_limit": len(answer_ids) == len(gen_token_ids),
+            },
         )
- 
+
     def get_token_confidences(self, logits) -> list:
-        probs = torch.softmax(logits, dim=-1)
-        max_probs = probs.max(dim=-1).values
-        return max_probs.tolist()
- 
+        probs = torch.softmax(logits.float(), dim=-1)
+        return probs.max(dim=-1).values.tolist()

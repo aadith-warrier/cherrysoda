@@ -1,15 +1,27 @@
 name: dream_7b
 wrapper: dream
-hf_repo_id: "Dream-org/Dream-v0-Instruct-7B"  
+hf_repo_id: "Dream-org/Dream-v0-Instruct-7B"
 dtype: bfloat16
-device: "cuda:1"                   
+device: "cuda:1"            # override per run with --device
+
+# Shared decoding budget (identical for both models): 256 new tokens, 256 steps
+# (1 token per step), greedy. Sampler = Dream's official default: entropy-ordered
+# unmasking over the whole window (Dream v0 has no blocks, so block_length must be null).
+# For a same-rule ablation against LLaDA, set remasking_strategy: low_confidence
+# (Dream's maskgit_plus, which ranks by top-1 probability like LLaDA).
 generation:
   max_new_tokens: 256
   num_denoising_steps: 256
   block_length: null
+  # Dream's README settings (temperature 0.2, top_p 0.95). Greedy decoding (0.0) makes
+  # Dream-Instruct answer in ~16 tokens with little or no reasoning (probe: mean 16
+  # tokens, min 7), while README sampling gives full solutions (mean 160 tokens) and
+  # better accuracy. Runs stay reproducible through a per-example seed in run_baseline.py;
+  # report the mean over seeds.
   temperature: 0.2
   top_p: 0.95
   alg_temp: 0.0
-  remasking_strategy: "low_confidence"
+  remasking_strategy: "entropy"   # entropy | low_confidence | margin | random
+  suppress_endoftext: false       # see dream_wrapper.py; decided by scripts/probe_short_answers.py
 
 supports_intermediate_states: true

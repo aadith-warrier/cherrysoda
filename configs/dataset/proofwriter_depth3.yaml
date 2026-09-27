@@ -1,17 +1,31 @@
 name: proofwriter_depth3
-source: "allenai_download"           
+source: "allenai_download"
 download_page: "https://allenai.org/data/proofwriter"
-raw_data_path: "data/raw/proofwriter/"  
-depth: 3                             
+raw_data_path: "data/raw/proofwriter/"
+# Loader reads  <raw_data_path>/**/<world>/depth-<depth>/meta-<split>.jsonl
+# (e.g. proofwriter-dataset-V2020.12.3/OWA/depth-3/meta-test.jsonl), one theory per
+# line with a nested `questions` field, and flattens it to one example per question.
+world: "OWA"                # OWA gives True/False/Unknown; CWA has no Unknown
+depth: 3
+split: "test"
 loader: proofwriter
+answer_type: label
 
-prelim_sample_size: 100
-full_sample_size: null
+# ProofWriter depth-3 test has far more questions than we can run, so we take a
+# fixed label-balanced subsample (equal True/False/Unknown), shuffled with `seed`.
+# The prelim 100 are a prefix of the full 600, so prelim numbers carry over.
+sample_seed: 1234
+prelim_sample_size: 100     # 34/33/33 across labels
+full_sample_size: 600       # 200 per label
 
 prompt_template: |
   Given the following facts and rules, determine whether the hypothesis is True, False, or Unknown.
+  - True: the hypothesis can be proved from the facts and rules.
+  - False: the negation of the hypothesis can be proved from the facts and rules.
+  - Unknown: neither the hypothesis nor its negation can be proved.
   Explain your reasoning step by step, stating each inference explicitly
-  (e.g., "Since X and Rule2, we can conclude Y").
+  (e.g., "Since Bob is red and all red things are rough, Bob is rough").
+  At the end, write the final answer on its own line in the form "The answer is: True", "The answer is: False", or "The answer is: Unknown".
 
   Theory: {theory}
   Hypothesis: {hypothesis}

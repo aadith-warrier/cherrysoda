@@ -1,13 +1,21 @@
 name: llada_8b
 wrapper: llada
 hf_repo_id: "GSAI-ML/LLaDA-8B-Instruct"
-device: "cuda:0"
+dtype: bfloat16
+device: "cuda:0"            # override per run with --device
 mask_token_id: 126336
+
+# Shared decoding budget (identical for both models): 256 new tokens, 256 steps
+# (1 token per step), greedy. Sampler = LLaDA's official default:
+# semi-autoregressive blocks of 32, low_confidence remasking.
 generation:
-  max_new_tokens: 128
-  num_denoising_steps: 128
-  block_length: 32 
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 32
   temperature: 0.0
-  remasking_strategy: "low_confidence"
+  remasking_strategy: "low_confidence"   # low_confidence | random
+  # Official LLaDA option `confidence_eos_eot_inf` (commit EOS/EoT predictions last).
+  # Off = the official default; LLaDA already reasons fully without it.
+  defer_eos_eot: false
 
 supports_intermediate_states: true

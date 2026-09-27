@@ -1,15 +1,17 @@
 name: svamp
-source: "github"                    
+source: "github"
 github_repo: "https://github.com/arkilpatel/SVAMP.git"
-raw_json_path: "data/raw/SVAMP/SVAMP.json"  
+raw_json_path: "data/raw/SVAMP/SVAMP.json"   # 1,000 problems; fields ID, Body, Question, Equation, Answer (float), Type
 loader: svamp
+answer_type: numeric
 
 prelim_sample_size: 100
-full_sample_size: null
+full_sample_size: null      # null = all 1,000
 
 prompt_template: |
   Solve the following math word problem step by step.
   Show each calculation explicitly (e.g., "5 + 3 = 8").
+  At the end, write the final answer on its own line in the form "The answer is: <number>".
 
   Problem: {question}
 

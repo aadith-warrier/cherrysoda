@@ -2,14 +2,16 @@ name: gsm8k
 hf_repo_id: "openai/gsm8k"
 hf_subset: "main"
 split: "test"
-loader: gsm8k                       
+loader: gsm8k
+answer_type: numeric
 
-prelim_sample_size: 100           
-full_sample_size: null            
+prelim_sample_size: 100
+full_sample_size: null      # null = all 1,319
 
 prompt_template: |
   Solve the following grade school math problem step by step.
   Show each calculation explicitly (e.g., "5 + 3 = 8").
+  At the end, write the final answer on its own line in the form "The answer is: <number>".
 
   Problem: {question}
 

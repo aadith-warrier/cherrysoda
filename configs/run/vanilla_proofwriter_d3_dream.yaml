@@ -1,0 +1,18 @@
+run_id: "vanilla_proofwriter_d3_dream"
+
+model_config: "configs/model/dream_7b.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+baseline: "vanilla"
+
+sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+seed: 42
+
+# Optional per-run overrides of the model's generation block, e.g.
+# generation_overrides: {remasking_strategy: low_confidence}
+generation_overrides: {}
+
+logging:
+  save_generations: true
+  save_intermediate_states: false
+  wandb_project: "cherrysoda"
+  wandb_run_name: null

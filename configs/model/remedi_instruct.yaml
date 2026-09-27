@@ -1,0 +1,14 @@
+name: remedi_instruct
+wrapper: remedi
+hf_repo_id: "maple-research-lab/RemeDi-Instruct"  # SFT-only checkpoint; built on LLaDA-8B-Instruct; ~9B params
+dtype: bfloat16
+device: "cuda:0"            # override per run with --device
+
+# Same budget as the LLaDA vanilla run: 256 tokens in blocks of 32, 32 steps per block
+# (1 token per step). The official sampler is greedy (argmax) and has no other options.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 32
+  temperature: 0.0          # not used: the official sampler is argmax only
+  remasking_strategy: "low_confidence"   # not used: the official sampler decides remasking itself

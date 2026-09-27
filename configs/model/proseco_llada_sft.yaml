@@ -1,0 +1,20 @@
+name: proseco_llada_sft
+wrapper: proseco
+hf_repo_id: "kuleshov-group/proseco-llada-sft"   # LLaDA-8B-Base + ProSeCo SFT
+tokenizer_repo_id: "GSAI-ML/LLaDA-8B-Instruct"   # as in the official harness
+dtype: bfloat16
+device: "cuda:0"            # override per run with --device
+mask_token_id: 126336
+
+# Same budget as the LLaDA vanilla run (256 tokens, 256 predictor steps, blocks of 32, greedy).
+# Corrector settings are the official harness defaults. The corrector adds forward passes;
+# they are reported in num_forward_passes (total NFE).
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 32
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+  apply_corrector_every_n_steps: 2
+  max_corrector_steps_per_loop: 4     # 0 = corrector off
+  early_eos_stopping: true

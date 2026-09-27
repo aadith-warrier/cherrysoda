@@ -1,0 +1,21 @@
+name: dapd_llada
+wrapper: dapd
+base: llada
+hf_repo_id: "GSAI-ML/LLaDA-8B-Instruct"
+device: "cuda:0"            # override per run with --device
+
+# Official DAPD settings for LLaDA GSM8K (README + exp/dapd/_run_llada_task.sh):
+# DAPD-Direct, tau 0.005 -> 0.05, layer_ratio 0.3, 256 tokens, 4 blocks (block 64),
+# the paper's best GSM8K setting (75.8% at 61.4 steps). DAPD decides its own step
+# count, so num_denoising_steps is ignored; forward passes are reported as NFE.
+# ProofWriter has no official setting; we use the GSM8K one.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256   # not used by DAPD
+  block_length: 64
+  temperature: 0.0
+  remasking_strategy: "low_confidence"   # not used by DAPD
+  dapd_alg: "dapd_direct"
+  tau_min: 0.005
+  tau_max: 0.05
+  layer_ratio: 0.3

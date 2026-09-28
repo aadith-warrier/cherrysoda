@@ -1,0 +1,26 @@
+{
+  "run_id": "remedi_rl_svamp",
+  "model": "remedi_rl",
+  "dataset": "svamp",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence"
+  },
+  "num_examples": 1000,
+  "accuracy": 0.933,
+  "num_correct": 933,
+  "extraction_pattern": 997,
+  "extraction_vote": 0,
+  "extraction_fallback": 3,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 1,
+  "avg_forward_passes": 265.0,
+  "avg_wall_time_sec": 12.717621431589127,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 91.421
+}

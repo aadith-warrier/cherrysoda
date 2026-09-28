@@ -1,0 +1,29 @@
+{
+  "run_id": "proseco_svamp",
+  "model": "proseco_llada_sft",
+  "dataset": "svamp",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "apply_corrector_every_n_steps": 2,
+    "max_corrector_steps_per_loop": 4,
+    "early_eos_stopping": true
+  },
+  "num_examples": 1000,
+  "accuracy": 0.873,
+  "num_correct": 873,
+  "extraction_pattern": 958,
+  "extraction_vote": 0,
+  "extraction_fallback": 20,
+  "extraction_none": 22,
+  "empty_generations": 20,
+  "hit_length_limit": 5,
+  "avg_forward_passes": 105.203,
+  "avg_wall_time_sec": 7.282001231193543,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 31.885
+}

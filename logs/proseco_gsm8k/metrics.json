@@ -1,0 +1,29 @@
+{
+  "run_id": "proseco_gsm8k",
+  "model": "proseco_llada_sft",
+  "dataset": "gsm8k",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "apply_corrector_every_n_steps": 2,
+    "max_corrector_steps_per_loop": 4,
+    "early_eos_stopping": true
+  },
+  "num_examples": 1319,
+  "accuracy": 0.7414708112206216,
+  "num_correct": 978,
+  "extraction_pattern": 1106,
+  "extraction_vote": 0,
+  "extraction_fallback": 178,
+  "extraction_none": 35,
+  "empty_generations": 33,
+  "hit_length_limit": 121,
+  "avg_forward_passes": 269.11523881728584,
+  "avg_wall_time_sec": 18.353516660015,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 112.7846853677028
+}

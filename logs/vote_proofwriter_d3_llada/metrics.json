@@ -1,0 +1,39 @@
+{
+  "run_id": "vote_proofwriter_d3_llada",
+  "model": "llada_8b",
+  "dataset": "proofwriter_depth3",
+  "baseline": "temporal_vote",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "defer_eos_eot": false,
+    "vote_weighting": "exp",
+    "vote_alpha": 5.0
+  },
+  "num_examples": 600,
+  "accuracy": 0.6766666666666666,
+  "num_correct": 406,
+  "extraction_pattern": 0,
+  "extraction_vote": 600,
+  "extraction_fallback": 0,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 21.54349332968394,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 240.53333333333333,
+  "accuracy_by_label": {
+    "False": 0.865,
+    "True": 0.7,
+    "Unknown": 0.465
+  },
+  "predicted_label_counts": {
+    "Unknown": 165,
+    "True": 178,
+    "False": 257
+  }
+}

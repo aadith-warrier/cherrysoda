@@ -1,0 +1,38 @@
+
+run                                               n     acc fallbk  none empty    NFE    sec
+check_proseco                                   100  77.00%     13     3     3  247.7  23.67
+check_proseco_off                               100  82.00%     11     1     1  136.3  12.68
+check_proseco_on_llada                          100   9.00%     76    18     6  153.9  12.56
+check_remedi                                    100  83.00%     13     0     0  265.0  13.94
+dapd_gsm8k_dream                               1319  63.84%     54     2     0   48.0   5.44
+dapd_gsm8k_llada                               1319  79.15%     32     0     0   64.7   5.12
+dapd_proofwriter_d3_dream                       600  62.00%      0     0     0   25.5   3.41
+                                              by label: False 94.5%, True 90.0%, Unknown 1.5%
+dapd_proofwriter_d3_llada                       600  71.33%      0     0     0   88.7  10.61
+                                              by label: False 88.0%, True 72.5%, Unknown 53.5%
+dapd_svamp_dream                               1000  77.70%     29     1     0   42.3   4.52
+dapd_svamp_llada                               1000  86.70%     18     0     0   57.1   5.28
+proseco_gsm8k                                  1319  74.15%    178    35    33  269.1  18.35
+proseco_proofwriter_d3                          600  53.67%     61    87     0  390.3  33.58
+                                              by label: False 69.0%, True 89.0%, Unknown 3.0%
+proseco_svamp                                  1000  87.30%     20    22    20  105.2   7.28
+remedi_rl_gsm8k                                1319  74.83%    214     0     0  265.0  10.27
+remedi_rl_proofwriter_d3                        600  58.83%      7   120     0  265.0  10.72
+                                              by label: False 67.5%, True 66.5%, Unknown 42.5%
+remedi_rl_svamp                                1000  93.30%      3     0     0  265.0  12.72
+vanilla_gsm8k_dream                            1319  80.36%     53     0     0  256.0  29.21
+vanilla_gsm8k_llada                            1319  80.59%     63     0     0  256.0  26.80
+vanilla_proofwriter_d3_dream                    600  44.33%      2   168     0  256.0  21.09
+                                              by label: False 65.5%, True 65.0%, Unknown 2.5%
+vanilla_proofwriter_d3_llada                    600  67.50%      2     0     0  256.0  29.19
+                                              by label: False 86.0%, True 69.5%, Unknown 47.0%
+vanilla_svamp_dream                            1000  85.40%     22     0     0  256.0  21.30
+vanilla_svamp_llada                            1000  88.40%     25     0     0  256.0  23.43
+vote_gsm8k_dream                               1319  79.76%     16     0     0  256.0  21.85
+vote_gsm8k_llada                               1319  79.91%      0     0     0  256.0  16.90
+vote_proofwriter_d3_dream                       600  56.83%      0    58     0  256.0  27.59
+                                              by label: False 89.5%, True 78.5%, Unknown 2.5%
+vote_proofwriter_d3_llada                       600  67.67%      0     0     0  256.0  21.54
+                                              by label: False 86.5%, True 70.0%, Unknown 46.5%
+vote_svamp_dream                               1000  85.40%      5     0     0  256.0  16.08
+vote_svamp_llada                               1000  88.30%      0     0     0  256.0  15.57

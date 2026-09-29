@@ -1,0 +1,29 @@
+{
+  "run_id": "vote_svamp_llada",
+  "model": "llada_8b",
+  "dataset": "svamp",
+  "baseline": "temporal_vote",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "defer_eos_eot": false,
+    "vote_weighting": "exp",
+    "vote_alpha": 5.0
+  },
+  "num_examples": 1000,
+  "accuracy": 0.883,
+  "num_correct": 883,
+  "extraction_pattern": 0,
+  "extraction_vote": 1000,
+  "extraction_fallback": 0,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 15.568941174268723,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 169.183
+}

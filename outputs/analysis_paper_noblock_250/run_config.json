@@ -1,0 +1,12 @@
+{
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 256,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "confidence_eos_eot_inf": true,
+    "logits_eos_inf": false
+  },
+  "dataset_config": "configs/dataset/gsm8k_paper.yaml"
+}

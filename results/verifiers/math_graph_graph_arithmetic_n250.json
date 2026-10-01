@@ -1,0 +1,42 @@
+{
+  "verifier": "graph_arithmetic",
+  "n_gold_graphs": 250,
+  "gold_step_fpr": 0.032917139614074914,
+  "gold_judged_step_fpr": 0.03656998738965952,
+  "gold_graph_fpr": 0.072,
+  "gold_steps_judged": 0.9001135073779796,
+  "perturbed": {
+    "arithmetic": {
+      "detected": 0.9634146341463414,
+      "exact": 0.43902439024390244,
+      "first_flag_is_error": 0.9146341463414634,
+      "extra_downstream": 0.036585365853658534,
+      "extra_unrelated": 0.5975609756097561,
+      "n": 82
+    },
+    "copy_error": {
+      "detected": 0.9102564102564102,
+      "exact": 0.4358974358974359,
+      "first_flag_is_error": 0.8589743589743589,
+      "extra_downstream": 0.0641025641025641,
+      "extra_unrelated": 0.6153846153846154,
+      "n": 78
+    },
+    "operator_swap": {
+      "detected": 1.0,
+      "exact": 0.9651162790697675,
+      "first_flag_is_error": 0.9767441860465116,
+      "extra_downstream": 0.011627906976744186,
+      "extra_unrelated": 0.023255813953488372,
+      "n": 86
+    },
+    "all": {
+      "detected": 0.959349593495935,
+      "exact": 0.6219512195121951,
+      "first_flag_is_error": 0.9186991869918699,
+      "extra_downstream": 0.036585365853658534,
+      "extra_unrelated": 0.4024390243902439,
+      "n": 246
+    }
+  }
+}

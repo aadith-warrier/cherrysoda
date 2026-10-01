@@ -1,0 +1,42 @@
+{
+  "verifier": "graph_arithmetic_nogrounding",
+  "n_gold_graphs": 1319,
+  "gold_step_fpr": 0.008507989209379539,
+  "gold_judged_step_fpr": 0.009642521166509878,
+  "gold_graph_fpr": 0.02122820318423048,
+  "gold_steps_judged": 0.882340734592239,
+  "perturbed": {
+    "arithmetic": {
+      "detected": 0.9234338747099768,
+      "exact": 0.9118329466357309,
+      "first_flag_is_error": 0.9211136890951276,
+      "extra_downstream": 0.016241299303944315,
+      "extra_unrelated": 0.0069605568445475635,
+      "n": 431
+    },
+    "copy_error": {
+      "detected": 0.12222222222222222,
+      "exact": 0.11777777777777777,
+      "first_flag_is_error": 0.12222222222222222,
+      "extra_downstream": 0.017777777777777778,
+      "extra_unrelated": 0.011111111111111112,
+      "n": 450
+    },
+    "operator_swap": {
+      "detected": 0.9904761904761905,
+      "exact": 0.9761904761904762,
+      "first_flag_is_error": 0.9857142857142858,
+      "extra_downstream": 0.009523809523809525,
+      "extra_unrelated": 0.009523809523809525,
+      "n": 420
+    },
+    "all": {
+      "detected": 0.6679477325134512,
+      "exact": 0.6579554189085319,
+      "first_flag_is_error": 0.665641813989239,
+      "extra_downstream": 0.014604150653343582,
+      "extra_unrelated": 0.009223674096848577,
+      "n": 1301
+    }
+  }
+}

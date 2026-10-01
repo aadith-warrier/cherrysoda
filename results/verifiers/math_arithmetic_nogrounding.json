@@ -1,0 +1,73 @@
+{
+  "task": "math",
+  "verifier": "arithmetic_nogrounding",
+  "n_cases": 10564,
+  "binary": {
+    "n": 10564,
+    "tp": 3672,
+    "fp": 3,
+    "fn": 1610,
+    "tn": 5279,
+    "precision": 0.9991836734693877,
+    "recall": 0.6951912154486937,
+    "f1": 0.8199173830523613,
+    "false_positive_rate": 0.0005679666792881485,
+    "accuracy": 0.8473116243847028
+  },
+  "coverage": 0.9822037107156381,
+  "coverage_on_valid": 0.9822037107156381,
+  "auroc": 0.8473116243847028,
+  "detection_rate_by_error": {
+    "arithmetic": 0.978051391862955,
+    "copy_error": 0.10646823125357756,
+    "operator_swap": 0.9952009598080384,
+    "valid (false positive rate)": 0.0005679666792881485
+  },
+  "predicted_error_types": {
+    "arithmetic": {
+      "arithmetic": 1827,
+      "unverifiable": 38,
+      "valid": 3
+    },
+    "copy_error": {
+      "valid": 1513,
+      "unverifiable": 48,
+      "arithmetic": 186
+    },
+    "operator_swap": {
+      "arithmetic": 1659,
+      "unverifiable": 8
+    },
+    "valid": {
+      "valid": 5185,
+      "unverifiable": 94,
+      "arithmetic": 3
+    }
+  },
+  "binary_by_dataset": {
+    "gsm8k": {
+      "n": 8564,
+      "tp": 2993,
+      "fp": 2,
+      "fn": 1289,
+      "tn": 4280,
+      "precision": 0.9993322203672788,
+      "recall": 0.6989724427837459,
+      "f1": 0.8225917273601759,
+      "false_positive_rate": 0.00046707146193367583,
+      "accuracy": 0.8492526856609062
+    },
+    "svamp": {
+      "n": 2000,
+      "tp": 679,
+      "fp": 1,
+      "fn": 321,
+      "tn": 999,
+      "precision": 0.9985294117647059,
+      "recall": 0.679,
+      "f1": 0.8083333333333333,
+      "false_positive_rate": 0.001,
+      "accuracy": 0.839
+    }
+  }
+}

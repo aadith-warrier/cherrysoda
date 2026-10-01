@@ -71,6 +71,52 @@ instead, so every run stays reproducible from git history alone.
    denoising states can be extracted (required for Track D), and (c) gives you
    real per-example timing to size prelim sample counts.
 
+## Verifiers (Phase 4)
+
+Step verifiers return one `Verdict` per reasoning step (`valid` / `invalid` / `unverifiable`, a score
+`p_invalid`, an error type and the individual checks); `valid` means the step was independently checked,
+which is where the Phase 5 minimal-subgraph search stops.
+
+| Module | What it checks |
+|---|---|
+| `src/verify/graph_math.py` | GSM8K/SVAMP graphs from `src/graph`: every parsed `Equation` recomputed with sympy over exact rationals (`sympy_equation_holds` = `equation_holds` without floats); operands no earlier step or the problem provides (`unsourced_values`, restricted to computing operands); text fallback for equations the builder missed |
+| `src/verify/arithmetic.py` | the same checks straight from step text (for text without a graph, e.g. half-denoised steps; masked steps are `unverifiable`) |
+| `src/verify/logic.py` | ProofWriter: parses the theory, closes it under its rules (open world) and checks each step's conclusions, stated premises, cited rules and "cannot be proved" claims |
+| `src/verify/nli.py` | NLI verifier for causal (since / because / so / if-then) steps with DeBERTa-v3-large NLI: stated reasons grounded clause by clause, cited rules checked against the context, and the inference decomposed into consequent => conclusion and facts => each antecedent (off-the-shelf NLI does not do modus ponens) |
+| `src/verify/calibration.py` | P/R/F1 per class, FPR, AUROC, ECE / Brier, temperature scaling, threshold fitting |
+| `src/verify/reference.py` | labelled test cases from gold reasoning: GSM8K `<<a*b=c>>` solutions (as text and as graphs built by `build_math_graph`), SVAMP equations, ProofWriter proof trees, each with one injected error |
+
+```bash
+python -m scripts.verify_graphs --dir outputs/analysis_paper_noblock_250           # verdicts_arith.jsonl for Phase 5
+python -m scripts.compare_arith_verifiers --dir outputs/analysis_paper_noblock_250 # vs equation_holds / check_equations
+python scripts/eval_verifiers.py --task math-graph      # gold GSM8K graphs: FPR, detection, localisation
+python scripts/eval_verifiers.py --task math            # text verifier on GSM8K + SVAMP reference steps
+python scripts/eval_verifiers.py --task logic --verifiers symbolic nli
+python scripts/verify_generations.py --generations logs/vanilla_proofwriter_d3_llada/generations.jsonl --verifiers symbolic nli
+```
+NLI temperature / threshold: `configs/verifier/nli.yaml`. Results: `results/verifiers/`.
+
+**Results so far**
+
+- *Graph arithmetic, gold GSM8K test graphs (1,319, one injected error each):* step FPR 0.85% (arithmetic
+  only) / 2.7% (with grounding); injected errors detected 92% (wrong result), 99% (wrong operator), 91%
+  (copied-in wrong operand, grounding only); the first flagged node is the injected one in 91% of graphs;
+  other flags fall almost only on steps downstream of the error.
+- *LLaDA, `analysis_paper_noblock_250`:* agrees with `equation_holds` on all 1,258 parsed equations; a flagged
+  step picks out 50/86 wrong answers at precision 0.94 (arithmetic) or 56/86 at 0.89 (with grounding);
+  `check_equations` (text only): 45/86 at 0.88, its extra flags are chain / algebra misreads.
+- *ProofWriter symbolic:* reproduces all 20,346 depth-3 test labels; F1 1.0 on reference steps; ~90% of its
+  flags on real LLaDA steps are genuine reasoning errors (hand audit of 40).
+- *NLI (DeBERTa-v3-large), ProofWriter reference steps:* 3-class macro-F1 0.81 (entailment 0.86, neutral 0.70,
+  contradiction 0.88); binary F1 0.87 / FPR 0.26 at 0.5, F1 0.91 / FPR 0.15 at the fitted threshold;
+  temperature scaling (T=3.2) lowers 3-class ECE 0.12 -> 0.09 (binary ECE rises 0.12 -> 0.16).
+  **On real LLaDA steps it does not hold up:** against the symbolic verdicts (200 answers, 2,140 steps both
+  judge) it catches 72% of invalid steps but only 14% of its flags are invalid, and it flags 46% of valid
+  steps. Use the symbolic verifier for ProofWriter; NLI only as a fallback for steps it cannot parse.
+
+Known limitation: `src/graph/extract.py` reads "3r + 5r + 10 = 42" as arithmetic (only x/y/n and capitals
+count as variables), so both `equation_holds` and the sympy check flag it.
+
 ## Experiment tracking
 
 WandB project: `cherrysoda` — [link once created]
@@ -90,7 +136,7 @@ HuggingFace models/datasets used: [add links here once confirmed]
 | RemeDi / ProSeCo baselines 
 | Oracle baseline (GSM8K/SVAMP) 
 | Gold graph annotation 
-| Deterministic verifier
-| NLI verifier + calibration
+| Deterministic verifier — done (`src/verify/graph_math.py`, `arithmetic.py`, `logic.py`)
+| NLI verifier + calibration — done (`src/verify/nli.py`, `configs/verifier/nli.yaml`)
 | Dependency-aware scheduler
 | Subgraph correction + remasking 

@@ -2,6 +2,11 @@
 
 CherrySoda
 
+## Project Links
+
+- GitHub repository: [aadith-warrier/cherrysoda](https://github.com/aadith-warrier/cherrysoda)
+- Weights & Biases: [CherrySoda project](https://forge.coreweave.com/wandb/cherry-soda/cherrysoda)
+
 ## Setup (conda)
 
 ```bash
@@ -197,7 +202,7 @@ count as variables), so both `equation_holds` and the sympy check flag it.
 
 ## Experiment tracking
 
-WandB project: `cherrysoda` — [link once created]
+WandB project: [`cherrysoda`](https://forge.coreweave.com/wandb/cherry-soda/cherrysoda)
 
 HuggingFace models/datasets used: [add links here once confirmed]
 

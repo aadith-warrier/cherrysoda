@@ -1,11 +1,33 @@
 import argparse
 import json
 import os
+import re
 import sys
  
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
  
 from src.eval.scoring import score_record, summarize  # noqa: E402
+
+
+# Used by the graph scripts (build_graphs.py, analyze_arithmetic.py, run_study.py).
+def extract_final_number(text: str):
+    # As in the LLaDA authors' OpenCompass scorer: ignore anything after the model starts a new "Question:".
+    text = text.split("Question:")[0]
+    numbers = re.findall(r"-?\d[\d,]*\.?\d*", text)
+    if not numbers:
+        return None
+    last = numbers[-1].replace(",", "")
+    try:
+        return float(last)
+    except ValueError:
+        return None
+
+
+def normalize_reference(ref: str):
+    try:
+        return float(str(ref).replace(",", "").strip())
+    except ValueError:
+        return None
  
  
 def main():

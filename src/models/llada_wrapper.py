@@ -22,6 +22,15 @@ def get_num_transfer_tokens(num_masked: int, steps: int) -> list:
     return [base + (1 if i < remainder else 0) for i in range(steps)]
 
 
+def add_gumbel_noise(logits, temperature: float):
+    # As in the official sampler (graph-dev): float64, since low-precision Gumbel noise hurts generation quality.
+    if temperature == 0:
+        return logits
+    logits = logits.to(torch.float64)
+    noise = torch.rand_like(logits, dtype=torch.float64)
+    return logits.exp() / (-torch.log(noise)) ** temperature
+
+
 class LLaDAWrapper(BaseDLMWrapper):
 
     def load(self):
@@ -35,6 +44,7 @@ class LLaDAWrapper(BaseDLMWrapper):
         ).to(self.device).eval()
 
         self.mask_token_id = self.config.get("mask_token_id", 126336)
+        self.use_chat_template = self.config.get("use_chat_template", True)
 
         stop_ids = set()
         for tok in LLADA_STOP_TOKENS:
@@ -56,7 +66,14 @@ class LLaDAWrapper(BaseDLMWrapper):
         eligibility_fn=None,
         block_length=None,
         step_observer=None,
+        temperature=0.0,
+        logits_eos_inf=False,
+        confidence_eos_eot_inf=False,
     ) -> GenerationResult:
+        """Decoding options from graph-dev (all off by default, which is the baseline sampler):
+        temperature > 0 samples with Gumbel noise; logits_eos_inf bans <|endoftext|>;
+        confidence_eos_eot_inf gives end-of-text predictions probability 0 when ranking, so they are
+        committed after all content (LLaDA paper, Appendix B.4), as in the graph runs."""
         if remasking_strategy not in ("low_confidence", "random"):
             raise ValueError(
                 f"LLaDA supports remasking_strategy 'low_confidence' or 'random', got '{remasking_strategy}'."
@@ -75,7 +92,12 @@ class LLaDAWrapper(BaseDLMWrapper):
         steps_per_block = num_denoising_steps // num_blocks
         defer_eos_eot = bool(self.config.get("generation", {}).get("defer_eos_eot", False))
 
-        prompt_ids = build_chat_input_ids(self.tokenizer, prompt, self.device)
+        if self.use_chat_template:
+            prompt_ids = build_chat_input_ids(self.tokenizer, prompt, self.device)
+        elif isinstance(prompt, list):
+            raise ValueError("Chat-message prompts require use_chat_template: true")
+        else:
+            prompt_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(self.device)
         prompt_len = prompt_ids.shape[1]
         gen_ids = torch.full((1, max_new_tokens), self.mask_token_id, dtype=torch.long, device=self.device)
         input_ids = torch.cat([prompt_ids, gen_ids], dim=1)
@@ -87,13 +109,24 @@ class LLaDAWrapper(BaseDLMWrapper):
 
         def forward_block(bs, be):
             all_logits = self.model(input_ids).logits[0]
+            if logits_eos_inf:
+                all_logits[..., LLADA_EOS_ID] = -torch.inf
             if step_observer is not None:
                 gen = input_ids[0, prompt_len:]
                 guess = torch.where(gen == self.mask_token_id, all_logits[prompt_len:].argmax(dim=-1), gen)
                 step_observer(forward_count[0], guess.tolist())
             forward_count[0] += 1
-            probs = torch.softmax(all_logits[bs:be].to(torch.float64), dim=-1)
-            conf, pred = probs.max(dim=-1)
+            block_logits = all_logits[bs:be]
+            if temperature == 0 and not confidence_eos_eot_inf:
+                probs = torch.softmax(block_logits.to(torch.float64), dim=-1)
+                conf, pred = probs.max(dim=-1)
+            else:  # graph-dev sampler: Gumbel argmax, confidence = probability of the chosen token
+                pred = torch.argmax(add_gumbel_noise(block_logits, temperature), dim=-1)
+                scored = block_logits
+                if confidence_eos_eot_inf:
+                    scored = block_logits.clone()
+                    scored[..., [LLADA_EOS_ID, LLADA_EOT_ID]] = -torch.inf
+                conf = torch.gather(torch.softmax(scored, dim=-1), -1, pred.unsqueeze(-1)).squeeze(-1).float()
             if defer_eos_eot:
                 is_end = (pred == LLADA_EOS_ID) | (pred == LLADA_EOT_ID)
                 conf = conf.masked_fill(is_end, float("-inf"))
@@ -169,6 +202,9 @@ class LLaDAWrapper(BaseDLMWrapper):
                 "prompt_num_tokens": prompt_len,
                 "answer_num_tokens": len(answer_ids),
                 "hit_length_limit": len(answer_ids) == len(gen_token_ids),
+                # Keys used by scripts/run_study.py (graph-dev).
+                "answer_tokens": len(answer_ids),
+                "leftover_masks": sum(t == self.mask_token_id for t in gen_token_ids),
             },
         )
 

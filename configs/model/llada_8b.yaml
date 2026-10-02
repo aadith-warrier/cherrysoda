@@ -20,9 +20,9 @@ generation:
 
 supports_intermediate_states: true
 
-# Graph params (graph-dev branch): free-order decoding used for the graph-guided method.
-# These need the LLaDA wrapper changes on graph-dev (`confidence_eos_eot_inf`, `logits_eos_inf`,
-# `use_chat_template`), so they are left commented out here.
+# Graph params (from graph-dev): free-order decoding used for the graph-guided method. The wrapper
+# supports these options; runs that need them set them through `generation_overrides` in the run
+# config (e.g. configs/run/prelim_vanilla_gsm8k_llada.yaml) or through the study configs.
 # generation:
 #   max_new_tokens: 256
 #   num_denoising_steps: 256

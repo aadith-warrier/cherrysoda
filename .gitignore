@@ -6,3 +6,7 @@ wandb/
 .venv/
 venv/
 *.egg-info/
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+CLAUDE.md

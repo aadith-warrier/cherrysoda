@@ -1,31 +1,11 @@
 import argparse
 import json
 import os
-import re
 from collections import Counter
 
+from scripts.score_accuracy import extract_final_number, normalize_reference
 from src.graph.registry import build_graph
 from src.graph.stats import graph_stats, render_graph_text
-
-
-def extract_final_number(text: str):
-    # As in the LLaDA authors' OpenCompass scorer: ignore anything after the model starts a new "Question:".
-    text = text.split("Question:")[0]
-    numbers = re.findall(r"-?\d[\d,]*\.?\d*", text)
-    if not numbers:
-        return None
-    last = numbers[-1].replace(",", "")
-    try:
-        return float(last)
-    except ValueError:
-        return None
-
-
-def normalize_reference(ref: str):
-    try:
-        return float(str(ref).replace(",", "").strip())
-    except ValueError:
-        return None
 
 
 def main():

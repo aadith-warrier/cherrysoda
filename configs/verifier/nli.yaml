@@ -1,0 +1,11 @@
+# NLI verifier (src/verify/nli.py). Temperature and flag threshold were fitted on the calibration half of the
+# ProofWriter depth-3 reference cases by:
+#   python scripts/eval_verifiers.py --task logic --verifiers nli
+# (results/verifiers/logic_nli_DeBERTa-v3-large-mnli-fever-anli-ling-wanli.json). Refit if the model or the
+# pair construction changes.
+model: MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli
+temperature: 3.23
+flag_threshold: 0.786      # best F1 on the calibration half; test F1 0.913, FPR 0.145
+top_k_context: 6
+top_k_rules: 3
+max_bindings: 3

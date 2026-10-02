@@ -60,7 +60,12 @@ class DreamWrapper(BaseDLMWrapper):
         eligibility_fn=None,
         block_length=None,
         step_observer=None,
+        temperature=None,
+        logits_eos_inf=False,
+        confidence_eos_eot_inf=False,
     ) -> GenerationResult:
+        if logits_eos_inf or confidence_eos_eot_inf:
+            raise NotImplementedError("End-of-text controls are only implemented for LLaDA.")
         if eligibility_fn is not None:
             raise NotImplementedError(
                 "eligibility_fn is not supported for Dream (the loop is inside diffusion_generate). "
@@ -80,7 +85,9 @@ class DreamWrapper(BaseDLMWrapper):
         prompt_len = input_ids.shape[1]
 
         gen_params = self.config.get("generation", {})
-        temperature = gen_params.get("temperature", 0.0) or 0.0
+        if temperature is None:  # default: the model config's sampling temperature
+            temperature = gen_params.get("temperature", 0.0)
+        temperature = temperature or 0.0
         top_p = gen_params.get("top_p") if temperature > 0 else None
 
         hooks = {}

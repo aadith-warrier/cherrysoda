@@ -1,0 +1,20 @@
+study_id: "study_llada_paper_noblock_250"
+
+# The chosen default setting (free-order decoding) on the first 250 GSM8K test problems, for a more
+# representative error analysis. Problems 1-50 are identical to
+# study_llada_gen_quality/paperprompt_len256_blkoff_eoslast (deterministic decoding).
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/gsm8k_paper.yaml"
+sample_size: 250
+baseline: "vanilla"
+
+base_generation:
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+  confidence_eos_eot_inf: false
+  logits_eos_inf: false
+
+variants:
+  - name: paperprompt_len256_blkoff_eoslast
+    generation: {max_new_tokens: 256, num_denoising_steps: 256, block_length: 256,
+                 confidence_eos_eot_inf: true, logits_eos_inf: false}

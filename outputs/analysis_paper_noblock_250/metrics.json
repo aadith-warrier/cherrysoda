@@ -1,0 +1,26 @@
+{
+  "variant": "paperprompt_len256_blkoff_eoslast",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 256,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "confidence_eos_eot_inf": true,
+    "logits_eos_inf": false
+  },
+  "num_examples": 250,
+  "accuracy": 0.656,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_answer_tokens": 253.0,
+  "mean_sec_per_problem": 64.27615436649323,
+  "mean_forward_passes": 256.0,
+  "leftover_masks_total": 0,
+  "peak_gpu_gib": 16.254579067230225,
+  "mean_graph_steps": 9.624,
+  "mean_graph_equations": 4.176,
+  "mean_graph_unsourced_numbers": 0.968,
+  "total_minutes": 212.6835297147433,
+  "dataset_config": "configs/dataset/gsm8k_paper.yaml"
+}

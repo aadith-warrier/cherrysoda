@@ -2,6 +2,7 @@ import glob
 import json
 import os
 import random
+import re
 
 import yaml
 
@@ -16,6 +17,34 @@ def _format_number(x) -> str:
     return str(int(v)) if v == int(v) else repr(v)
 
 
+def _gsm8k_fewshot_prefix(cfg: dict) -> str:
+    """Worked examples from the first `num_fewshot` train problems, calculator annotations removed."""
+    k = cfg.get("num_fewshot", 0)
+    if not k:
+        return ""
+    from datasets import load_dataset
+
+    train = load_dataset(cfg["hf_repo_id"], cfg["hf_subset"], split="train").select(range(k))
+    shots = []
+    for row in train:
+        solution = re.sub(r"<<[^>]*>>", "", row["answer"]).strip()
+        shots.append(cfg["prompt_template"].format(question=row["question"]).rstrip() + "\n" + solution)
+    return "\n\n".join(shots) + "\n\n"
+
+
+def _gsm8k_prompt(cfg: dict, question: str, prefix: str):
+    """A plain string prompt, or a list of chat messages when the config defines few-shot chat turns
+    (configs/dataset/gsm8k_paper.yaml). Few-shot configs keep the question text exactly as in the dataset,
+    as on graph-dev; the zero-shot prompt strips it, as in the baselines."""
+    if "fewshot_turns" in cfg:
+        return [dict(t) for t in cfg["fewshot_turns"]] + [
+            {"role": "user", "content": cfg["question_template"].format(question=question)}
+        ]
+    if prefix:
+        return prefix + cfg["prompt_template"].format(question=question)
+    return cfg["prompt_template"].format(question=question.strip())
+
+
 def load_gsm8k(dataset_config_path: str, sample_size: int = None) -> list:
     from datasets import load_dataset
 
@@ -23,13 +52,14 @@ def load_gsm8k(dataset_config_path: str, sample_size: int = None) -> list:
     ds = load_dataset(cfg["hf_repo_id"], cfg["hf_subset"], split=cfg["split"])
     if sample_size:
         ds = ds.select(range(min(sample_size, len(ds))))
+    prefix = _gsm8k_fewshot_prefix(cfg)
 
     examples = []
     for i, row in enumerate(ds):
         reference_answer = _format_number(row["answer"].split("####")[-1])
         examples.append({
             "example_id": f"gsm8k_{i:05d}",
-            "prompt": cfg["prompt_template"].format(question=row["question"].strip()),
+            "prompt": _gsm8k_prompt(cfg, row["question"], prefix),
             "reference_answer": reference_answer,
             "reference_solution": row["answer"],
             "metadata": {"dataset": "gsm8k", "answer_type": "numeric"},

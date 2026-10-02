@@ -24,8 +24,9 @@ class GenerationResult:
     raw_metadata: dict = field(default_factory=dict)
 
 
-def build_chat_input_ids(tokenizer, prompt: str, device):
-    messages = [{"role": "user", "content": prompt}]
+def build_chat_input_ids(tokenizer, prompt, device):
+    """`prompt` is a string (one user turn) or a list of chat messages (e.g. few-shot turns)."""
+    messages = prompt if isinstance(prompt, list) else [{"role": "user", "content": prompt}]
     text = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
     return tokenizer(text, add_special_tokens=False, return_tensors="pt").input_ids.to(device)
 
@@ -69,13 +70,15 @@ class BaseDLMWrapper(ABC):
     @abstractmethod
     def generate(
         self,
-        prompt: str,
+        prompt,  # a string (one user turn) or a list of chat messages
         max_new_tokens: int,
         num_denoising_steps: int,
         remasking_strategy: str = "low_confidence",
         return_intermediate_states: bool = False,
         eligibility_fn: Optional[callable] = None,
         block_length: Optional[int] = None,
+        # Wrappers may also accept temperature, logits_eos_inf and confidence_eos_eot_inf
+        # (LLaDA's free-order options); baselines/vanilla.py passes them only where accepted.
     ) -> GenerationResult:
         raise NotImplementedError
 

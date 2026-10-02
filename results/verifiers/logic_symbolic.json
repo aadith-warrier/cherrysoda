@@ -1,0 +1,41 @@
+{
+  "task": "logic",
+  "verifier": "symbolic",
+  "n_cases": 1002,
+  "binary": {
+    "n": 1002,
+    "tp": 501,
+    "fp": 0,
+    "fn": 0,
+    "tn": 501,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "false_positive_rate": 0.0,
+    "accuracy": 1.0
+  },
+  "coverage": 1.0,
+  "coverage_on_valid": 1.0,
+  "auroc": 1.0,
+  "detection_rate_by_error": {
+    "contradiction": 1.0,
+    "false_premise": 1.0,
+    "unsupported": 1.0,
+    "valid (false positive rate)": 0.0
+  },
+  "predicted_error_types": {
+    "contradiction": {
+      "contradiction": 182
+    },
+    "false_premise": {
+      "contradiction": 36,
+      "false_premise": 143
+    },
+    "unsupported": {
+      "unsupported": 140
+    },
+    "valid": {
+      "valid": 501
+    }
+  }
+}

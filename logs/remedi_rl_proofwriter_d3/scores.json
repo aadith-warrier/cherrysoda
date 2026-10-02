@@ -1,0 +1,26 @@
+{
+  "num_examples": 600,
+  "accuracy": 0.5883333333333334,
+  "num_correct": 353,
+  "extraction_pattern": 473,
+  "extraction_vote": 0,
+  "extraction_fallback": 7,
+  "extraction_none": 120,
+  "empty_generations": 0,
+  "hit_length_limit": 107,
+  "avg_forward_passes": 265.0,
+  "avg_wall_time_sec": 10.715344496568044,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 181.95666666666668,
+  "accuracy_by_label": {
+    "False": 0.675,
+    "True": 0.665,
+    "Unknown": 0.425
+  },
+  "predicted_label_counts": {
+    "True": 159,
+    "False": 176,
+    "None": 120,
+    "Unknown": 145
+  }
+}

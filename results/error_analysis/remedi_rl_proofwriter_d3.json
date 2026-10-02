@@ -1,0 +1,113 @@
+{
+  "num_examples": 600,
+  "num_correct": 353,
+  "no_answer": 120,
+  "looping": 8,
+  "looping_and_wrong": 6,
+  "confusion": {
+    "True": {
+      "True": 133,
+      "Unknown": 32,
+      "none": 31,
+      "False": 4
+    },
+    "False": {
+      "True": 6,
+      "False": 135,
+      "none": 31,
+      "Unknown": 28
+    },
+    "Unknown": {
+      "False": 37,
+      "none": 58,
+      "True": 20,
+      "Unknown": 85
+    }
+  },
+  "accuracy_by_depth": {
+    "0": 0.6866359447004609,
+    "1": 0.5680473372781065,
+    "2": 0.6,
+    "3": 0.36470588235294116,
+    "4": 0.3333333333333333,
+    "5": 1.0
+  },
+  "accuracy_by_depth_true_false_only": {
+    "0": 0.9484536082474226,
+    "1": 0.7211538461538461,
+    "2": 0.6068376068376068,
+    "3": 0.36585365853658536
+  },
+  "unknown_gold_by_depth": {
+    "0": 120,
+    "1": 65,
+    "2": 8,
+    "3": 3,
+    "4": 3,
+    "5": 1
+  },
+  "example_ids": {
+    "no_answer": [
+      "proofwriter_d3_00005",
+      "proofwriter_d3_00007",
+      "proofwriter_d3_00008",
+      "proofwriter_d3_00018",
+      "proofwriter_d3_00019",
+      "proofwriter_d3_00023",
+      "proofwriter_d3_00035",
+      "proofwriter_d3_00041",
+      "proofwriter_d3_00044",
+      "proofwriter_d3_00047",
+      "proofwriter_d3_00049",
+      "proofwriter_d3_00053",
+      "proofwriter_d3_00057",
+      "proofwriter_d3_00074",
+      "proofwriter_d3_00077",
+      "proofwriter_d3_00079",
+      "proofwriter_d3_00083",
+      "proofwriter_d3_00089",
+      "proofwriter_d3_00090",
+      "proofwriter_d3_00091",
+      "proofwriter_d3_00092",
+      "proofwriter_d3_00104",
+      "proofwriter_d3_00107",
+      "proofwriter_d3_00108",
+      "proofwriter_d3_00109",
+      "proofwriter_d3_00111",
+      "proofwriter_d3_00116",
+      "proofwriter_d3_00130",
+      "proofwriter_d3_00135",
+      "proofwriter_d3_00137",
+      "proofwriter_d3_00143",
+      "proofwriter_d3_00150",
+      "proofwriter_d3_00157",
+      "proofwriter_d3_00165",
+      "proofwriter_d3_00174",
+      "proofwriter_d3_00176",
+      "proofwriter_d3_00185",
+      "proofwriter_d3_00191",
+      "proofwriter_d3_00193",
+      "proofwriter_d3_00196",
+      "proofwriter_d3_00202",
+      "proofwriter_d3_00206",
+      "proofwriter_d3_00215",
+      "proofwriter_d3_00218",
+      "proofwriter_d3_00224",
+      "proofwriter_d3_00225",
+      "proofwriter_d3_00227",
+      "proofwriter_d3_00228",
+      "proofwriter_d3_00230",
+      "proofwriter_d3_00239"
+    ],
+    "looping": [
+      "proofwriter_d3_00023",
+      "proofwriter_d3_00135",
+      "proofwriter_d3_00255",
+      "proofwriter_d3_00519",
+      "proofwriter_d3_00524",
+      "proofwriter_d3_00543",
+      "proofwriter_d3_00560",
+      "proofwriter_d3_00595"
+    ]
+  }
+}

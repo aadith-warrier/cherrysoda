@@ -1,0 +1,30 @@
+{
+  "run_id": "dapd_svamp_llada",
+  "model": "dapd_llada",
+  "dataset": "svamp",
+  "baseline": "vanilla",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 64,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "dapd_alg": "dapd_direct",
+    "tau_min": 0.005,
+    "tau_max": 0.05,
+    "layer_ratio": 0.3
+  },
+  "num_examples": 1000,
+  "accuracy": 0.867,
+  "num_correct": 867,
+  "extraction_pattern": 982,
+  "extraction_vote": 0,
+  "extraction_fallback": 18,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 57.109,
+  "avg_wall_time_sec": 5.27773202419281,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 168.876
+}

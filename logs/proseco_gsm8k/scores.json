@@ -1,0 +1,15 @@
+{
+  "num_examples": 1319,
+  "accuracy": 0.7414708112206216,
+  "num_correct": 978,
+  "extraction_pattern": 1106,
+  "extraction_vote": 0,
+  "extraction_fallback": 178,
+  "extraction_none": 35,
+  "empty_generations": 33,
+  "hit_length_limit": 121,
+  "avg_forward_passes": 269.11523881728584,
+  "avg_wall_time_sec": 18.353516660015,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 112.7846853677028
+}

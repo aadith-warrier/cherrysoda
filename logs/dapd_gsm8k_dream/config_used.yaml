@@ -1,0 +1,52 @@
+run:
+  run_id: dapd_gsm8k_dream
+  model_config: configs/model/dapd_dream.yaml
+  dataset_config: configs/dataset/gsm8k.yaml
+  baseline: vanilla
+  sample_size: full
+  seed: 42
+  generation_overrides: {}
+  logging:
+    save_generations: true
+    save_intermediate_states: false
+    wandb_project: cherrysoda
+    wandb_run_name: null
+model:
+  name: dapd_dream
+  wrapper: dapd
+  base: dream
+  hf_repo_id: Dream-org/Dream-v0-Instruct-7B
+  device: cuda:1
+  generation:
+    max_new_tokens: 256
+    num_denoising_steps: 256
+    block_length: null
+    temperature: 0.0
+    remasking_strategy: entropy
+    dapd_alg: dapd_direct
+    tau_min: 0.005
+    tau_max: 0.01
+    layer_ratio: 0.3
+dataset:
+  name: gsm8k
+  hf_repo_id: openai/gsm8k
+  hf_subset: main
+  split: test
+  loader: gsm8k
+  answer_type: numeric
+  prelim_sample_size: 100
+  full_sample_size: null
+  prompt_template: 'Solve the following grade school math problem step by step.
+
+    Show each calculation explicitly (e.g., "5 + 3 = 8").
+
+    At the end, write the final answer on its own line in the form "The answer is:
+    <number>".
+
+
+    Problem: {question}
+
+
+    Solution:
+
+    '

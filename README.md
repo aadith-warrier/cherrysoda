@@ -204,8 +204,6 @@ count as variables), so both `equation_holds` and the sympy check flag it.
 
 WandB project: [`cherrysoda`](https://forge.coreweave.com/wandb/cherry-soda/cherrysoda)
 
-HuggingFace models/datasets used: [add links here once confirmed]
-
 ## Status
 
 | Component 

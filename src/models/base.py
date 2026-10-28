@@ -15,13 +15,16 @@ class DenoisingStepRecord:
 @dataclass
 class GenerationResult:
     prompt: str
-    generated_text: str               # decoded answer, truncated at the first end-of-turn / EOS token
-    num_forward_passes: int           # NFE actually spent
+    generated_text: str
+    num_forward_passes: int
     wall_time_sec: float
     num_denoising_steps_used: int
-    num_remasked_tokens: int = 0      # tokens reverted to [MASK] after being committed (0 for vanilla)
+    num_remasked_tokens: int = 0
     intermediate_states: Optional[list] = field(default=None)
     raw_metadata: dict = field(default_factory=dict)
+
+
+    token_ids: Optional[list] = field(default=None)
 
 
 def build_chat_input_ids(tokenizer, prompt, device):
@@ -70,17 +73,30 @@ class BaseDLMWrapper(ABC):
     @abstractmethod
     def generate(
         self,
-        prompt,  # a string (one user turn) or a list of chat messages
+        prompt,
         max_new_tokens: int,
         num_denoising_steps: int,
         remasking_strategy: str = "low_confidence",
         return_intermediate_states: bool = False,
         eligibility_fn: Optional[callable] = None,
         block_length: Optional[int] = None,
-        # Wrappers may also accept temperature, logits_eos_inf and confidence_eos_eot_inf
-        # (LLaDA's free-order options); baselines/vanilla.py passes them only where accepted.
+
+
     ) -> GenerationResult:
         raise NotImplementedError
+
+    def refine(
+        self,
+        prompt,
+        token_ids: list,
+        remask_positions: list,
+        num_denoising_steps: Optional[int] = None,
+        temperature: Optional[float] = None,
+        allow_end_from: Optional[int] = None,
+        confidence_eos_eot_inf: bool = True,
+        select_fn: Optional[callable] = None,
+    ) -> GenerationResult:
+        raise NotImplementedError(f"{type(self).__name__} does not implement refine()")
 
     @abstractmethod
     def get_token_confidences(self, logits) -> list:

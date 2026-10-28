@@ -1,0 +1,102 @@
+(code-halu) sriharinim@pkgpu:~/cherrysoda$ CUDA_VISIBLE_DEVICES=0 python -m scripts.run_graph_method --config conf
+igs/run/graph_remask_gsm8k_llada.yaml --limit 20 --device cuda:0
+CUDA_VISIBLE_DEVICES=0 python -m scripts.run_graph_method --config configs/run/scheduled_gsm8k_llada.yaml --limit
+20 --device cuda:0
+Loading llada_8b on cuda:0  |  remask on gsm8k
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████| 6/6 [00:00<00:00,  7.28it/s]
+[graph_remask_gsm8k_llada_limit20] 1/20 FIXED flags 1->0 rounds 1 nfe 342 | acc 0->1/1
+[graph_remask_gsm8k_llada_limit20] 2/20 ok    flags 0->0 rounds 0 nfe 256 | acc 1->2/2
+[graph_remask_gsm8k_llada_limit20] 3/20 bad   flags 2->0 rounds 1 nfe 368 | acc 1->2/3
+[graph_remask_gsm8k_llada_limit20] 4/20 ok    flags 0->0 rounds 0 nfe 256 | acc 2->3/4
+[graph_remask_gsm8k_llada_limit20] 5/20 ok    flags 0->0 rounds 0 nfe 256 | acc 3->4/5
+[graph_remask_gsm8k_llada_limit20] 6/20 ok    flags 2->2 rounds 1 nfe 360 | acc 4->5/6
+[graph_remask_gsm8k_llada_limit20] 7/20 ok    flags 0->0 rounds 0 nfe 256 | acc 5->6/7
+[graph_remask_gsm8k_llada_limit20] 8/20 bad   flags 0->0 rounds 0 nfe 256 | acc 5->6/8
+[graph_remask_gsm8k_llada_limit20] 9/20 bad   flags 1->1 rounds 2 nfe 336 | acc 5->6/9
+[graph_remask_gsm8k_llada_limit20] 10/20 ok    flags 0->0 rounds 0 nfe 256 | acc 6->7/10
+[graph_remask_gsm8k_llada_limit20] 11/20 ok    flags 0->0 rounds 0 nfe 256 | acc 7->8/11
+[graph_remask_gsm8k_llada_limit20] 12/20 FIXED flags 1->0 rounds 1 nfe 297 | acc 7->9/12
+[graph_remask_gsm8k_llada_limit20] 13/20 bad   flags 2->2 rounds 3 nfe 492 | acc 7->9/13
+[graph_remask_gsm8k_llada_limit20] 14/20 bad   flags 0->0 rounds 0 nfe 256 | acc 7->9/14
+[graph_remask_gsm8k_llada_limit20] 15/20 ok    flags 0->0 rounds 0 nfe 256 | acc 8->10/15
+[graph_remask_gsm8k_llada_limit20] 16/20 bad   flags 1->1 rounds 2 nfe 382 | acc 8->10/16
+[graph_remask_gsm8k_llada_limit20] 17/20 ok    flags 0->0 rounds 0 nfe 256 | acc 9->11/17
+[graph_remask_gsm8k_llada_limit20] 18/20 bad   flags 2->2 rounds 1 nfe 330 | acc 9->11/18
+[graph_remask_gsm8k_llada_limit20] 19/20 bad   flags 1->0 rounds 1 nfe 301 | acc 9->11/19
+[graph_remask_gsm8k_llada_limit20] 20/20 ok    flags 2->0 rounds 1 nfe 335 | acc 10->12/20
+# graph_remask_gsm8k_llada_limit20
+
+llada_8b, method `remask`, mode `graph`, max_rounds 3, temperature 0.0, n = 20
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 50.0% | 60.0% (+10.0%, 95% CI [+0.0%, +25.0%]) |
+| reasoning consistency (no flagged step) | 50.0% | 75.0% |
+| mean NFE | 256 | 305 (+49) |
+
+fixed 2, broken 0 (exact McNemar p = 0.500)
+
+- examples with a flagged step: 8 wrong, 2 right drafts
+- no answer 0.0%, hit token limit 0.0%, 95.3 s/problem
+- answer format ('The answer is'): draft 50.0%, final 50.0%; accuracy among formatted 50.0% -> 50.0%
+- verifier in situ: graphs parsed cleanly 100.0%, 10.1 steps per answer; a flag means a wrong draft 80.0% of the t
+ime; 2 wrong drafts never flagged, 6 flagged but still wrong; flags by type {'arithmetic': 9, 'ungrounded_operand'
+: 6}
+- tokens: draft 254, final 254, re-denoised 48 per problem
+- time per problem: draft 83.2 s + refine 12.2 s + parse/verify 0.19 s = 95.5 s; peak GPU memory 15.5 GiB
+- <= 9 steps (n=8): 62% -> 75% (fixed 1, broken 0)
+- 10-11 steps (n=8): 62% -> 62% (fixed 0, broken 0)
+- > 11 steps (n=4): 0% -> 25% (fixed 1, broken 0)
+- remasked: 50.0% of examples, 1.40 rounds on average; 2 came back identical
+- remask ratio |M|/L: 26.9% per round, 37.7% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 34.5%
+
+Loading llada_8b on cuda:0  |  scheduled on gsm8k
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████| 6/6 [00:00<00:00,  6.33it/s]
+[scheduled_gsm8k_llada_limit20] 1/20 FIXED flags 1->0 passes 122 nfe 378 | acc 0->1/1
+[scheduled_gsm8k_llada_limit20] 2/20 ok    flags 0->0 passes 92 nfe 348 | acc 1->2/2
+[scheduled_gsm8k_llada_limit20] 3/20 bad   flags 2->1 passes 124 nfe 380 | acc 1->2/3
+[scheduled_gsm8k_llada_limit20] 4/20 ok    flags 0->0 passes 84 nfe 340 | acc 2->3/4
+[scheduled_gsm8k_llada_limit20] 5/20 ok    flags 0->0 passes 92 nfe 348 | acc 3->4/5
+[scheduled_gsm8k_llada_limit20] 6/20 ok    flags 2->2 passes 103 nfe 359 | acc 4->5/6
+[scheduled_gsm8k_llada_limit20] 7/20 ok    flags 0->0 passes 88 nfe 344 | acc 5->6/7
+[scheduled_gsm8k_llada_limit20] 8/20 bad   flags 0->1 passes 104 nfe 360 | acc 5->6/8
+[scheduled_gsm8k_llada_limit20] 9/20 bad   flags 1->1 passes 93 nfe 349 | acc 5->6/9
+[scheduled_gsm8k_llada_limit20] 10/20 BROKE flags 0->1 passes 123 nfe 379 | acc 6->6/10
+[scheduled_gsm8k_llada_limit20] 11/20 ok    flags 0->0 passes 136 nfe 392 | acc 7->7/11
+[scheduled_gsm8k_llada_limit20] 12/20 bad   flags 1->1 passes 74 nfe 330 | acc 7->7/12
+[scheduled_gsm8k_llada_limit20] 13/20 bad   flags 2->2 passes 67 nfe 323 | acc 7->7/13
+[scheduled_gsm8k_llada_limit20] 14/20 bad   flags 0->0 passes 134 nfe 390 | acc 7->7/14
+[scheduled_gsm8k_llada_limit20] 15/20 ok    flags 0->0 passes 109 nfe 365 | acc 8->8/15
+[scheduled_gsm8k_llada_limit20] 16/20 bad   flags 1->2 passes 90 nfe 346 | acc 8->8/16
+[scheduled_gsm8k_llada_limit20] 17/20 BROKE flags 0->0 passes 84 nfe 340 | acc 9->8/17
+[scheduled_gsm8k_llada_limit20] 18/20 bad   flags 2->4 passes 89 nfe 345 | acc 9->8/18
+[scheduled_gsm8k_llada_limit20] 19/20 FIXED flags 1->0 passes 105 nfe 361 | acc 9->9/19
+[scheduled_gsm8k_llada_limit20] 20/20 ok    flags 2->0 passes 132 nfe 388 | acc 10->10/20
+# scheduled_gsm8k_llada_limit20
+
+llada_8b, method `scheduled`, 1 token(s) per active step per pass, n = 20
+
+| | draft | after scheduling |
+|---|---|---|
+| accuracy | 50.0% | 50.0% (+0.0%, 95% CI [-20.0%, +20.0%]) |
+| reasoning consistency (no flagged step) | 50.0% | 55.0% |
+| mean NFE | 256 | 358 (+102) |
+
+fixed 2, broken 2 (exact McNemar p = 1.000)
+
+- examples with a flagged step: 8 wrong, 2 right drafts
+- no answer 0.0%, hit token limit 0.0%, 109.0 s/problem
+- answer format ('The answer is'): draft 50.0%, final 95.0%; accuracy among formatted 50.0% -> 47.4%
+- verifier in situ: graphs parsed cleanly 100.0%, 10.1 steps per answer; a flag means a wrong draft 80.0% of the t
+ime; 2 wrong drafts never flagged, 6 flagged but still wrong; flags by type {'arithmetic': 9, 'ungrounded_operand'
+: 6}
+- tokens: draft 254, final 255, re-denoised 256 per problem
+- time per problem: draft 83.2 s + refine 25.8 s + parse/verify 0.23 s = 109.2 s; peak GPU memory 15.6 GiB
+- <= 9 steps (n=8): 62% -> 75% (fixed 2, broken 1)
+- 10-11 steps (n=8): 62% -> 50% (fixed 0, broken 1)
+- > 11 steps (n=4): 0% -> 0% (fixed 0, broken 0)
+- scheduled pass: 102 NFE (2.61 tokens per pass, 5.3 dependency levels); 0 examples left as drafted
+
+(code-halu) sriharinim@pkgpu:~/cherrysoda$ tmux capture-pane -pS - -E - > pane_history.log
+

@@ -1,0 +1,80 @@
+{
+  "num_examples": 20,
+  "method": "scheduled",
+  "mode": "scheduled",
+  "draft_accuracy": 0.5,
+  "accuracy": 0.5,
+  "delta_accuracy": 0.0,
+  "delta_ci95": [
+    -0.2,
+    0.2
+  ],
+  "fixed": 2,
+  "broken": 2,
+  "mcnemar_p": 1.0,
+  "reasoning_consistency_before": 0.5,
+  "reasoning_consistency_after": 0.55,
+  "frac_examples_remasked": 0.0,
+  "mean_rounds_when_remasked": 0.0,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 358.25,
+  "mean_nfe_overhead": 102.25,
+  "mean_remask_ratio_per_round": 0.0,
+  "mean_remask_ratio_cumulative": 0.0,
+  "mean_affected_subgraph_ratio": 0.0,
+  "flagged_draft_wrong": 8,
+  "flagged_draft_right": 2,
+  "unchanged_after_remask": 0,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 108.98928283452987,
+  "format_rate_draft": 0.5,
+  "format_rate": 0.95,
+  "accuracy_among_formatted_draft": 0.5,
+  "accuracy_among_formatted": 0.47368421052631576,
+  "mean_graph_steps": 10.05,
+  "graph_parse_clean_rate": 1.0,
+  "flag_type_counts": {
+    "arithmetic": 9,
+    "ungrounded_operand": 6
+  },
+  "flag_precision_draft_wrong": 0.8,
+  "wrong_drafts_not_flagged": 2,
+  "wrong_drafts_flagged_still_wrong": 6,
+  "mean_tokens_draft": 254.15,
+  "mean_tokens_final": 254.6,
+  "mean_tokens_regenerated": 256.0,
+  "mean_sec_generate": 83.17261654138565,
+  "mean_sec_refine": 25.816666293144227,
+  "mean_sec_parse_verify": 0.22647314742207528,
+  "mean_sec_total": 109.21575598195196,
+  "by_graph_size": {
+    "<= 9 steps": {
+      "n": 8,
+      "draft_accuracy": 0.625,
+      "accuracy": 0.75,
+      "fixed": 2,
+      "broken": 1
+    },
+    "10-11 steps": {
+      "n": 8,
+      "draft_accuracy": 0.625,
+      "accuracy": 0.5,
+      "fixed": 0,
+      "broken": 1
+    },
+    "> 11 steps": {
+      "n": 4,
+      "draft_accuracy": 0.0,
+      "accuracy": 0.0,
+      "fixed": 0,
+      "broken": 0
+    }
+  },
+  "mean_nfe_schedule": 102.25,
+  "mean_levels": 5.35,
+  "mean_tokens_per_pass": 2.610433416319109,
+  "num_skipped": 0,
+  "peak_gpu_gib": 15.613035678863525,
+  "total_minutes": 8.717822265625
+}

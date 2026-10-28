@@ -2,7 +2,9 @@
 
     python scripts/verify_generations.py --generations logs/vanilla_proofwriter_d3_llada/generations.jsonl --verifiers symbolic nli
 
-For ProofWriter answers (no graph builder yet): each line is a step, checked against the theory.
+For ProofWriter answers, each line is a step, checked against the theory. (ProofWriter graphs now exist,
+src/graph/build_logic.py via scripts/build_graphs.py; this script keeps the line-based inputs so its
+numbers stay comparable with the interim report.)
 Maths runs with saved graphs go through scripts/verify_graphs.py instead. Writes
 <run dir>/verdicts_<verifier>.jsonl and prints:
   reasoning consistency rate   share of answers with no flagged step (proposal, Sec. 5)

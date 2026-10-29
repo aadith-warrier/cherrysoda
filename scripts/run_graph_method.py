@@ -1,4 +1,19 @@
+"""Run a graph-guided method on a dataset and score it against the same run's uncorrected draft.
+
+    python -m scripts.run_graph_method --config configs/run/graph_remask_gsm8k_llada.yaml
+    python -m scripts.run_graph_method --config ... --limit 20 --device cuda:1     # quick check
+
+`method` in the run config:
+  remask     (Sec. 3.3) draft -> graph -> verify -> remask the affected subgraph A(B) -> re-denoise, up to max_rounds.
+             `remask.mode: full` is the full-sequence control (same verifier and rounds).
+  scheduled  (Sec. 3.4) draft -> graph -> re-denoise the whole response in dependency order (no correction).
+The model (llada | dream), dataset and verifier come from the run config, so every combination uses this script.
+The draft is cached on disk, so every method variant on the same model / decoding / dataset shares one set of drafts.
+
+Outputs in logs/<run_id>/: generations.jsonl, metrics.json, summary.md, run_config.json
+"""
 import argparse
+import glob
 import hashlib
 import json
 import math
@@ -12,13 +27,13 @@ import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data.loaders import load_dataset_unified
-from scripts.score_accuracy import extract_final_number, normalize_reference
-from src.eval.scoring import ANSWER_TYPE_BY_DATASET, extract_label, extract_numeric, score_record
-from src.methods.graph_remask import GraphRemasker, RemaskConfig
-from src.methods.scheduler import ScheduleConfig, ScheduledDecoder
-from src.models.base import GenerationResult, truncate_at_stop
-from src.verify.registry import make_verify_fn
+from data.loaders import load_dataset_unified  # noqa: E402
+from scripts.score_accuracy import extract_final_number, normalize_reference  # noqa: E402
+from src.eval.scoring import ANSWER_TYPE_BY_DATASET, extract_label, extract_numeric, score_record  # noqa: E402
+from src.methods.graph_remask import GraphRemasker, RemaskConfig  # noqa: E402
+from src.methods.scheduler import ScheduleConfig, ScheduledDecoder  # noqa: E402
+from src.models.base import GenerationResult, truncate_at_stop  # noqa: E402
+from src.verify.registry import make_verify_fn  # noqa: E402
 
 
 def load_yaml(path):
@@ -42,7 +57,7 @@ def make_scorer(dataset_name, answer_type=None):
     return score
 
 
-
+# ---------------------------------------------------------------------------------------------- statistics
 def make_format_check(dataset_name, answer_type=None):
     """text -> did the output state its answer in the requested form ('The answer is ...')? The scorer falls back to
     the last number, so this is reported separately (paper Sec. 3.7: outputs that do not follow the answer format)."""
@@ -135,12 +150,12 @@ def summarize(records, mode_name="graph", method="remask"):
         "no_answer_rate": mean([r["predicted_answer"] is None for r in records]),
         "hit_length_limit_rate": mean([r.get("hit_length_limit", False) for r in records]),
         "mean_sec_per_problem": mean([r["wall_time_sec"] for r in records]),
-
+        # --- output diagnostics (Sec. 3.7)
         "format_rate_draft": mean([r.get("draft_format_ok", True) for r in records]),
         "format_rate": mean([r.get("format_ok", True) for r in records]),
         "accuracy_among_formatted_draft": mean([r["draft_correct"] for r in records if r.get("draft_format_ok", True)]),
         "accuracy_among_formatted": mean([r["correct"] for r in records if r.get("format_ok", True)]),
-
+        # --- verifier / parser in situ
         "mean_graph_steps": mean([r.get("graph_steps", 0) for r in records]),
         "graph_parse_clean_rate": mean([r.get("parse_warnings", 0) == 0 and r.get("graph_steps", 0) > 0 for r in records]),
         "flag_type_counts": _sum_counts([r.get("flag_types", {}) for r in records]),
@@ -149,7 +164,7 @@ def summarize(records, mode_name="graph", method="remask"):
         "wrong_drafts_not_flagged": sum(r["flags_before"] == 0 and not r["draft_correct"] for r in records),
         "wrong_drafts_flagged_still_wrong": sum(r["flags_before"] > 0 and not r["draft_correct"] and not r["correct"]
                                                 for r in records),
-
+        # --- compute and time (seconds as measured where the work happened; see README on idle-GPU timing)
         "mean_tokens_draft": mean([r.get("tokens_draft", 0) for r in records]),
         "mean_tokens_final": mean([r.get("tokens_final", 0) for r in records]),
         "mean_tokens_regenerated": mean([r.get("tokens_regenerated", 0) for r in records]),
@@ -211,17 +226,24 @@ def write_summary(path, run_id, m, settings):
         f.write("\n".join(lines) + "\n")
 
 
-
+# ---------------------------------------------------------------------------------------------- draft cache
 class DraftCache:
     """Drafts are deterministic (greedy), so each is generated once per (model, decoding, dataset) and reused."""
 
-    def __init__(self, directory, key_obj):
+    def __init__(self, directory, key_obj, shard=None):
+        """`shard` (e.g. 0) makes this process write to its own file, so several GPUs can generate drafts at once;
+        every process reads all files of the same key."""
         os.makedirs(directory, exist_ok=True)
         key = hashlib.sha1(json.dumps(key_obj, sort_keys=True, default=str).encode()).hexdigest()[:12]
-        self.path = os.path.join(directory, f"drafts_{key}.jsonl")
+        self.path = os.path.join(directory, f"drafts_{key}.jsonl" if shard is None else f"drafts_{key}.shard{shard}.jsonl")
+        self._pattern = os.path.join(directory, f"drafts_{key}*.jsonl")
         self.items = {}
-        if os.path.exists(self.path):
-            with open(self.path) as f:
+        self._reload()
+
+    def _reload(self):
+        """(Re)read every file of this key, so drafts another process wrote in the meantime are picked up."""
+        for path in sorted(glob.glob(self._pattern)):
+            with open(path) as f:
                 for line in f:
                     if line.strip():
                         d = json.loads(line)
@@ -229,6 +251,9 @@ class DraftCache:
 
     def get(self, example_id):
         d = self.items.get(example_id)
+        if d is None:
+            self._reload()              # another GPU may have generated it meanwhile
+            d = self.items.get(example_id)
         if d is None:
             return None
         return GenerationResult(prompt=None, generated_text=d["generated_text"], num_forward_passes=d["nfe"],
@@ -243,7 +268,7 @@ class DraftCache:
             f.write(json.dumps(d) + "\n")
 
 
-
+# ---------------------------------------------------------------------------------------------- main
 def seed_everything(seed):
     random.seed(seed)
     try:
@@ -254,11 +279,40 @@ def seed_everything(seed):
         pass
 
 
+def generate_drafts(cfg, model_cfg, gen_cfg, cache_key, sample, shard, reverse=False):
+    """Fill the draft cache for a slice of the problems. Run one process per GPU with --shard 0/N, 1/N, ..."""
+    i, n = (int(x) for x in shard.split("/"))
+    if not 0 <= i < n:
+        raise ValueError("--shard must be I/N with 0 <= I < N")
+    examples = load_dataset_unified(cfg["dataset_config"], sample_size=sample)[i::n]
+    if reverse:
+        examples = examples[::-1]
+    cache = DraftCache(cfg.get("draft_cache", "logs/draft_cache"), cache_key, shard=i)
+    from baselines.vanilla import run as run_generate
+    from src.models.model_registry import get_model_wrapper
+    print(f"Loading {model_cfg['name']} on {model_cfg.get('device')}  |  drafts for shard {i}/{n}: "
+          f"{len(examples)} problems, {sum(cache.get(e['example_id']) is not None for e in examples)} already cached", flush=True)
+    model = get_model_wrapper(model_cfg)
+    done = 0
+    for k, ex in enumerate(examples, start=1):
+        if cache.get(ex["example_id"]) is None:
+            seed_everything((cfg.get("seed", 42) * 1_000_003 + zlib.crc32(ex["example_id"].encode())) % (2**31))
+            cache.put(ex["example_id"], run_generate(model, ex, gen_cfg))
+            done += 1
+        if k % 10 == 0 or k == len(examples):
+            print(f"[drafts shard {i}/{n}] {k}/{len(examples)} ({done} generated)", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", required=True)
     ap.add_argument("--limit", type=int, help="only the first N problems (writes to <run_id>_limit<N>)")
     ap.add_argument("--device")
+    ap.add_argument("--drafts-only", action="store_true",
+                    help="only generate and cache the drafts (no remasking); combine with --shard to use several GPUs")
+    ap.add_argument("--reverse", action="store_true",
+                    help="with --drafts-only: work from the last problem backwards, so a helper GPU meets a normal run in the middle")
+    ap.add_argument("--shard", help="I/N: this process handles problems I, I+N, I+2N, ... (use with --drafts-only)")
     ap.add_argument("--seed", type=int, help="override the run seed (writes to <run_id>_seed<N>); for Dream, report the mean over seeds")
     args = ap.parse_args()
 
@@ -277,7 +331,14 @@ def main():
     remask_cfg = RemaskConfig(**cfg.get("remask", {}))
     sched_cfg = ScheduleConfig(**cfg.get("schedule", {}))
     method_cfg = remask_cfg if method == "remask" else sched_cfg
-    sample = args.limit or cfg.get("sample_size")
+    sample = args.limit or cfg.get("sample_size") or "full"   # null / missing = the whole test set (the loader would otherwise fall back to the dataset config's 100-problem prelim size)
+    cache_key = {"model": model_cfg["name"], "repo": model_cfg.get("hf_repo_id"), "gen": gen_cfg,
+                 "dataset": cfg["dataset_config"],
+                 # sampled drafts (Dream) depend on the seed; greedy ones keep the old cache key
+                 **({"seed": cfg.get("seed", 42)} if (gen_cfg.get("temperature") or 0) > 0 else {})}
+    if args.drafts_only:
+        generate_drafts(cfg, model_cfg, gen_cfg, cache_key, sample, args.shard or "0/1", args.reverse)
+        return
     run_id = cfg["run_id"] + (f"_limit{args.limit}" if args.limit else "")
     out_dir = os.path.join("logs", run_id)
     os.makedirs(out_dir, exist_ok=True)
@@ -301,11 +362,7 @@ def main():
         else ScheduledDecoder(model, verify_fn, sched_cfg)
     score = make_scorer(dataset_cfg["name"], dataset_cfg.get("answer_type"))
     fmt_ok = make_format_check(dataset_cfg["name"], dataset_cfg.get("answer_type"))
-    cache = DraftCache(cfg.get("draft_cache", "logs/draft_cache"),
-                       {"model": model_cfg["name"], "repo": model_cfg.get("hf_repo_id"), "gen": gen_cfg,
-                        "dataset": cfg["dataset_config"],
-
-                        **({"seed": cfg.get("seed", 42)} if (gen_cfg.get("temperature") or 0) > 0 else {})})
+    cache = DraftCache(cfg.get("draft_cache", "logs/draft_cache"), cache_key)
 
     t_start = time.time()
     with open(gen_path, "w") as f:
@@ -317,7 +374,7 @@ def main():
             draft = cache.get(ex["example_id"])
             if draft is None:
                 from baselines.vanilla import run as run_generate
-
+                # same per-example seeding as scripts/run_baseline.py, so sampled drafts (Dream) are reproducible
                 seed_everything((cfg.get("seed", 42) * 1_000_003 + zlib.crc32(ex["example_id"].encode())) % (2**31))
                 draft = run_generate(model, ex, gen_cfg)
                 cache.put(ex["example_id"], draft)
@@ -366,7 +423,7 @@ def main():
     try:
         import torch
         if torch.cuda.is_available():
-            m["peak_gpu_gib"] = torch.cuda.max_memory_allocated() / 2**30
+            m["peak_gpu_gib"] = torch.cuda.max_memory_allocated() / 2**30   # this process only (draft cache hits skip generation)
     except ImportError:
         pass
     m["total_minutes"] = (time.time() - t_start) / 60

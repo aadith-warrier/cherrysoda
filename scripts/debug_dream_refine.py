@@ -1,3 +1,13 @@
+"""Find out WHY Dream's refine(all positions) differs from diffusion_generate (only needed if check_refine shows < ~99%).
+
+    CUDA_VISIBLE_DEVICES=1 python -m scripts.debug_dream_refine --config configs/run/graph_remask_gsm8k_dream.yaml \
+        --device cuda:0 --index 1
+
+Runs one problem greedily both ways, records which positions each commits at every denoising step, and prints the first
+step where they disagree: which positions only the native sampler committed, which only refine() committed, refine's
+confidence for those positions (a tie or a tiny gap points to numerics; a large gap points to a logic difference),
+and, if the commit sets agree but the committed tokens differ, the first such token.
+"""
 import argparse
 import os
 import sys
@@ -6,8 +16,8 @@ import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data.loaders import load_dataset_unified
-from src.models.model_registry import get_model_wrapper
+from data.loaders import load_dataset_unified  # noqa: E402
+from src.models.model_registry import get_model_wrapper  # noqa: E402
 
 
 def main():
@@ -28,6 +38,11 @@ def main():
     native = model.generate(ex["prompt"], gen["max_new_tokens"], gen["num_denoising_steps"],
                             remasking_strategy=gen["remasking_strategy"], return_intermediate_states=True,
                             block_length=None, temperature=0.0)
+    again = model.generate(ex["prompt"], gen["max_new_tokens"], gen["num_denoising_steps"],
+                           remasking_strategy=gen["remasking_strategy"], block_length=None, temperature=0.0)
+    same = sum(a == b for a, b in zip(native.token_ids, again.token_ids)) / len(native.token_ids)
+    print(f"native generate() run twice: {same:.1%} tokens equal "
+          f"({'deterministic' if same == 1 else 'NOT deterministic: GPU noise, so refine can never match exactly'})")
     trace = []
     mine = model.refine(ex["prompt"], native.token_ids, list(range(len(native.token_ids))), temperature=0.0,
                         allow_end_from=0, trace=trace)
@@ -35,6 +50,8 @@ def main():
     print(f"{ex['example_id']}: native commits per step recorded for {len(history)} steps; refine ran {len(trace)} passes; "
           f"tokens equal {sum(a == b for a, b in zip(native.token_ids, mine.token_ids)) / len(mine.token_ids):.1%}")
 
+    if not trace:
+        print("refine() now runs Dream's own diffusion_generate (no per-step trace); the equality figure above is the check.")
     for t in trace:
         rec = history.get(t["step"])
         if rec is None:

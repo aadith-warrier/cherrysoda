@@ -27,7 +27,7 @@
   "unchanged_after_remask": 5,
   "no_answer_rate": 0.0,
   "hit_length_limit_rate": 0.0,
-  "mean_sec_per_problem": 99.2927351474762,
+  "mean_sec_per_problem": 99.48646652460098,
   "format_rate_draft": 0.5,
   "format_rate": 0.5,
   "accuracy_among_formatted_draft": 0.54,
@@ -45,9 +45,9 @@
   "mean_tokens_final": 254.22,
   "mean_tokens_regenerated": 25.92,
   "mean_sec_generate": 92.7915428495407,
-  "mean_sec_refine": 6.501192297935486,
-  "mean_sec_parse_verify": 0.14852973092347382,
-  "mean_sec_total": 99.44126487839966,
+  "mean_sec_refine": 6.694923675060272,
+  "mean_sec_parse_verify": 0.14786039534956216,
+  "mean_sec_total": 99.63432691995054,
   "by_graph_size": {
     "<= 8 steps": {
       "n": 36,
@@ -72,5 +72,5 @@
     }
   },
   "peak_gpu_gib": 15.47842025756836,
-  "total_minutes": 11.148475913206736
+  "total_minutes": 11.47027410666148
 }

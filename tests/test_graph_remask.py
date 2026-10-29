@@ -92,7 +92,6 @@ def test_token_char_spans_roundtrip():
 
 
 def test_affected_subgraph_figure1():
-    """Paper Fig. 1 (gsm8k_00026): steps 5 and 9 are wrong, 13 is independent, 15 and 16 consume the wrong values."""
     path = os.path.join(ROOT, "outputs/analysis_paper_noblock_250/generations.jsonl")
     record = next(json.loads(l) for l in open(path) if json.loads(l)["example_id"] == "gsm8k_00026")
     graph = build_graph(record)
@@ -113,16 +112,14 @@ def test_localized_remask_keeps_independent_step():
     masked = set(model.calls[0]["positions"])
     line2 = range(DRAFT.index("4 * 5"), DRAFT.index("4 * 5") + len("4 * 5 = 20"))
     assert not masked & set(line2), "the independent step 4*5=20 must stay fixed"
-
     assert all(p in masked for p in range(0, 9))
     assert all(p in masked for p in range(len(DRAFT), L))
-
     assert model.calls[0]["allow_end_from"] == DRAFT.index("The answer")
 
     r = res.rounds[0]
     assert r.flagged == ["1"] and r.affected == ["1", "3", "4"]
     assert abs(r.affected_ratio - 3 / 4) < 1e-9
-    assert r.n_remasked == len("2 * 3 = 7") + len("7 + 20 = 27") + len("The answer is 27")
+    assert r.n_remasked == len("2 * 3 = 7") + len("7 + 20 = 27") + len("The answer is 27")  # newlines stay
 
 
 def test_nfe_counts_draft_and_refine():
@@ -145,11 +142,31 @@ def test_no_flags_no_remask():
 
 
 def test_stops_when_greedy_refine_reproduces_the_draft():
-    model = FakeModel(repair=DRAFT)
+    model = FakeModel(repair=DRAFT) 
     res = GraphRemasker(model, eq_verifier, RemaskConfig(max_rounds=5)).run(EXAMPLE, GEN_CFG)
     assert len(model.calls) == 1 and res.flags_after == 1 and not res.rounds[0].changed
     res = GraphRemasker(FakeModel(repair=DRAFT), eq_verifier, RemaskConfig(max_rounds=3, temperature=0.5)).run(EXAMPLE, GEN_CFG)
     assert len(res.rounds) == 3
+
+
+def test_scheduled_correction_keeps_independent_step_and_orders_dependents():
+    model = FakeModel()
+    res = GraphRemasker(model, eq_verifier, RemaskConfig(max_rounds=1, schedule=True)).run(EXAMPLE, GEN_CFG)
+    assert res.final_text == FIXED and (res.flags_before, res.flags_after) == (1, 0)
+    masked = set(model.calls[0]["positions"])
+    line2 = range(DRAFT.index("4 * 5"), DRAFT.index("4 * 5") + len("4 * 5 = 20"))
+    assert not masked & set(line2), "the independent step must stay fixed"
+    s1 = range(0, len("2 * 3 = 7"))
+    s3 = range(DRAFT.index("7 + 20"), DRAFT.index("7 + 20") + len("7 + 20 = 27"))
+    assert max(model.commit_pass[p] for p in s1) < min(model.commit_pass[p] for p in s3)
+
+
+def test_schedule_requires_graph_mode():
+    try:
+        RemaskConfig(mode="full", schedule=True)
+    except ValueError:
+        return
+    raise AssertionError("expected a ValueError")
 
 
 def test_draft_cache_is_used():
@@ -187,7 +204,6 @@ def test_runner_statistics_and_cache(tmp_path=None):
         got = DraftCache(d, {"k": 1}).get("a")
         assert got.token_ids == [5, 6] and got.num_forward_passes == 7
         assert DraftCache(d, {"k": 2}).get("a") is None
-
 
 if __name__ == "__main__":
     tests = [(k, v) for k, v in sorted(globals().items()) if k.startswith("test_")]

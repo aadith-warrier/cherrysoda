@@ -8,7 +8,6 @@ from src.models.base import truncate_at_stop
 from src.verify.base import INVALID
 
 def affected_subgraph(graph, bad_ids) -> list:
-
     children = {}
     for e in graph.edges:
         children.setdefault(e.src, []).append(e.dst)
@@ -26,7 +25,7 @@ def token_char_spans(tokenizer, ids: list):
     text = full.strip()
     spans, prev = [], 0
     for i in range(len(ids)):
-        piece = tokenizer.decode(ids[: i + 1], skip_special_tokens=True).rstrip("�")
+        piece = tokenizer.decode(ids[: i + 1], skip_special_tokens=True).rstrip("�")  # half a UTF-8 char
         end = max(prev, len(piece))
         s, e = min(max(prev - lead, 0), len(text)), min(max(end - lead, 0), len(text))
         spans.append((s, e))
@@ -49,10 +48,14 @@ class RemaskConfig:
     temperature: Optional[float] = None
     confidence_eos_eot_inf: bool = True
     stop_if_unchanged: bool = True
-
+    schedule: bool = False
+    tokens_per_unit: int = 1
+    
     def __post_init__(self):
         if self.mode not in ("graph", "full"):
             raise ValueError(f"mode must be 'graph' or 'full', got {self.mode!r}")
+        if self.schedule and self.mode != "graph":
+            raise ValueError("schedule: true only makes sense with mode: graph")
 
 
 @dataclass
@@ -99,7 +102,6 @@ class RemaskResult:
     flags_after: int
     rounds: list = field(default_factory=list)
     skipped_reason: str = ""
-
     n_steps: int = 0
     parse_warnings: int = 0
     flag_types: dict = field(default_factory=dict)
@@ -151,6 +153,7 @@ class GraphRemasker:
         return Inspection(text, len(answer_ids), graph, verdicts, bad, time.perf_counter() - t0)
 
     def plan(self, state: Inspection, token_ids: list):
+        """(positions to remask, allow_end_from, affected step ids)."""
         stop = self.model.stop_token_ids
         L = state.n_tokens
         if self.cfg.mode == "full":
@@ -163,8 +166,6 @@ class GraphRemasker:
         content = positions_overlapping(spans, ranges)
         if not content:
             return [], 0, affected
-
-
 
         in_content = set(content)
         kept = [i for i in range(L) if i not in in_content and token_ids[i] not in stop and spans[i][1] > spans[i][0]]
@@ -186,7 +187,6 @@ class GraphRemasker:
         state = self.inspect(example, ids)
         first, rounds, skipped, parse_secs = state, [], "", []
         if draft.generated_text and draft.generated_text != first.text:
-
             skipped = "decoded token ids differ from the wrapper's generated_text"
             state = type(state)(state.text, state.n_tokens, state.graph, state.verdicts, [])
 
@@ -197,12 +197,18 @@ class GraphRemasker:
             if not positions:
                 skipped = "flagged steps could not be mapped to token positions"
                 break
+            select_fn = None
+            if self.cfg.schedule:
+                from src.methods.scheduler import DependencyPlan
+                _, spans = token_char_spans(self.model.tokenizer, ids[: state.n_tokens])
+                select_fn = DependencyPlan(state.graph, spans, state.n_tokens, len(ids), self.cfg.tokens_per_unit).select
             res = self.model.refine(
                 example["prompt"], ids, positions,
                 num_denoising_steps=self.cfg.steps_per_round,
                 temperature=self.cfg.temperature,
                 allow_end_from=allow_end_from,
                 confidence_eos_eot_inf=self.cfg.confidence_eos_eot_inf,
+                select_fn=select_fn,
             )
             nfe += res.num_forward_passes
             wall += res.wall_time_sec

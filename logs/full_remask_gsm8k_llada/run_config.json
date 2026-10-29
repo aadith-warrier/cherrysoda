@@ -1,6 +1,7 @@
 {
   "config": {
     "run_id": "full_remask_gsm8k_llada",
+    "method": "remask",
     "model_config": "configs/model/llada_8b.yaml",
     "dataset_config": "configs/dataset/gsm8k_paper.yaml",
     "sample_size": 100,
@@ -36,7 +37,8 @@
     "confidence_eos_eot_inf": true,
     "logits_eos_inf": false
   },
-  "remask": {
+  "method": "remask",
+  "method_settings": {
     "mode": "full",
     "max_rounds": 3,
     "steps_per_round": null,

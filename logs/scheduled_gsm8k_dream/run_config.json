@@ -1,0 +1,40 @@
+{
+  "config": {
+    "run_id": "scheduled_gsm8k_dream",
+    "method": "scheduled",
+    "model_config": "configs/model/dream_7b.yaml",
+    "dataset_config": "configs/dataset/gsm8k_paper.yaml",
+    "sample_size": 100,
+    "seed": 42,
+    "generation": {
+      "max_new_tokens": 256,
+      "num_denoising_steps": 256,
+      "block_length": null
+    },
+    "verifier": {
+      "name": "graph_arithmetic",
+      "check_grounding": true
+    },
+    "schedule": {
+      "tokens_per_unit": 1,
+      "temperature": null
+    },
+    "draft_cache": "logs/draft_cache"
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": null,
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "alg_temp": 0.0,
+    "remasking_strategy": "entropy",
+    "suppress_endoftext": false
+  },
+  "method": "scheduled",
+  "method_settings": {
+    "tokens_per_unit": 1,
+    "temperature": null
+  },
+  "n": 100
+}

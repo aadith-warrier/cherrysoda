@@ -1,0 +1,76 @@
+{
+  "num_examples": 100,
+  "method": "remask",
+  "mode": "full",
+  "draft_accuracy": 0.63,
+  "accuracy": 0.63,
+  "delta_accuracy": 0.0,
+  "delta_ci95": [
+    -0.05,
+    0.05
+  ],
+  "fixed": 3,
+  "broken": 3,
+  "mcnemar_p": 1.0,
+  "reasoning_consistency_before": 0.72,
+  "reasoning_consistency_after": 0.78,
+  "frac_examples_remasked": 0.28,
+  "mean_rounds_when_remasked": 2.6785714285714284,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 448.0,
+  "mean_nfe_overhead": 192.0,
+  "mean_remask_ratio_per_round": 1.0,
+  "mean_remask_ratio_cumulative": 2.6785714285714284,
+  "mean_affected_subgraph_ratio": 1.0,
+  "flagged_draft_wrong": 24,
+  "flagged_draft_right": 4,
+  "unchanged_after_remask": 0,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 142.07867082834244,
+  "format_rate_draft": 0.5,
+  "format_rate": 0.51,
+  "accuracy_among_formatted_draft": 0.54,
+  "accuracy_among_formatted": 0.5294117647058824,
+  "mean_graph_steps": 9.31,
+  "graph_parse_clean_rate": 1.0,
+  "flag_type_counts": {
+    "arithmetic": 30,
+    "ungrounded_operand": 7
+  },
+  "flag_precision_draft_wrong": 0.8571428571428571,
+  "wrong_drafts_not_flagged": 13,
+  "wrong_drafts_flagged_still_wrong": 21,
+  "mean_tokens_draft": 254.21,
+  "mean_tokens_final": 254.29,
+  "mean_tokens_regenerated": 190.83,
+  "mean_sec_generate": 92.7915428495407,
+  "mean_sec_refine": 49.28712797880173,
+  "mean_sec_parse_verify": 0.18627037424594164,
+  "mean_sec_total": 142.26494120258837,
+  "by_graph_size": {
+    "<= 8 steps": {
+      "n": 36,
+      "draft_accuracy": 0.75,
+      "accuracy": 0.75,
+      "fixed": 1,
+      "broken": 1
+    },
+    "9-10 steps": {
+      "n": 34,
+      "draft_accuracy": 0.5588235294117647,
+      "accuracy": 0.5294117647058824,
+      "fixed": 0,
+      "broken": 1
+    },
+    "> 10 steps": {
+      "n": 30,
+      "draft_accuracy": 0.5666666666666667,
+      "accuracy": 0.6,
+      "fixed": 2,
+      "broken": 1
+    }
+  },
+  "peak_gpu_gib": 16.325052738189697,
+  "total_minutes": 82.4572337349256
+}

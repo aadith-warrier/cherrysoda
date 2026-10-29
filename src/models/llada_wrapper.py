@@ -13,8 +13,8 @@ from src.models.base import (
 )
 
 LLADA_STOP_TOKENS = ("<|eot_id|>", "<|endoftext|>")
-LLADA_EOS_ID = 126081   # <|endoftext|>, as hard-coded in the official generate.py
-LLADA_EOT_ID = 126348   # <|eot_id|>
+LLADA_EOS_ID = 126081
+LLADA_EOT_ID = 126348
 
 
 def get_num_transfer_tokens(num_masked: int, steps: int) -> list:
@@ -23,7 +23,7 @@ def get_num_transfer_tokens(num_masked: int, steps: int) -> list:
 
 
 def add_gumbel_noise(logits, temperature: float):
-    # As in the official sampler (graph-dev): float64, since low-precision Gumbel noise hurts generation quality.
+
     if temperature == 0:
         return logits
     logits = logits.to(torch.float64)
@@ -38,7 +38,7 @@ class LLaDAWrapper(BaseDLMWrapper):
         dtype = getattr(torch, self.config.get("dtype", "bfloat16"))
 
         self.tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
-        # Official README loads with AutoModel (LLaDAModelLM via trust_remote_code).
+
         self.model = AutoModel.from_pretrained(
             repo_id, trust_remote_code=True, torch_dtype=dtype
         ).to(self.device).eval()
@@ -120,7 +120,7 @@ class LLaDAWrapper(BaseDLMWrapper):
             if temperature == 0 and not confidence_eos_eot_inf:
                 probs = torch.softmax(block_logits.to(torch.float64), dim=-1)
                 conf, pred = probs.max(dim=-1)
-            else:  # graph-dev sampler: Gumbel argmax, confidence = probability of the chosen token
+            else:
                 pred = torch.argmax(add_gumbel_noise(block_logits, temperature), dim=-1)
                 scored = block_logits
                 if confidence_eos_eot_inf:
@@ -143,7 +143,7 @@ class LLaDAWrapper(BaseDLMWrapper):
                 if not masked:
                     break
                 if k == 0:
-                    continue  # would be a no-op step; skip it rather than spend a forward pass
+                    continue
 
                 conf, pred = forward_block(bs, be)
                 num_forward_passes += 1
@@ -175,8 +175,8 @@ class LLaDAWrapper(BaseDLMWrapper):
                     ))
                 global_step += 1
 
-            # Only reachable when eligibility_fn held positions back: finish the block
-            # so no [MASK] tokens leak into the output.
+
+
             leftover = (input_ids[0, bs:be] == self.mask_token_id).nonzero(as_tuple=True)[0].tolist()
             if leftover:
                 conf, pred = forward_block(bs, be)
@@ -198,13 +198,94 @@ class LLaDAWrapper(BaseDLMWrapper):
             num_denoising_steps_used=global_step,
             num_remasked_tokens=0,
             intermediate_states=intermediate_states,
+            token_ids=gen_token_ids,
             raw_metadata={
                 "prompt_num_tokens": prompt_len,
                 "answer_num_tokens": len(answer_ids),
                 "hit_length_limit": len(answer_ids) == len(gen_token_ids),
-                # Keys used by scripts/run_study.py (graph-dev).
+
                 "answer_tokens": len(answer_ids),
                 "leftover_masks": sum(t == self.mask_token_id for t in gen_token_ids),
+            },
+        )
+
+    @torch.no_grad()
+    def refine(
+        self,
+        prompt,
+        token_ids,
+        remask_positions,
+        num_denoising_steps=None,
+        temperature=None,
+        allow_end_from=None,
+        confidence_eos_eot_inf=True,
+        select_fn=None,
+    ) -> GenerationResult:
+
+        start_time = time.time()
+        temperature = 0.0 if temperature is None else temperature
+        if self.use_chat_template:
+            prompt_ids = build_chat_input_ids(self.tokenizer, prompt, self.device)
+        elif isinstance(prompt, list):
+            raise ValueError("Chat-message prompts require use_chat_template: true")
+        else:
+            prompt_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(self.device)
+        prompt_len = prompt_ids.shape[1]
+
+        positions = sorted(set(int(p) for p in remask_positions))
+        if any(p < 0 or p >= len(token_ids) for p in positions):
+            raise ValueError("remask_positions out of range of token_ids")
+        gen_ids = torch.tensor([token_ids], dtype=torch.long, device=self.device)
+        pos_t = torch.tensor(positions, dtype=torch.long, device=self.device)
+        gen_ids[0, pos_t] = self.mask_token_id
+        input_ids = torch.cat([prompt_ids, gen_ids], dim=1)
+
+        n = len(positions)
+        steps = max(1, min(num_denoising_steps or n, n)) if n else 0
+        schedule = get_num_transfer_tokens(n, steps) if n else []
+        if select_fn is not None:
+            schedule = [1] * n
+        end_ids = [LLADA_EOS_ID, LLADA_EOT_ID]
+        num_forward_passes = 0
+
+        for k in schedule:
+            still = input_ids[0, prompt_len + pos_t] == self.mask_token_id
+            remaining = pos_t[still]
+            if remaining.numel() == 0:
+                break
+            logits = self.model(input_ids).logits[0, prompt_len:][remaining]
+            num_forward_passes += 1
+            if allow_end_from is not None:
+                banned = remaining < allow_end_from
+                logits[:, end_ids] = torch.where(banned[:, None], -torch.inf, logits[:, end_ids])
+            pred = torch.argmax(add_gumbel_noise(logits, temperature), dim=-1)
+            scored = logits.float()
+            if confidence_eos_eot_inf:
+                scored = scored.clone()
+                scored[:, end_ids] = -torch.inf
+            conf = torch.gather(torch.softmax(scored, dim=-1), -1, pred.unsqueeze(-1)).squeeze(-1)
+            if select_fn is None:
+                top = torch.topk(conf, min(k, remaining.numel())).indices
+            else:
+                rem_list, want = remaining.tolist(), set(select_fn(remaining.tolist(), conf.tolist()))
+                idx = [i for i, p in enumerate(rem_list) if p in want] or [int(conf.argmax())]
+                top = torch.tensor(idx, dtype=torch.long, device=self.device)
+            input_ids[0, prompt_len + remaining[top]] = pred[top]
+
+        out_ids = input_ids[0, prompt_len:].tolist()
+        answer_ids = truncate_at_stop(out_ids, self.stop_token_ids)
+        return GenerationResult(
+            prompt=prompt,
+            generated_text=self.tokenizer.decode(answer_ids, skip_special_tokens=True).strip(),
+            num_forward_passes=num_forward_passes,
+            wall_time_sec=time.time() - start_time,
+            num_denoising_steps_used=num_forward_passes,
+            num_remasked_tokens=n,
+            token_ids=out_ids,
+            raw_metadata={
+                "answer_tokens": len(answer_ids),
+                "hit_length_limit": len(answer_ids) == len(out_ids),
+                "leftover_masks": sum(t == self.mask_token_id for t in out_ids),
             },
         )
 

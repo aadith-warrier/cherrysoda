@@ -1,0 +1,385 @@
+(code-halu) sriharinim@pkgpu:~/cherrysoda$ CUDA_VISIBLE_DEVICES=1 bash -c 'for c in graph_remask full_remask scheduled; do
+  python -m scripts.run_graph_method --config configs/run/${c}_gsm8k_dream.yaml --device cuda:0
+done'
+Loading dream_7b on cuda:0  |  remask on gsm8k
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████| 4/4 [00:00<00:00,  8.27it/s]
+[graph_remask_gsm8k_dream] 1/100 ok    flags 0->0 rounds 0 nfe 256 | acc 1->1/1
+[graph_remask_gsm8k_dream] 2/100 ok    flags 0->0 rounds 0 nfe 256 | acc 2->2/2
+[graph_remask_gsm8k_dream] 3/100 bad   flags 1->0 rounds 1 nfe 327 | acc 2->2/3
+[graph_remask_gsm8k_dream] 4/100 ok    flags 0->0 rounds 0 nfe 256 | acc 3->3/4
+[graph_remask_gsm8k_dream] 5/100 ok    flags 0->0 rounds 0 nfe 256 | acc 4->4/5
+[graph_remask_gsm8k_dream] 6/100 ok    flags 0->0 rounds 0 nfe 256 | acc 5->5/6
+[graph_remask_gsm8k_dream] 7/100 ok    flags 0->0 rounds 0 nfe 256 | acc 6->6/7
+[graph_remask_gsm8k_dream] 8/100 bad   flags 1->0 rounds 1 nfe 304 | acc 6->6/8
+[graph_remask_gsm8k_dream] 9/100 ok    flags 1->1 rounds 3 nfe 721 | acc 7->7/9
+[graph_remask_gsm8k_dream] 10/100 ok    flags 1->1 rounds 3 nfe 898 | acc 8->8/10
+[graph_remask_gsm8k_dream] 11/100 ok    flags 0->0 rounds 0 nfe 256 | acc 9->9/11
+[graph_remask_gsm8k_dream] 12/100 ok    flags 0->0 rounds 0 nfe 256 | acc 10->10/12
+[graph_remask_gsm8k_dream] 13/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 10->10/13
+[graph_remask_gsm8k_dream] 14/100 bad   flags 0->0 rounds 0 nfe 256 | acc 10->10/14
+[graph_remask_gsm8k_dream] 15/100 ok    flags 0->0 rounds 0 nfe 256 | acc 11->11/15
+[graph_remask_gsm8k_dream] 16/100 bad   flags 0->0 rounds 0 nfe 256 | acc 11->11/16
+[graph_remask_gsm8k_dream] 17/100 ok    flags 0->0 rounds 0 nfe 256 | acc 12->12/17
+[graph_remask_gsm8k_dream] 18/100 ok    flags 0->0 rounds 0 nfe 256 | acc 13->13/18
+[graph_remask_gsm8k_dream] 19/100 ok    flags 0->0 rounds 0 nfe 256 | acc 14->14/19
+[graph_remask_gsm8k_dream] 20/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/20
+[graph_remask_gsm8k_dream] 21/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/21
+[graph_remask_gsm8k_dream] 22/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/22
+[graph_remask_gsm8k_dream] 23/100 ok    flags 1->1 rounds 3 nfe 880 | acc 15->15/23
+[graph_remask_gsm8k_dream] 24/100 ok    flags 0->0 rounds 0 nfe 256 | acc 16->16/24
+[graph_remask_gsm8k_dream] 25/100 ok    flags 0->0 rounds 0 nfe 256 | acc 17->17/25
+[graph_remask_gsm8k_dream] 26/100 ok    flags 0->0 rounds 0 nfe 256 | acc 18->18/26
+[graph_remask_gsm8k_dream] 27/100 ok    flags 0->0 rounds 0 nfe 256 | acc 19->19/27
+[graph_remask_gsm8k_dream] 28/100 ok    flags 0->0 rounds 0 nfe 256 | acc 20->20/28
+[graph_remask_gsm8k_dream] 29/100 bad   flags 0->0 rounds 0 nfe 256 | acc 20->20/29
+[graph_remask_gsm8k_dream] 30/100 ok    flags 0->0 rounds 0 nfe 256 | acc 21->21/30
+[graph_remask_gsm8k_dream] 31/100 ok    flags 2->2 rounds 3 nfe 1024 | acc 22->22/31
+[graph_remask_gsm8k_dream] 32/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 23->23/32
+[graph_remask_gsm8k_dream] 33/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 24->24/33
+[graph_remask_gsm8k_dream] 34/100 ok    flags 0->0 rounds 0 nfe 256 | acc 25->25/34
+[graph_remask_gsm8k_dream] 35/100 ok    flags 0->0 rounds 0 nfe 256 | acc 26->26/35
+[graph_remask_gsm8k_dream] 36/100 ok    flags 0->0 rounds 0 nfe 256 | acc 27->27/36
+[graph_remask_gsm8k_dream] 37/100 ok    flags 0->0 rounds 0 nfe 256 | acc 28->28/37
+[graph_remask_gsm8k_dream] 38/100 bad   flags 0->0 rounds 0 nfe 256 | acc 28->28/38
+[graph_remask_gsm8k_dream] 39/100 ok    flags 0->0 rounds 0 nfe 256 | acc 29->29/39
+[graph_remask_gsm8k_dream] 40/100 ok    flags 0->0 rounds 0 nfe 256 | acc 30->30/40
+[graph_remask_gsm8k_dream] 41/100 ok    flags 0->0 rounds 0 nfe 256 | acc 31->31/41
+[graph_remask_gsm8k_dream] 42/100 ok    flags 0->0 rounds 0 nfe 256 | acc 32->32/42
+[graph_remask_gsm8k_dream] 43/100 ok    flags 0->0 rounds 0 nfe 256 | acc 33->33/43
+[graph_remask_gsm8k_dream] 44/100 bad   flags 0->0 rounds 0 nfe 256 | acc 33->33/44
+[graph_remask_gsm8k_dream] 45/100 ok    flags 0->0 rounds 0 nfe 256 | acc 34->34/45
+[graph_remask_gsm8k_dream] 46/100 bad   flags 0->0 rounds 0 nfe 256 | acc 34->34/46
+[graph_remask_gsm8k_dream] 47/100 bad   flags 1->1 rounds 3 nfe 499 | acc 34->34/47
+[graph_remask_gsm8k_dream] 48/100 ok    flags 0->0 rounds 0 nfe 256 | acc 35->35/48
+[graph_remask_gsm8k_dream] 49/100 ok    flags 0->0 rounds 0 nfe 256 | acc 36->36/49
+[graph_remask_gsm8k_dream] 50/100 ok    flags 0->0 rounds 0 nfe 256 | acc 37->37/50
+[graph_remask_gsm8k_dream] 51/100 ok    flags 0->0 rounds 0 nfe 256 | acc 38->38/51
+[graph_remask_gsm8k_dream] 52/100 ok    flags 0->0 rounds 0 nfe 256 | acc 39->39/52
+[graph_remask_gsm8k_dream] 53/100 ok    flags 0->0 rounds 0 nfe 256 | acc 40->40/53
+[graph_remask_gsm8k_dream] 54/100 ok    flags 0->0 rounds 0 nfe 256 | acc 41->41/54
+[graph_remask_gsm8k_dream] 55/100 ok    flags 0->0 rounds 0 nfe 256 | acc 42->42/55
+[graph_remask_gsm8k_dream] 56/100 ok    flags 0->0 rounds 0 nfe 256 | acc 43->43/56
+[graph_remask_gsm8k_dream] 57/100 ok    flags 0->0 rounds 0 nfe 256 | acc 44->44/57
+[graph_remask_gsm8k_dream] 58/100 ok    flags 0->0 rounds 0 nfe 256 | acc 45->45/58
+[graph_remask_gsm8k_dream] 59/100 ok    flags 0->0 rounds 0 nfe 256 | acc 46->46/59
+[graph_remask_gsm8k_dream] 60/100 ok    flags 0->0 rounds 0 nfe 256 | acc 47->47/60
+[graph_remask_gsm8k_dream] 61/100 ok    flags 0->0 rounds 0 nfe 256 | acc 48->48/61
+[graph_remask_gsm8k_dream] 62/100 ok    flags 0->0 rounds 0 nfe 256 | acc 49->49/62
+[graph_remask_gsm8k_dream] 63/100 bad   flags 3->3 rounds 3 nfe 1024 | acc 49->49/63
+[graph_remask_gsm8k_dream] 64/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 50->50/64
+[graph_remask_gsm8k_dream] 65/100 ok    flags 0->0 rounds 0 nfe 256 | acc 51->51/65
+[graph_remask_gsm8k_dream] 66/100 ok    flags 0->0 rounds 0 nfe 256 | acc 52->52/66
+[graph_remask_gsm8k_dream] 67/100 ok    flags 0->0 rounds 0 nfe 256 | acc 53->53/67
+[graph_remask_gsm8k_dream] 68/100 ok    flags 0->0 rounds 0 nfe 256 | acc 54->54/68
+[graph_remask_gsm8k_dream] 69/100 ok    flags 0->0 rounds 0 nfe 256 | acc 55->55/69
+[graph_remask_gsm8k_dream] 70/100 ok    flags 0->0 rounds 0 nfe 256 | acc 56->56/70
+[graph_remask_gsm8k_dream] 71/100 ok    flags 0->0 rounds 0 nfe 256 | acc 57->57/71
+[graph_remask_gsm8k_dream] 72/100 ok    flags 0->0 rounds 0 nfe 256 | acc 58->58/72
+[graph_remask_gsm8k_dream] 73/100 ok    flags 0->0 rounds 0 nfe 256 | acc 59->59/73
+[graph_remask_gsm8k_dream] 74/100 ok    flags 1->0 rounds 1 nfe 474 | acc 60->60/74
+[graph_remask_gsm8k_dream] 75/100 ok    flags 0->0 rounds 0 nfe 256 | acc 61->61/75
+[graph_remask_gsm8k_dream] 76/100 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/76
+[graph_remask_gsm8k_dream] 77/100 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/77
+[graph_remask_gsm8k_dream] 78/100 ok    flags 0->0 rounds 0 nfe 256 | acc 62->62/78
+[graph_remask_gsm8k_dream] 79/100 ok    flags 0->0 rounds 0 nfe 256 | acc 63->63/79
+[graph_remask_gsm8k_dream] 80/100 ok    flags 0->0 rounds 0 nfe 256 | acc 64->64/80
+[graph_remask_gsm8k_dream] 81/100 ok    flags 0->0 rounds 0 nfe 256 | acc 65->65/81
+[graph_remask_gsm8k_dream] 82/100 ok    flags 0->0 rounds 0 nfe 256 | acc 66->66/82
+[graph_remask_gsm8k_dream] 83/100 ok    flags 0->0 rounds 0 nfe 256 | acc 67->67/83
+[graph_remask_gsm8k_dream] 84/100 ok    flags 0->0 rounds 0 nfe 256 | acc 68->68/84
+[graph_remask_gsm8k_dream] 85/100 ok    flags 0->0 rounds 0 nfe 256 | acc 69->69/85
+[graph_remask_gsm8k_dream] 86/100 ok    flags 0->0 rounds 0 nfe 256 | acc 70->70/86
+[graph_remask_gsm8k_dream] 87/100 ok    flags 0->0 rounds 0 nfe 256 | acc 71->71/87
+[graph_remask_gsm8k_dream] 88/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 71->71/88
+[graph_remask_gsm8k_dream] 89/100 ok    flags 0->0 rounds 0 nfe 256 | acc 72->72/89
+[graph_remask_gsm8k_dream] 90/100 ok    flags 0->0 rounds 0 nfe 256 | acc 73->73/90
+[graph_remask_gsm8k_dream] 91/100 ok    flags 0->0 rounds 0 nfe 256 | acc 74->74/91
+[graph_remask_gsm8k_dream] 92/100 ok    flags 0->0 rounds 0 nfe 256 | acc 75->75/92
+[graph_remask_gsm8k_dream] 93/100 ok    flags 0->0 rounds 0 nfe 256 | acc 76->76/93
+[graph_remask_gsm8k_dream] 94/100 ok    flags 1->0 rounds 1 nfe 364 | acc 77->77/94
+[graph_remask_gsm8k_dream] 95/100 ok    flags 0->0 rounds 0 nfe 256 | acc 78->78/95
+[graph_remask_gsm8k_dream] 96/100 ok    flags 0->0 rounds 0 nfe 256 | acc 79->79/96
+[graph_remask_gsm8k_dream] 97/100 ok    flags 0->0 rounds 0 nfe 256 | acc 80->80/97
+[graph_remask_gsm8k_dream] 98/100 bad   flags 0->0 rounds 0 nfe 256 | acc 80->80/98
+[graph_remask_gsm8k_dream] 99/100 ok    flags 0->0 rounds 0 nfe 256 | acc 81->81/99
+[graph_remask_gsm8k_dream] 100/100 ok    flags 0->0 rounds 0 nfe 256 | acc 82->82/100
+# graph_remask_gsm8k_dream
+
+dream_7b, method `remask`, mode `graph`, max_rounds 3, temperature None, n = 100
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 82.0% | 82.0% (+0.0%, 95% CI [+0.0%, +0.0%]) |
+| reasoning consistency (no flagged step) | 85.0% | 89.0% |
+| mean NFE | 256 | 334 (+78) |
+
+fixed 0, broken 0 (exact McNemar p = 1.000)
+
+- examples with a flagged step: 6 wrong, 9 right drafts
+- no answer 0.0%, hit token limit 0.0%, 86.4 s/problem
+- answer format ('The answer is'): draft 97.0%, final 97.0%; accuracy among formatted 82.5% -> 82.5%
+- verifier in situ: graphs parsed cleanly 97.0%, 4.3 steps per answer; a flag means a wrong draft 40.0% of the time; 12 wro
+ng drafts never flagged, 6 flagged but still wrong; flags by type {'arithmetic': 8, 'ungrounded_operand': 10}
+- tokens: draft 112, final 112, re-denoised 38 per problem
+- time per problem: draft 64.6 s + refine 21.7 s + parse/verify 0.16 s = 86.5 s; peak GPU memory 15.9 GiB
+- <= 4 steps (n=67): 87% -> 87% (fixed 0, broken 0)
+- > 4 steps (n=33): 73% -> 73% (fixed 0, broken 0)
+- remasked: 15.0% of examples, 2.47 rounds on average; 6 came back identical
+- remask ratio |M|/L: 81.6% per round, 201.3% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 81.2%
+
+Loading dream_7b on cuda:0  |  remask on gsm8k
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████| 4/4 [00:00<00:00,  9.27it/s]
+[full_remask_gsm8k_dream] 1/100 ok    flags 0->0 rounds 0 nfe 256 | acc 1->1/1
+[full_remask_gsm8k_dream] 2/100 ok    flags 0->0 rounds 0 nfe 256 | acc 2->2/2
+[full_remask_gsm8k_dream] 3/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 2->2/3
+[full_remask_gsm8k_dream] 4/100 ok    flags 0->0 rounds 0 nfe 256 | acc 3->3/4
+[full_remask_gsm8k_dream] 5/100 ok    flags 0->0 rounds 0 nfe 256 | acc 4->4/5
+[full_remask_gsm8k_dream] 6/100 ok    flags 0->0 rounds 0 nfe 256 | acc 5->5/6
+[full_remask_gsm8k_dream] 7/100 ok    flags 0->0 rounds 0 nfe 256 | acc 6->6/7
+[full_remask_gsm8k_dream] 8/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 6->6/8
+[full_remask_gsm8k_dream] 9/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 7->7/9
+[full_remask_gsm8k_dream] 10/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 8->8/10
+[full_remask_gsm8k_dream] 11/100 ok    flags 0->0 rounds 0 nfe 256 | acc 9->9/11
+[full_remask_gsm8k_dream] 12/100 ok    flags 0->0 rounds 0 nfe 256 | acc 10->10/12
+[full_remask_gsm8k_dream] 13/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 10->10/13
+[full_remask_gsm8k_dream] 14/100 bad   flags 0->0 rounds 0 nfe 256 | acc 10->10/14
+[full_remask_gsm8k_dream] 15/100 ok    flags 0->0 rounds 0 nfe 256 | acc 11->11/15
+[full_remask_gsm8k_dream] 16/100 bad   flags 0->0 rounds 0 nfe 256 | acc 11->11/16
+[full_remask_gsm8k_dream] 17/100 ok    flags 0->0 rounds 0 nfe 256 | acc 12->12/17
+[full_remask_gsm8k_dream] 18/100 ok    flags 0->0 rounds 0 nfe 256 | acc 13->13/18
+[full_remask_gsm8k_dream] 19/100 ok    flags 0->0 rounds 0 nfe 256 | acc 14->14/19
+[full_remask_gsm8k_dream] 20/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/20
+[full_remask_gsm8k_dream] 21/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/21
+[full_remask_gsm8k_dream] 22/100 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/22
+[full_remask_gsm8k_dream] 23/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 15->15/23
+[full_remask_gsm8k_dream] 24/100 ok    flags 0->0 rounds 0 nfe 256 | acc 16->16/24
+[full_remask_gsm8k_dream] 25/100 ok    flags 0->0 rounds 0 nfe 256 | acc 17->17/25
+[full_remask_gsm8k_dream] 26/100 ok    flags 0->0 rounds 0 nfe 256 | acc 18->18/26
+[full_remask_gsm8k_dream] 27/100 ok    flags 0->0 rounds 0 nfe 256 | acc 19->19/27
+[full_remask_gsm8k_dream] 28/100 ok    flags 0->0 rounds 0 nfe 256 | acc 20->20/28
+[full_remask_gsm8k_dream] 29/100 bad   flags 0->0 rounds 0 nfe 256 | acc 20->20/29
+[full_remask_gsm8k_dream] 30/100 ok    flags 0->0 rounds 0 nfe 256 | acc 21->21/30
+[full_remask_gsm8k_dream] 31/100 ok    flags 2->2 rounds 3 nfe 1024 | acc 22->22/31
+[full_remask_gsm8k_dream] 32/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 23->23/32
+[full_remask_gsm8k_dream] 33/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 24->24/33
+[full_remask_gsm8k_dream] 34/100 ok    flags 0->0 rounds 0 nfe 256 | acc 25->25/34
+[full_remask_gsm8k_dream] 35/100 ok    flags 0->0 rounds 0 nfe 256 | acc 26->26/35
+[full_remask_gsm8k_dream] 36/100 ok    flags 0->0 rounds 0 nfe 256 | acc 27->27/36
+[full_remask_gsm8k_dream] 37/100 ok    flags 0->0 rounds 0 nfe 256 | acc 28->28/37
+[full_remask_gsm8k_dream] 38/100 bad   flags 0->0 rounds 0 nfe 256 | acc 28->28/38
+[full_remask_gsm8k_dream] 39/100 ok    flags 0->0 rounds 0 nfe 256 | acc 29->29/39
+[full_remask_gsm8k_dream] 40/100 ok    flags 0->0 rounds 0 nfe 256 | acc 30->30/40
+[full_remask_gsm8k_dream] 41/100 ok    flags 0->0 rounds 0 nfe 256 | acc 31->31/41
+[full_remask_gsm8k_dream] 42/100 ok    flags 0->0 rounds 0 nfe 256 | acc 32->32/42
+[full_remask_gsm8k_dream] 43/100 ok    flags 0->0 rounds 0 nfe 256 | acc 33->33/43
+[full_remask_gsm8k_dream] 44/100 bad   flags 0->0 rounds 0 nfe 256 | acc 33->33/44
+[full_remask_gsm8k_dream] 45/100 ok    flags 0->0 rounds 0 nfe 256 | acc 34->34/45
+[full_remask_gsm8k_dream] 46/100 bad   flags 0->0 rounds 0 nfe 256 | acc 34->34/46
+[full_remask_gsm8k_dream] 47/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 34->34/47
+[full_remask_gsm8k_dream] 48/100 ok    flags 0->0 rounds 0 nfe 256 | acc 35->35/48
+[full_remask_gsm8k_dream] 49/100 ok    flags 0->0 rounds 0 nfe 256 | acc 36->36/49
+[full_remask_gsm8k_dream] 50/100 ok    flags 0->0 rounds 0 nfe 256 | acc 37->37/50
+[full_remask_gsm8k_dream] 51/100 ok    flags 0->0 rounds 0 nfe 256 | acc 38->38/51
+[full_remask_gsm8k_dream] 52/100 ok    flags 0->0 rounds 0 nfe 256 | acc 39->39/52
+[full_remask_gsm8k_dream] 53/100 ok    flags 0->0 rounds 0 nfe 256 | acc 40->40/53
+[full_remask_gsm8k_dream] 54/100 ok    flags 0->0 rounds 0 nfe 256 | acc 41->41/54
+[full_remask_gsm8k_dream] 55/100 ok    flags 0->0 rounds 0 nfe 256 | acc 42->42/55
+[full_remask_gsm8k_dream] 56/100 ok    flags 0->0 rounds 0 nfe 256 | acc 43->43/56
+[full_remask_gsm8k_dream] 57/100 ok    flags 0->0 rounds 0 nfe 256 | acc 44->44/57
+[full_remask_gsm8k_dream] 58/100 ok    flags 0->0 rounds 0 nfe 256 | acc 45->45/58
+[full_remask_gsm8k_dream] 59/100 ok    flags 0->0 rounds 0 nfe 256 | acc 46->46/59
+[full_remask_gsm8k_dream] 60/100 ok    flags 0->0 rounds 0 nfe 256 | acc 47->47/60
+[full_remask_gsm8k_dream] 61/100 ok    flags 0->0 rounds 0 nfe 256 | acc 48->48/61
+[full_remask_gsm8k_dream] 62/100 ok    flags 0->0 rounds 0 nfe 256 | acc 49->49/62
+[full_remask_gsm8k_dream] 63/100 bad   flags 3->3 rounds 3 nfe 1024 | acc 49->49/63
+[full_remask_gsm8k_dream] 64/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 50->50/64
+[full_remask_gsm8k_dream] 65/100 ok    flags 0->0 rounds 0 nfe 256 | acc 51->51/65
+[full_remask_gsm8k_dream] 66/100 ok    flags 0->0 rounds 0 nfe 256 | acc 52->52/66
+[full_remask_gsm8k_dream] 67/100 ok    flags 0->0 rounds 0 nfe 256 | acc 53->53/67
+[full_remask_gsm8k_dream] 68/100 ok    flags 0->0 rounds 0 nfe 256 | acc 54->54/68
+[full_remask_gsm8k_dream] 69/100 ok    flags 0->0 rounds 0 nfe 256 | acc 55->55/69
+[full_remask_gsm8k_dream] 70/100 ok    flags 0->0 rounds 0 nfe 256 | acc 56->56/70
+[full_remask_gsm8k_dream] 71/100 ok    flags 0->0 rounds 0 nfe 256 | acc 57->57/71
+[full_remask_gsm8k_dream] 72/100 ok    flags 0->0 rounds 0 nfe 256 | acc 58->58/72
+[full_remask_gsm8k_dream] 73/100 ok    flags 0->0 rounds 0 nfe 256 | acc 59->59/73
+[full_remask_gsm8k_dream] 74/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 60->60/74
+[full_remask_gsm8k_dream] 75/100 ok    flags 0->0 rounds 0 nfe 256 | acc 61->61/75
+[full_remask_gsm8k_dream] 76/100 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/76
+[full_remask_gsm8k_dream] 77/100 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/77
+[full_remask_gsm8k_dream] 78/100 ok    flags 0->0 rounds 0 nfe 256 | acc 62->62/78
+[full_remask_gsm8k_dream] 79/100 ok    flags 0->0 rounds 0 nfe 256 | acc 63->63/79
+[full_remask_gsm8k_dream] 80/100 ok    flags 0->0 rounds 0 nfe 256 | acc 64->64/80
+[full_remask_gsm8k_dream] 81/100 ok    flags 0->0 rounds 0 nfe 256 | acc 65->65/81
+[full_remask_gsm8k_dream] 82/100 ok    flags 0->0 rounds 0 nfe 256 | acc 66->66/82
+[full_remask_gsm8k_dream] 83/100 ok    flags 0->0 rounds 0 nfe 256 | acc 67->67/83
+[full_remask_gsm8k_dream] 84/100 ok    flags 0->0 rounds 0 nfe 256 | acc 68->68/84
+[full_remask_gsm8k_dream] 85/100 ok    flags 0->0 rounds 0 nfe 256 | acc 69->69/85
+[full_remask_gsm8k_dream] 86/100 ok    flags 0->0 rounds 0 nfe 256 | acc 70->70/86
+[full_remask_gsm8k_dream] 87/100 ok    flags 0->0 rounds 0 nfe 256 | acc 71->71/87
+[full_remask_gsm8k_dream] 88/100 bad   flags 1->1 rounds 3 nfe 1024 | acc 71->71/88
+[full_remask_gsm8k_dream] 89/100 ok    flags 0->0 rounds 0 nfe 256 | acc 72->72/89
+[full_remask_gsm8k_dream] 90/100 ok    flags 0->0 rounds 0 nfe 256 | acc 73->73/90
+[full_remask_gsm8k_dream] 91/100 ok    flags 0->0 rounds 0 nfe 256 | acc 74->74/91
+[full_remask_gsm8k_dream] 92/100 ok    flags 0->0 rounds 0 nfe 256 | acc 75->75/92
+[full_remask_gsm8k_dream] 93/100 ok    flags 0->0 rounds 0 nfe 256 | acc 76->76/93
+[full_remask_gsm8k_dream] 94/100 ok    flags 1->1 rounds 3 nfe 1024 | acc 77->77/94
+[full_remask_gsm8k_dream] 95/100 ok    flags 0->0 rounds 0 nfe 256 | acc 78->78/95
+[full_remask_gsm8k_dream] 96/100 ok    flags 0->0 rounds 0 nfe 256 | acc 79->79/96
+[full_remask_gsm8k_dream] 97/100 ok    flags 0->0 rounds 0 nfe 256 | acc 80->80/97
+[full_remask_gsm8k_dream] 98/100 bad   flags 0->0 rounds 0 nfe 256 | acc 80->80/98
+[full_remask_gsm8k_dream] 99/100 ok    flags 0->0 rounds 0 nfe 256 | acc 81->81/99
+[full_remask_gsm8k_dream] 100/100 ok    flags 0->0 rounds 0 nfe 256 | acc 82->82/100
+# full_remask_gsm8k_dream
+
+dream_7b, method `remask`, mode `full`, max_rounds 3, temperature None, n = 100
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 82.0% | 82.0% (+0.0%, 95% CI [+0.0%, +0.0%]) |
+| reasoning consistency (no flagged step) | 85.0% | 85.0% |
+| mean NFE | 256 | 371 (+115) |
+
+fixed 0, broken 0 (exact McNemar p = 1.000)
+
+- examples with a flagged step: 6 wrong, 9 right drafts
+- no answer 0.0%, hit token limit 0.0%, 90.0 s/problem
+- answer format ('The answer is'): draft 97.0%, final 97.0%; accuracy among formatted 82.5% -> 82.5%
+- verifier in situ: graphs parsed cleanly 97.0%, 4.3 steps per answer; a flag means a wrong draft 40.0% of the time; 12 wro
+ng drafts never flagged, 6 flagged but still wrong; flags by type {'arithmetic': 8, 'ungrounded_operand': 10}
+- tokens: draft 112, final 112, re-denoised 62 per problem
+- time per problem: draft 64.6 s + refine 25.4 s + parse/verify 0.18 s = 90.2 s; peak GPU memory 15.9 GiB
+- <= 4 steps (n=67): 87% -> 87% (fixed 0, broken 0)
+- > 4 steps (n=33): 73% -> 73% (fixed 0, broken 0)
+- remasked: 15.0% of examples, 3.00 rounds on average; 12 came back identical
+- remask ratio |M|/L: 100.0% per round, 300.0% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 100.0%
+
+Loading dream_7b on cuda:0  |  scheduled on gsm8k
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████| 4/4 [00:00<00:00,  8.85it/s]
+[scheduled_gsm8k_dream] 1/100 ok    flags 0->0 passes 88 nfe 344 | acc 1->1/1
+[scheduled_gsm8k_dream] 2/100 ok    flags 0->0 passes 48 nfe 304 | acc 2->2/2
+[scheduled_gsm8k_dream] 3/100 bad   flags 1->0 passes 83 nfe 339 | acc 2->2/3
+[scheduled_gsm8k_dream] 4/100 ok    flags 0->0 passes 51 nfe 307 | acc 3->3/4
+[scheduled_gsm8k_dream] 5/100 ok    flags 0->0 passes 88 nfe 344 | acc 4->4/5
+[scheduled_gsm8k_dream] 6/100 BROKE flags 0->0 passes 124 nfe 380 | acc 5->4/6
+[scheduled_gsm8k_dream] 7/100 ok    flags 0->0 passes 92 nfe 348 | acc 6->5/7
+[scheduled_gsm8k_dream] 8/100 bad   flags 1->0 passes 126 nfe 382 | acc 6->5/8
+[scheduled_gsm8k_dream] 9/100 BROKE flags 1->0 passes 134 nfe 390 | acc 7->5/9
+[scheduled_gsm8k_dream] 10/100 BROKE flags 1->0 passes 72 nfe 328 | acc 8->5/10
+[scheduled_gsm8k_dream] 11/100 BROKE flags 0->0 passes 129 nfe 385 | acc 9->5/11
+[scheduled_gsm8k_dream] 12/100 BROKE flags 0->1 passes 69 nfe 325 | acc 10->5/12
+[scheduled_gsm8k_dream] 13/100 bad   flags 1->0 passes 49 nfe 305 | acc 10->5/13
+[scheduled_gsm8k_dream] 14/100 bad   flags 0->1 passes 192 nfe 448 | acc 10->5/14
+[scheduled_gsm8k_dream] 15/100 ok    flags 0->0 passes 163 nfe 419 | acc 11->6/15
+[scheduled_gsm8k_dream] 16/100 bad   flags 0->2 passes 115 nfe 371 | acc 11->6/16
+[scheduled_gsm8k_dream] 17/100 BROKE flags 0->0 passes 53 nfe 309 | acc 12->6/17
+[scheduled_gsm8k_dream] 18/100 BROKE flags 0->1 passes 141 nfe 397 | acc 13->6/18
+[scheduled_gsm8k_dream] 19/100 BROKE flags 0->0 passes 89 nfe 345 | acc 14->6/19
+[scheduled_gsm8k_dream] 20/100 FIXED flags 0->0 passes 87 nfe 343 | acc 14->7/20
+[scheduled_gsm8k_dream] 21/100 bad   flags 0->0 passes 67 nfe 323 | acc 14->7/21
+[scheduled_gsm8k_dream] 22/100 bad   flags 0->0 passes 69 nfe 325 | acc 14->7/22
+[scheduled_gsm8k_dream] 23/100 ok    flags 1->1 passes 74 nfe 330 | acc 15->8/23
+[scheduled_gsm8k_dream] 24/100 ok    flags 0->0 passes 55 nfe 311 | acc 16->9/24
+[scheduled_gsm8k_dream] 25/100 ok    flags 0->0 passes 116 nfe 372 | acc 17->10/25
+[scheduled_gsm8k_dream] 26/100 BROKE flags 0->0 passes 69 nfe 325 | acc 18->10/26
+[scheduled_gsm8k_dream] 27/100 ok    flags 0->0 passes 83 nfe 339 | acc 19->11/27
+[scheduled_gsm8k_dream] 28/100 ok    flags 0->0 passes 98 nfe 354 | acc 20->12/28
+[scheduled_gsm8k_dream] 29/100 bad   flags 0->0 passes 93 nfe 349 | acc 20->12/29
+[scheduled_gsm8k_dream] 30/100 ok    flags 0->0 passes 71 nfe 327 | acc 21->13/30
+[scheduled_gsm8k_dream] 31/100 ok    flags 2->2 passes 127 nfe 383 | acc 22->14/31
+[scheduled_gsm8k_dream] 32/100 ok    flags 1->1 passes 149 nfe 405 | acc 23->15/32
+[scheduled_gsm8k_dream] 33/100 ok    flags 1->0 passes 55 nfe 311 | acc 24->16/33
+[scheduled_gsm8k_dream] 34/100 BROKE flags 0->0 passes 57 nfe 313 | acc 25->16/34
+[scheduled_gsm8k_dream] 35/100 ok    flags 0->0 passes 89 nfe 345 | acc 26->17/35
+[scheduled_gsm8k_dream] 36/100 ok    flags 0->0 passes 81 nfe 337 | acc 27->18/36
+[scheduled_gsm8k_dream] 37/100 ok    flags 0->0 passes 67 nfe 323 | acc 28->19/37
+[scheduled_gsm8k_dream] 38/100 bad   flags 0->0 passes 76 nfe 332 | acc 28->19/38
+[scheduled_gsm8k_dream] 39/100 ok    flags 0->0 passes 95 nfe 351 | acc 29->20/39
+[scheduled_gsm8k_dream] 40/100 ok    flags 0->2 passes 112 nfe 368 | acc 30->21/40
+[scheduled_gsm8k_dream] 41/100 ok    flags 0->0 passes 66 nfe 322 | acc 31->22/41
+[scheduled_gsm8k_dream] 42/100 ok    flags 0->0 passes 111 nfe 367 | acc 32->23/42
+[scheduled_gsm8k_dream] 43/100 ok    flags 0->0 passes 79 nfe 335 | acc 33->24/43
+[scheduled_gsm8k_dream] 44/100 bad   flags 0->0 passes 138 nfe 394 | acc 33->24/44
+[scheduled_gsm8k_dream] 45/100 ok    flags 0->0 passes 98 nfe 354 | acc 34->25/45
+[scheduled_gsm8k_dream] 46/100 FIXED flags 0->0 passes 255 nfe 511 | acc 34->26/46
+[scheduled_gsm8k_dream] 47/100 bad   flags 1->1 passes 82 nfe 338 | acc 34->26/47
+[scheduled_gsm8k_dream] 48/100 ok    flags 0->0 passes 137 nfe 393 | acc 35->27/48
+[scheduled_gsm8k_dream] 49/100 ok    flags 0->0 passes 71 nfe 327 | acc 36->28/49
+[scheduled_gsm8k_dream] 50/100 ok    flags 0->0 passes 72 nfe 328 | acc 37->29/50
+[scheduled_gsm8k_dream] 51/100 ok    flags 0->0 passes 84 nfe 340 | acc 38->30/51
+[scheduled_gsm8k_dream] 52/100 ok    flags 0->0 passes 87 nfe 343 | acc 39->31/52
+[scheduled_gsm8k_dream] 53/100 ok    flags 0->0 passes 116 nfe 372 | acc 40->32/53
+[scheduled_gsm8k_dream] 54/100 ok    flags 0->0 passes 163 nfe 419 | acc 41->33/54
+[scheduled_gsm8k_dream] 55/100 ok    flags 0->0 passes 85 nfe 341 | acc 42->34/55
+[scheduled_gsm8k_dream] 56/100 ok    flags 0->0 passes 70 nfe 326 | acc 43->35/56
+[scheduled_gsm8k_dream] 57/100 ok    flags 0->0 passes 69 nfe 325 | acc 44->36/57
+[scheduled_gsm8k_dream] 58/100 BROKE flags 0->0 passes 138 nfe 394 | acc 45->36/58
+[scheduled_gsm8k_dream] 59/100 ok    flags 0->0 passes 129 nfe 385 | acc 46->37/59
+[scheduled_gsm8k_dream] 60/100 ok    flags 0->0 passes 60 nfe 316 | acc 47->38/60
+[scheduled_gsm8k_dream] 61/100 BROKE flags 0->1 passes 74 nfe 330 | acc 48->38/61
+[scheduled_gsm8k_dream] 62/100 ok    flags 0->0 passes 109 nfe 365 | acc 49->39/62
+[scheduled_gsm8k_dream] 63/100 bad   flags 3->2 passes 184 nfe 440 | acc 49->39/63
+[scheduled_gsm8k_dream] 64/100 BROKE flags 1->1 passes 99 nfe 355 | acc 50->39/64
+[scheduled_gsm8k_dream] 65/100 ok    flags 0->0 passes 75 nfe 331 | acc 51->40/65
+[scheduled_gsm8k_dream] 66/100 ok    flags 0->0 passes 115 nfe 371 | acc 52->41/66
+[scheduled_gsm8k_dream] 67/100 BROKE flags 0->1 passes 75 nfe 331 | acc 53->41/67
+[scheduled_gsm8k_dream] 68/100 ok    flags 0->0 passes 103 nfe 359 | acc 54->42/68
+[scheduled_gsm8k_dream] 69/100 ok    flags 0->0 passes 87 nfe 343 | acc 55->43/69
+[scheduled_gsm8k_dream] 70/100 ok    flags 0->0 passes 73 nfe 329 | acc 56->44/70
+[scheduled_gsm8k_dream] 71/100 ok    flags 0->0 passes 135 nfe 391 | acc 57->45/71
+[scheduled_gsm8k_dream] 72/100 ok    flags 0->0 passes 59 nfe 315 | acc 58->46/72
+[scheduled_gsm8k_dream] 73/100 BROKE flags 0->0 passes 60 nfe 316 | acc 59->46/73
+[scheduled_gsm8k_dream] 74/100 BROKE flags 1->1 passes 39 nfe 295 | acc 60->46/74
+[scheduled_gsm8k_dream] 75/100 ok    flags 0->0 passes 105 nfe 361 | acc 61->47/75
+[scheduled_gsm8k_dream] 76/100 bad   flags 0->0 passes 122 nfe 378 | acc 61->47/76
+[scheduled_gsm8k_dream] 77/100 FIXED flags 0->0 passes 147 nfe 403 | acc 61->48/77
+[scheduled_gsm8k_dream] 78/100 ok    flags 0->0 passes 67 nfe 323 | acc 62->49/78
+[scheduled_gsm8k_dream] 79/100 BROKE flags 0->1 passes 78 nfe 334 | acc 63->49/79
+[scheduled_gsm8k_dream] 80/100 ok    flags 0->0 passes 72 nfe 328 | acc 64->50/80
+[scheduled_gsm8k_dream] 81/100 ok    flags 0->0 passes 103 nfe 359 | acc 65->51/81
+[scheduled_gsm8k_dream] 82/100 ok    flags 0->0 passes 116 nfe 372 | acc 66->52/82
+[scheduled_gsm8k_dream] 83/100 ok    flags 0->0 passes 89 nfe 345 | acc 67->53/83
+[scheduled_gsm8k_dream] 84/100 ok    flags 0->0 passes 64 nfe 320 | acc 68->54/84
+[scheduled_gsm8k_dream] 85/100 BROKE flags 0->0 passes 37 nfe 293 | acc 69->54/85
+[scheduled_gsm8k_dream] 86/100 BROKE flags 0->0 passes 71 nfe 327 | acc 70->54/86
+[scheduled_gsm8k_dream] 87/100 ok    flags 0->0 passes 90 nfe 346 | acc 71->55/87
+[scheduled_gsm8k_dream] 88/100 bad   flags 1->1 passes 145 nfe 401 | acc 71->55/88
+[scheduled_gsm8k_dream] 89/100 BROKE flags 0->0 passes 97 nfe 353 | acc 72->55/89
+[scheduled_gsm8k_dream] 90/100 BROKE flags 0->1 passes 61 nfe 317 | acc 73->55/90
+[scheduled_gsm8k_dream] 91/100 BROKE flags 0->0 passes 118 nfe 374 | acc 74->55/91
+[scheduled_gsm8k_dream] 92/100 ok    flags 0->0 passes 69 nfe 325 | acc 75->56/92
+[scheduled_gsm8k_dream] 93/100 ok    flags 0->0 passes 86 nfe 342 | acc 76->57/93
+[scheduled_gsm8k_dream] 94/100 ok    flags 1->0 passes 229 nfe 485 | acc 77->58/94
+[scheduled_gsm8k_dream] 95/100 ok    flags 0->0 passes 128 nfe 384 | acc 78->59/95
+[scheduled_gsm8k_dream] 96/100 ok    flags 0->0 passes 120 nfe 376 | acc 79->60/96
+[scheduled_gsm8k_dream] 97/100 ok    flags 0->0 passes 36 nfe 292 | acc 80->61/97
+[scheduled_gsm8k_dream] 98/100 bad   flags 0->0 passes 54 nfe 310 | acc 80->61/98
+[scheduled_gsm8k_dream] 99/100 BROKE flags 0->0 passes 82 nfe 338 | acc 81->61/99
+[scheduled_gsm8k_dream] 100/100 BROKE flags 0->1 passes 90 nfe 346 | acc 82->61/100
+# scheduled_gsm8k_dream
+
+dream_7b, method `scheduled`, 1 token(s) per active step per pass, n = 100
+
+| | draft | after scheduling |
+|---|---|---|
+| accuracy | 82.0% | 61.0% (-21.0%, 95% CI [-30.0%, -12.0%]) |
+| reasoning consistency (no flagged step) | 85.0% | 82.0% |
+| mean NFE | 256 | 352 (+96) |
+
+fixed 3, broken 24 (exact McNemar p = 0.000)
+
+- examples with a flagged step: 6 wrong, 9 right drafts
+- no answer 0.0%, hit token limit 0.0%, 85.4 s/problem
+- answer format ('The answer is'): draft 97.0%, final 79.0%; accuracy among formatted 82.5% -> 73.4%
+- verifier in situ: graphs parsed cleanly 97.0%, 4.3 steps per answer; a flag means a wrong draft 40.0% of the time; 12 wro
+ng drafts never flagged, 6 flagged but still wrong; flags by type {'arithmetic': 8, 'ungrounded_operand': 10}
+- tokens: draft 112, final 124, re-denoised 256 per problem
+- time per problem: draft 64.6 s + refine 20.8 s + parse/verify 0.23 s = 85.6 s; peak GPU memory 15.4 GiB
+- <= 4 steps (n=67): 87% -> 66% (fixed 1, broken 15)
+- > 4 steps (n=33): 73% -> 52% (fixed 2, broken 9)
+- scheduled pass: 96 NFE (1.19 tokens per pass, 3.6 dependency levels); 0 examples left as drafted
+
+(code-halu) sriharinim@pkgpu:~/cherrysoda$ tmux capture-pane -pS - -E - > pane_history.log
+
+

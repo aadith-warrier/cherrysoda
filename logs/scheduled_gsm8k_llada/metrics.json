@@ -1,0 +1,80 @@
+{
+  "num_examples": 100,
+  "method": "scheduled",
+  "mode": "scheduled",
+  "draft_accuracy": 0.63,
+  "accuracy": 0.67,
+  "delta_accuracy": 0.040000000000000036,
+  "delta_ci95": [
+    -0.06,
+    0.13
+  ],
+  "fixed": 14,
+  "broken": 10,
+  "mcnemar_p": 0.5412561893463135,
+  "reasoning_consistency_before": 0.72,
+  "reasoning_consistency_after": 0.69,
+  "frac_examples_remasked": 0.0,
+  "mean_rounds_when_remasked": 0.0,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 359.07,
+  "mean_nfe_overhead": 103.07,
+  "mean_remask_ratio_per_round": 0.0,
+  "mean_remask_ratio_cumulative": 0.0,
+  "mean_affected_subgraph_ratio": 0.0,
+  "flagged_draft_wrong": 24,
+  "flagged_draft_right": 4,
+  "unchanged_after_remask": 0,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 118.67852346420288,
+  "format_rate_draft": 0.5,
+  "format_rate": 0.77,
+  "accuracy_among_formatted_draft": 0.54,
+  "accuracy_among_formatted": 0.6233766233766234,
+  "mean_graph_steps": 9.31,
+  "graph_parse_clean_rate": 1.0,
+  "flag_type_counts": {
+    "arithmetic": 30,
+    "ungrounded_operand": 7
+  },
+  "flag_precision_draft_wrong": 0.8571428571428571,
+  "wrong_drafts_not_flagged": 13,
+  "wrong_drafts_flagged_still_wrong": 15,
+  "mean_tokens_draft": 254.21,
+  "mean_tokens_final": 254.44,
+  "mean_tokens_regenerated": 256.0,
+  "mean_sec_generate": 92.7915428495407,
+  "mean_sec_refine": 25.88698061466217,
+  "mean_sec_parse_verify": 0.2171521869674325,
+  "mean_sec_total": 118.89567565117031,
+  "by_graph_size": {
+    "<= 8 steps": {
+      "n": 36,
+      "draft_accuracy": 0.75,
+      "accuracy": 0.7222222222222222,
+      "fixed": 3,
+      "broken": 4
+    },
+    "9-10 steps": {
+      "n": 34,
+      "draft_accuracy": 0.5588235294117647,
+      "accuracy": 0.7941176470588235,
+      "fixed": 9,
+      "broken": 1
+    },
+    "> 10 steps": {
+      "n": 30,
+      "draft_accuracy": 0.5666666666666667,
+      "accuracy": 0.4666666666666667,
+      "fixed": 2,
+      "broken": 5
+    }
+  },
+  "mean_nfe_schedule": 103.07,
+  "mean_levels": 5.4,
+  "mean_tokens_per_pass": 2.6786226785335687,
+  "num_skipped": 0,
+  "peak_gpu_gib": 15.617647647857666,
+  "total_minutes": 43.68247905572255
+}

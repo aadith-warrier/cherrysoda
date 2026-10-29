@@ -1,0 +1,25 @@
+run_id: "scheduled_gsm8k_llada"
+
+method: scheduled
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/gsm8k_paper.yaml"
+sample_size: 100
+
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 256
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+  confidence_eos_eot_inf: true
+  logits_eos_inf: false
+
+verifier:
+  name: graph_arithmetic
+  check_grounding: true
+
+schedule:
+  tokens_per_unit: 1
+  temperature: 0.0
+
+draft_cache: "logs/draft_cache"

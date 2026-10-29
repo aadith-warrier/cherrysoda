@@ -1,0 +1,76 @@
+{
+  "num_examples": 100,
+  "method": "remask",
+  "mode": "graph",
+  "draft_accuracy": 0.63,
+  "accuracy": 0.75,
+  "delta_accuracy": 0.12,
+  "delta_ci95": [
+    0.06,
+    0.19
+  ],
+  "fixed": 12,
+  "broken": 0,
+  "mcnemar_p": 0.00048828125,
+  "reasoning_consistency_before": 0.72,
+  "reasoning_consistency_after": 0.87,
+  "frac_examples_remasked": 0.28,
+  "mean_rounds_when_remasked": 1.3571428571428572,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 280.9,
+  "mean_nfe_overhead": 24.9,
+  "mean_remask_ratio_per_round": 0.2742477430259298,
+  "mean_remask_ratio_cumulative": 0.37219336553519045,
+  "mean_affected_subgraph_ratio": 0.3591711650922177,
+  "flagged_draft_wrong": 24,
+  "flagged_draft_right": 4,
+  "unchanged_after_remask": 5,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 99.05782041549682,
+  "format_rate_draft": 0.5,
+  "format_rate": 0.5,
+  "accuracy_among_formatted_draft": 0.54,
+  "accuracy_among_formatted": 0.66,
+  "mean_graph_steps": 9.31,
+  "graph_parse_clean_rate": 1.0,
+  "flag_type_counts": {
+    "arithmetic": 30,
+    "ungrounded_operand": 7
+  },
+  "flag_precision_draft_wrong": 0.8571428571428571,
+  "wrong_drafts_not_flagged": 13,
+  "wrong_drafts_flagged_still_wrong": 12,
+  "mean_tokens_draft": 254.21,
+  "mean_tokens_final": 254.22,
+  "mean_tokens_regenerated": 26.51,
+  "mean_sec_generate": 92.7915428495407,
+  "mean_sec_refine": 6.266277565956115,
+  "mean_sec_parse_verify": 0.1472303969785571,
+  "mean_sec_total": 99.20505081247538,
+  "by_graph_size": {
+    "<= 8 steps": {
+      "n": 36,
+      "draft_accuracy": 0.75,
+      "accuracy": 0.8333333333333334,
+      "fixed": 3,
+      "broken": 0
+    },
+    "9-10 steps": {
+      "n": 34,
+      "draft_accuracy": 0.5588235294117647,
+      "accuracy": 0.7058823529411765,
+      "fixed": 5,
+      "broken": 0
+    },
+    "> 10 steps": {
+      "n": 30,
+      "draft_accuracy": 0.5666666666666667,
+      "accuracy": 0.7,
+      "fixed": 4,
+      "broken": 0
+    }
+  },
+  "peak_gpu_gib": 15.47842025756836,
+  "total_minutes": 10.821364279588064
+}

@@ -28,7 +28,7 @@ class GenerationResult:
 
 
 def build_chat_input_ids(tokenizer, prompt, device):
-    """`prompt` is a string (one user turn) or a list of chat messages (e.g. few-shot turns)."""
+
     messages = prompt if isinstance(prompt, list) else [{"role": "user", "content": prompt}]
     text = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
     return tokenizer(text, add_special_tokens=False, return_tensors="pt").input_ids.to(device)

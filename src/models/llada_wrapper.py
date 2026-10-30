@@ -70,10 +70,7 @@ class LLaDAWrapper(BaseDLMWrapper):
         logits_eos_inf=False,
         confidence_eos_eot_inf=False,
     ) -> GenerationResult:
-        """Decoding options from graph-dev (all off by default, which is the baseline sampler):
-        temperature > 0 samples with Gumbel noise; logits_eos_inf bans <|endoftext|>;
-        confidence_eos_eot_inf gives end-of-text predictions probability 0 when ranking, so they are
-        committed after all content (LLaDA paper, Appendix B.4), as in the graph runs."""
+
         if remasking_strategy not in ("low_confidence", "random"):
             raise ValueError(
                 f"LLaDA supports remasking_strategy 'low_confidence' or 'random', got '{remasking_strategy}'."

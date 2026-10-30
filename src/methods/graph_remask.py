@@ -69,7 +69,7 @@ class Inspection:
 
     @property
     def n_steps(self) -> int:
-        return sum(1 for n in self.graph.nodes if n.kind in ("calc", "claim"))
+        return sum(1 for n in self.graph.nodes if n.kind not in ("problem", "header"))  # maths: calc/claim; ProofWriter: all step kinds
 
     @property
     def flag_types(self) -> dict:
@@ -221,7 +221,7 @@ class GraphRemasker:
             rounds.append(RoundLog(
                 round=r, flagged=list(state.bad), affected=list(affected), n_remasked=content_n,
                 remask_ratio=content_n / max(1, state.n_tokens),
-                affected_ratio=len([a for a in affected if state.graph.node(a).kind in ("calc", "claim")]) / n_steps,
+                affected_ratio=len([a for a in affected if state.graph.node(a).kind not in ("problem", "header")]) / n_steps,
                 nfe=res.num_forward_passes, flagged_after=len(new_state.bad), changed=changed,
             ))
             ids, state = new_ids, new_state

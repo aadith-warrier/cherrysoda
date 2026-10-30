@@ -1,0 +1,829 @@
+diff --git a/configs/run/graph_ans_noban_proofwriter_d3_dream_n300.yaml b/configs/run/graph_ans_noban_proofwriter_d3_dream_n300.yaml
+new file mode 100644
+index 0000000..048330b
+--- /dev/null
++++ b/configs/run/graph_ans_noban_proofwriter_d3_dream_n300.yaml
+@@ -0,0 +1,29 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_ans_noban_proofwriter_d3_dream_n300"
++
++method: remask
++model_config: "configs/model/dream_7b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_dream), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: null
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++  check_answer: true        # flag answer lines whose label contradicts the verified steps
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: null
++  confidence_eos_eot_inf: true
++
++draft_cache: "logs/draft_cache"
+diff --git a/configs/run/graph_ans_noban_proofwriter_d3_llada_n300.yaml b/configs/run/graph_ans_noban_proofwriter_d3_llada_n300.yaml
+new file mode 100644
+index 0000000..834bfd3
+--- /dev/null
++++ b/configs/run/graph_ans_noban_proofwriter_d3_llada_n300.yaml
+@@ -0,0 +1,31 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_ans_noban_proofwriter_d3_llada_n300"
++
++method: remask
++model_config: "configs/model/llada_8b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_llada), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: 32
++  temperature: 0.0
++  remasking_strategy: "low_confidence"
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++  check_answer: true        # flag answer lines whose label contradicts the verified steps
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: 0.0
++  confidence_eos_eot_inf: true
++
++draft_cache: "logs/draft_cache"
+diff --git a/configs/run/graph_ans_proofwriter_d3_dream_n300.yaml b/configs/run/graph_ans_proofwriter_d3_dream_n300.yaml
+new file mode 100644
+index 0000000..6ea5301
+--- /dev/null
++++ b/configs/run/graph_ans_proofwriter_d3_dream_n300.yaml
+@@ -0,0 +1,30 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_ans_proofwriter_d3_dream_n300"
++
++method: remask
++model_config: "configs/model/dream_7b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_dream), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: null
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++  check_answer: true        # flag answer lines whose label contradicts the verified steps
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: null
++  confidence_eos_eot_inf: true
++  ban_flagged_label: true   # a rejected label may not be written again on that line
++
++draft_cache: "logs/draft_cache"
+diff --git a/configs/run/graph_ans_proofwriter_d3_llada_n300.yaml b/configs/run/graph_ans_proofwriter_d3_llada_n300.yaml
+new file mode 100644
+index 0000000..d0c95a3
+--- /dev/null
++++ b/configs/run/graph_ans_proofwriter_d3_llada_n300.yaml
+@@ -0,0 +1,32 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_ans_proofwriter_d3_llada_n300"
++
++method: remask
++model_config: "configs/model/llada_8b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_llada), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: 32
++  temperature: 0.0
++  remasking_strategy: "low_confidence"
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++  check_answer: true        # flag answer lines whose label contradicts the verified steps
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: 0.0
++  confidence_eos_eot_inf: true
++  ban_flagged_label: true   # a rejected label may not be written again on that line
++
++draft_cache: "logs/draft_cache"
+diff --git a/configs/run/graph_remask_proofwriter_d3_dream_n300.yaml b/configs/run/graph_remask_proofwriter_d3_dream_n300.yaml
+new file mode 100644
+index 0000000..aab08a1
+--- /dev/null
++++ b/configs/run/graph_remask_proofwriter_d3_dream_n300.yaml
+@@ -0,0 +1,28 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_remask_proofwriter_d3_dream_n300"
++
++method: remask
++model_config: "configs/model/dream_7b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_dream), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: null
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: null
++  confidence_eos_eot_inf: true
++
++draft_cache: "logs/draft_cache"
+diff --git a/configs/run/graph_remask_proofwriter_d3_llada_n300.yaml b/configs/run/graph_remask_proofwriter_d3_llada_n300.yaml
+new file mode 100644
+index 0000000..d2ceb3d
+--- /dev/null
++++ b/configs/run/graph_remask_proofwriter_d3_llada_n300.yaml
+@@ -0,0 +1,30 @@
++# Answer-support check + label ban (ProofWriter). 300 questions: the first 150 are the design half (the idea came
++# from their error analysis, drafts cached), 150-299 are held out (fresh drafts). Report them separately:
++# scripts/split_report.py.
++run_id: "graph_remask_proofwriter_d3_llada_n300"
++
++method: remask
++model_config: "configs/model/llada_8b.yaml"
++dataset_config: "configs/dataset/proofwriter_depth3.yaml"
++sample_size: 300            # 0-149 design half, 150-299 held out; 50 per label in each
++seed: 42
++
++# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_llada), so the draft accuracy is the baseline.
++generation:
++  max_new_tokens: 256
++  num_denoising_steps: 256
++  block_length: 32
++  temperature: 0.0
++  remasking_strategy: "low_confidence"
++verifier:
++  name: graph_logic
++  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
++
++remask:
++  mode: graph
++  max_rounds: 3
++  steps_per_round: null
++  temperature: 0.0
++  confidence_eos_eot_inf: true
++
++draft_cache: "logs/draft_cache"
+diff --git a/run_answer_check.sh b/run_answer_check.sh
+new file mode 100755
+index 0000000..92bd39c
+--- /dev/null
++++ b/run_answer_check.sh
+@@ -0,0 +1,111 @@
++#!/usr/bin/env bash
++# Answer-support check + label ban on ProofWriter, LLaDA and Dream, 300 questions each
++# (0-149 design half, 150-299 held out).
++#
++#   bash run_answer_check.sh            # GPU cuda:0
++#   bash run_answer_check.sh cuda:1
++#
++# Everything printed also goes to logs/run_answer_check.log. When it finishes, send
++#   results/answer_check_report.md
++# Per-problem progress for each run is in logs/<run_id>.stdout.log. Safe to re-run: finished problems are skipped.
++set -uo pipefail
++cd "$(dirname "$0")"
++export PYTHONNOUSERSITE=1
++DEVICE="${1:-cuda:0}"
++mkdir -p logs results
++exec > >(tee -a logs/run_answer_check.log) 2>&1
++
++say() { echo; echo "=== $(date '+%F %T')  $*"; }
++die() { echo; echo "STOPPED: $*"; echo "Send logs/run_answer_check.log"; exit 1; }
++PY="pixi run python"
++
++say "repo $(git rev-parse --short HEAD 2>/dev/null)  device $DEVICE"
++nvidia-smi --query-gpu=name,memory.used,memory.total --format=csv,noheader 2>/dev/null || true
++
++# ---------------------------------------------------------------- 1. unit tests (fake models, no GPU)
++say "1/5 unit tests"
++$PY -m pytest -q tests/test_graph_remask_proofwriter.py tests/test_graph_logic.py tests/test_graph_remask.py \
++    || die "unit tests failed"
++
++# ---------------------------------------------------------------- 2. label tokens with the real tokenizers
++say "2/5 label tokens the ban will forbid"
++$PY - <<'EOF' || die "label token check failed"
++import sys, yaml
++sys.path.insert(0, ".")
++from transformers import AutoTokenizer
++from src.methods.graph_remask import label_token_ids
++ok = True
++for cfg in ("configs/model/llada_8b.yaml", "configs/model/dream_7b.yaml"):
++    repo = yaml.safe_load(open(cfg))["hf_repo_id"]
++    tok = AutoTokenizer.from_pretrained(repo, trust_remote_code=True)
++    for lab in ("True", "False", "Unknown"):
++        ids = label_token_ids(tok, lab)
++        pieces = [tok.decode([i]) for i in ids]
++        good = bool(ids) and all(lab.lower().startswith(p.strip().lstrip(':*"').lower()) and p.strip().lstrip(':*"')
++                                 for p in pieces)
++        ok &= good
++        print(f"  {repo:32} {lab:8} -> {pieces}  {'ok' if good else 'UNEXPECTED'}")
++sys.exit(0 if ok else 1)
++EOF
++
++# ---------------------------------------------------------------- 3. smoke: do bans change labels?
++say "3/5 smoke run: 20 LLaDA problems with the ban (cached drafts)"
++$PY -m scripts.run_graph_method --config configs/run/graph_ans_proofwriter_d3_llada_n300.yaml --limit 20 \
++    --device "$DEVICE" > logs/smoke_answer_check.stdout.log 2>&1 || { tail -30 logs/smoke_answer_check.stdout.log; die "smoke run crashed"; }
++$PY - <<'EOF' || die "bans did not change any label: the ban is not reaching the model"
++import json, sys
++rs = [json.loads(l) for l in open("logs/graph_ans_proofwriter_d3_llada_n300_limit20/generations.jsonl")]
++banned = [r for r in rs if any(x.get("banned_labels") for x in r["rounds"])]
++changed = [r for r in banned if r["draft_predicted"] != r["predicted_answer"]]
++print(f"  {len(rs)} problems, {len(banned)} answer lines banned, label changed in {len(changed)}")
++for r in banned:
++    print(f"    {r['example_id']}  ref {r['reference_answer']:7}  draft {r['draft_predicted']} -> {r['predicted_answer']}"
++          f"  banned {[x.get('banned_labels') for x in r['rounds']]}")
++sys.exit(1 if banned and not changed else 0)
++EOF
++
++# ---------------------------------------------------------------- 4. the six runs
++run() {   # run_id
++  local rid="$1"
++  say "run $rid"
++  $PY -m scripts.run_graph_method --config "configs/run/${rid}.yaml" --device "$DEVICE" 2>&1 \
++    | tee -a "logs/${rid}.stdout.log" \
++    | awk '/^\[[^]]*\] [0-9]+\/[0-9]+ /{split($2,a,"/"); if (a[1]%25==0 || a[1]==a[2]) print; next} {print}' \
++    || echo "!!! $rid FAILED (see logs/${rid}.stdout.log); continuing"
++}
++say "4/5 runs (graph_remask first: it decodes the 150 new drafts, the other two reuse them)"
++for m in llada dream; do
++  run "graph_remask_proofwriter_d3_${m}_n300"
++  run "graph_ans_noban_proofwriter_d3_${m}_n300"
++  run "graph_ans_proofwriter_d3_${m}_n300"
++done
++
++# ---------------------------------------------------------------- 5. reports
++say "5/5 reports"
++REPORT=results/answer_check_report.md
++{
++  echo "# Answer-support check + label ban, ProofWriter depth 3, n = 300 ($(date '+%F %T'))"
++  echo "repo $(git rev-parse --short HEAD 2>/dev/null)"
++  for m in llada dream; do
++    echo; echo "## ${m}: design half vs held-out half"
++    $PY -m scripts.split_report --names graph graph+check graph+check+ban \
++      --runs logs/graph_remask_proofwriter_d3_${m}_n300 logs/graph_ans_noban_proofwriter_d3_${m}_n300 \
++             logs/graph_ans_proofwriter_d3_${m}_n300 \
++      --out results/answer_check_split_${m}.md 2>&1 | grep -v '^wrote'
++    echo; echo "## ${m}: all 300"
++    $PY -m scripts.compare_methods --names graph graph+check graph+check+ban \
++      --runs logs/graph_remask_proofwriter_d3_${m}_n300 logs/graph_ans_noban_proofwriter_d3_${m}_n300 \
++             logs/graph_ans_proofwriter_d3_${m}_n300 \
++      --out results/answer_check_all_${m} 2>&1 | grep -v '^wrote'
++    echo; echo "## ${m}: error breakdown, graph+check+ban"
++    echo '```'
++    $PY -m scripts.analyze_proofwriter_remask logs/graph_ans_proofwriter_d3_${m}_n300 2>&1
++    echo '```'
++    for v in graph_remask graph_ans_noban graph_ans; do
++      echo; echo "## ${m}: ${v} summary"; echo
++      cat "logs/${v}_proofwriter_d3_${m}_n300/summary.md" 2>/dev/null || echo "(missing)"
++    done
++  done
++} > "$REPORT" 2>&1
++cat "$REPORT"
++say "done. Send $REPORT"
+diff --git a/scripts/split_report.py b/scripts/split_report.py
+new file mode 100644
+index 0000000..3e73fa1
+--- /dev/null
++++ b/scripts/split_report.py
+@@ -0,0 +1,101 @@
++"""Results of remask runs on the design half (first 150 ProofWriter questions, where the answer-support idea came
++from) and the held-out half (questions 150-299, fresh drafts), reported separately.
++
++    python -m scripts.split_report --runs logs/A logs/B ... [--names a b ...] [--split 150] [--out results/x.md]
++
++Per run and half: draft and final accuracy, paired bootstrap 95% CI of the change, fixed / broken, exact McNemar p,
++and for runs with the answer check how many answer lines were rejected and how often the label then changed.
++Then every pair of runs head to head on each half (same drafts, so the comparison is paired).
++"""
++import argparse
++import json
++import os
++import sys
++
++sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
++
++from scripts.compare_runs import mcnemar_exact_p  # noqa: E402
++from scripts.run_graph_method import paired_bootstrap_ci  # noqa: E402
++
++
++def load(run_dir):
++    with open(os.path.join(run_dir, "generations.jsonl")) as f:
++        rs = [json.loads(line) for line in f]
++    return {r["example_id"]: r for r in rs}
++
++
++def final_pred(r):
++    return r.get("predicted_answer", r.get("predicted"))
++
++
++def halves(ids, split):
++    ids = sorted(ids)
++    return {"design": ids[:split], "held-out": ids[split:]}
++
++
++def row(rs, ids):
++    d = [bool(rs[i]["draft_correct"]) for i in ids]
++    f = [bool(rs[i]["correct"]) for i in ids]
++    fixed = sum(1 for a, b in zip(d, f) if not a and b)
++    broken = sum(1 for a, b in zip(d, f) if a and not b)
++    lo, hi = paired_bootstrap_ci(d, f)
++    banned = [rs[i] for i in ids if any(x.get("banned_labels") for x in rs[i].get("rounds") or [])]
++    changed = sum(1 for r in banned if r["draft_predicted"] != final_pred(r))
++    return {"n": len(ids), "draft": sum(d) / len(ids), "final": sum(f) / len(ids), "lo": lo, "hi": hi,
++            "fixed": fixed, "broken": broken, "p": mcnemar_exact_p(fixed, broken),
++            "banned": len(banned), "banned_changed": changed,
++            "banned_fixed": sum(1 for r in banned if not r["draft_correct"] and r["correct"]),
++            "banned_broken": sum(1 for r in banned if r["draft_correct"] and not r["correct"])}
++
++
++def main():
++    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
++    ap.add_argument("--runs", nargs="+", required=True)
++    ap.add_argument("--names", nargs="+")
++    ap.add_argument("--split", type=int, default=150, help="first N questions are the design half")
++    ap.add_argument("--out", help="also write the tables to this .md file")
++    args = ap.parse_args()
++    names = args.names or [os.path.basename(r.rstrip("/")) for r in args.runs]
++    runs = {}
++    for name, d in zip(names, args.runs):
++        if not os.path.exists(os.path.join(d, "generations.jsonl")):
++            print(f"(skipping {name}: {d} has no generations.jsonl)")
++            continue
++        runs[name] = load(d)
++    if not runs:
++        sys.exit("no runs found")
++    common = set.intersection(*(set(r) for r in runs.values()))
++    parts = halves(common, args.split)
++    lines = []
++    for half, ids in parts.items():
++        if not ids:
++            continue
++        lines += [f"\n### {half} ({ids[0]} .. {ids[-1]}, n = {len(ids)})\n",
++                  "| method | draft | final | Δ [95% CI] | fixed / broken | McNemar p | answer bans: lines / label changed / fixed / broken |",
++                  "|---|---|---|---|---|---|---|"]
++        for name, rs in runs.items():
++            s = row(rs, ids)
++            bans = (f"{s['banned']} / {s['banned_changed']} / {s['banned_fixed']} / {s['banned_broken']}"
++                    if s["banned"] else "-")
++            lines.append(f"| {name} | {100 * s['draft']:.1f}% | {100 * s['final']:.1f}% | "
++                         f"{100 * (s['final'] - s['draft']):+.1f} [{100 * s['lo']:+.1f}, {100 * s['hi']:+.1f}] | "
++                         f"{s['fixed']} / {s['broken']} | {s['p']:.3f} | {bans} |")
++        names_ = list(runs)
++        if len(names_) > 1:
++            lines += ["", "| A vs B | A only right | B only right | gap A-B | McNemar p |", "|---|---|---|---|---|"]
++            for i, a in enumerate(names_):
++                for b in names_[i + 1:]:
++                    ao = sum(1 for k in ids if runs[a][k]["correct"] and not runs[b][k]["correct"])
++                    bo = sum(1 for k in ids if runs[b][k]["correct"] and not runs[a][k]["correct"])
++                    lines.append(f"| {a} vs {b} | {ao} | {bo} | {100 * (ao - bo) / len(ids):+.1f} | {mcnemar_exact_p(ao, bo):.3f} |")
++    text = "\n".join(lines)
++    print(text)
++    if args.out:
++        os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
++        with open(args.out, "w") as f:
++            f.write(text + "\n")
++        print(f"\nwrote {args.out}")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/src/methods/graph_remask.py b/src/methods/graph_remask.py
+index bbf2a05..c37d480 100644
+--- a/src/methods/graph_remask.py
++++ b/src/methods/graph_remask.py
+@@ -50,6 +50,9 @@ class RemaskConfig:
+     stop_if_unchanged: bool = True
+     schedule: bool = False
+     tokens_per_unit: int = 1
++    # ProofWriter: when the answer-support check rejects an answer line's label, forbid that label (and any label
++    # rejected in an earlier round) at the answer line's positions, so the line cannot be rewritten unchanged
++    ban_flagged_label: bool = False
+     
+     def __post_init__(self):
+         if self.mode not in ("graph", "full"):
+@@ -87,6 +90,7 @@ class RoundLog:
+     nfe: int
+     flagged_after: int
+     changed: bool
++    banned_labels: list = field(default_factory=list)
+ 
+ 
+ @dataclass
+@@ -127,6 +131,41 @@ class RemaskResult:
+         return d
+ 
+ 
++LABEL_VARIANTS = ("{}", " {}", "{l}", " {l}", ":{}", ": {}", "**{}", "\"{}")
++
++
++def label_token_ids(tokenizer, label: str) -> list:
++    """First token of each way the label can be written, so banning them stops the label from being started."""
++    out = set()
++    for v in LABEL_VARIANTS:
++        text = v.format(label, l=label.lower())
++        try:
++            ids = tokenizer.encode(text, add_special_tokens=False)
++        except TypeError:
++            ids = tokenizer.encode(text)
++        if not ids:
++            continue
++        # skip leading pieces that are only punctuation/space ("**", ":"), ban the first piece of the word itself
++        for t in ids:
++            piece = tokenizer.decode([t], skip_special_tokens=True)
++            if any(ch.isalpha() for ch in piece):
++                out.add(int(t))
++                break
++    return sorted(out)
++
++
++def rejected_labels(state) -> set:
++    """Labels of answer lines the answer-support check rejected in this inspection."""
++    out = set()
++    for b in state.bad:
++        v = state.verdicts.get(b)
++        if v is not None and v.error_type == "unsupported_answer":
++            for c in v.checks:
++                if c.name == "answer_support" and c.detail:
++                    out.add(c.detail)
++    return out
++
++
+ class GraphRemasker:
+     def __init__(self, model, verify_fn: Callable, cfg: RemaskConfig = None, graph_fn: Callable = build_graph):
+         self.model, self.verify_fn, self.cfg, self.graph_fn = model, verify_fn, cfg or RemaskConfig(), graph_fn
+@@ -190,6 +229,7 @@ class GraphRemasker:
+             skipped = "decoded token ids differ from the wrapper's generated_text"
+             state = type(state)(state.text, state.n_tokens, state.graph, state.verdicts, [])
+ 
++        banned_labels = set()
+         for r in range(1, self.cfg.max_rounds + 1):
+             if not state.bad:
+                 break
+@@ -197,11 +237,23 @@ class GraphRemasker:
+             if not positions:
+                 skipped = "flagged steps could not be mapped to token positions"
+                 break
++            ban = None
++            if self.cfg.ban_flagged_label:
++                banned_labels |= rejected_labels(state)
++                if banned_labels:
++                    _, spans = token_char_spans(self.model.tokenizer, ids[: state.n_tokens])
++                    answer_ranges = [(n.char_start, n.char_end) for n in state.graph.nodes if n.kind == "answer"]
++                    tok = sorted({t for lab in banned_labels for t in label_token_ids(self.model.tokenizer, lab)})
++                    in_answer = set(positions_overlapping(spans, answer_ranges)) & set(positions)
++                    if in_answer:   # also the freed tail after the response, where a shifted answer line can land
++                        in_answer |= {p for p in positions if p >= state.n_tokens}
++                    ban = {p: tok for p in sorted(in_answer)} or None
+             select_fn = None
+             if self.cfg.schedule:
+                 from src.methods.scheduler import DependencyPlan
+                 _, spans = token_char_spans(self.model.tokenizer, ids[: state.n_tokens])
+                 select_fn = DependencyPlan(state.graph, spans, state.n_tokens, len(ids), self.cfg.tokens_per_unit).select
++            extra = {"ban": ban} if ban else {}   # only when needed: older wrappers/fakes have no `ban` argument
+             res = self.model.refine(
+                 example["prompt"], ids, positions,
+                 num_denoising_steps=self.cfg.steps_per_round,
+@@ -209,6 +261,7 @@ class GraphRemasker:
+                 allow_end_from=allow_end_from,
+                 confidence_eos_eot_inf=self.cfg.confidence_eos_eot_inf,
+                 select_fn=select_fn,
++                **extra,
+             )
+             nfe += res.num_forward_passes
+             wall += res.wall_time_sec
+@@ -223,6 +276,7 @@ class GraphRemasker:
+                 remask_ratio=content_n / max(1, state.n_tokens),
+                 affected_ratio=len([a for a in affected if state.graph.node(a).kind not in ("problem", "header")]) / n_steps,
+                 nfe=res.num_forward_passes, flagged_after=len(new_state.bad), changed=changed,
++                banned_labels=sorted(banned_labels) if ban else [],
+             ))
+             ids, state = new_ids, new_state
+             parse_secs.append(new_state.seconds)
+diff --git a/src/models/dream_wrapper.py b/src/models/dream_wrapper.py
+index ff4d005..0b156e7 100644
+--- a/src/models/dream_wrapper.py
++++ b/src/models/dream_wrapper.py
+@@ -231,7 +231,7 @@ class DreamWrapper(BaseDLMWrapper):
+ 
+     @torch.no_grad()
+     def _refine_native(self, prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature, top_p, alg,
+-                       allow_end_from, start_time):
++                       allow_end_from, start_time, ban=None):
+         """Re-denoise `positions` with Dream's own `diffusion_generate`, unchanged.
+ 
+         diffusion_generate fills a window of [MASK] tokens after the prompt; a tokens hook called once before the first
+@@ -259,6 +259,8 @@ class DreamWrapper(BaseDLMWrapper):
+             rows = torch.arange(min(allow_end_from, L), device=self.device)
+             ban_rows = (prompt_len + rows[~keep[rows]])         # rewritten positions before the allowed tail
+         eot_id = self.endoftext_id if gen_params.get("suppress_endoftext", False) else None
++        # forbidden tokens at rewritten positions, indexed like ban_rows (prompt_len + response position)
++        ban_cells = [(prompt_len + p, sorted(ids)) for p, ids in (ban or {}).items() if 0 <= p < L and not keep[p]]
+ 
+         def tokens_hook(step, x, logits):
+             if step is None:                                    # initial state, before the first denoising step
+@@ -270,6 +272,8 @@ class DreamWrapper(BaseDLMWrapper):
+             low = torch.finfo(logits.dtype).min
+             if ban_rows is not None and ban_rows.numel():
+                 logits[0][ban_rows[:, None], end_ids[None, :]] = low
++            for row, ids in ban_cells:
++                logits[0][row, ids] = low
+             if eot_id is not None:
+                 logits[..., eot_id] = float("-inf")
+             return logits
+@@ -328,6 +332,7 @@ class DreamWrapper(BaseDLMWrapper):
+         confidence_eos_eot_inf=True,   # LLaDA-only option; accepted and ignored so both wrappers share a signature
+         select_fn=None,
+         trace=None,                    # debugging: a list that receives one dict per forward pass (see below)
++        ban=None,                      # {response position: [token ids]} that may not be predicted there
+     ) -> GenerationResult:
+         """Reset `remask_positions` of an existing response to [MASK] and re-denoise just those; every other position
+         stays fixed as context. Mirrors LLaDAWrapper.refine (see there for allow_end_from).
+@@ -353,7 +358,7 @@ class DreamWrapper(BaseDLMWrapper):
+         if select_fn is None:
+             # Dream's own sampler, unchanged: see _refine_native
+             return self._refine_native(prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature,
+-                                       top_p, alg, allow_end_from, start_time)
++                                       top_p, alg, allow_end_from, start_time, ban=ban)
+         gen_ids = torch.tensor([token_ids], dtype=torch.long, device=self.device)
+         pos_t = torch.tensor(positions, dtype=torch.long, device=self.device)
+         gen_ids[0, pos_t] = self.mask_token_id
+@@ -385,6 +390,10 @@ class DreamWrapper(BaseDLMWrapper):
+             if allow_end_from is not None:
+                 banned = remaining < allow_end_from
+                 logits[:, end_ids] = torch.where(banned[:, None], torch.finfo(logits.dtype).min, logits[:, end_ids])
++            if ban:
++                for row, p in enumerate(remaining.tolist()):
++                    if p in ban:
++                        logits[row, list(ban[p])] = torch.finfo(logits.dtype).min
+             conf, pred = self._sample(logits, temperature, top_p, alg)
+             if select_fn is None:
+                 # same as diffusion_generate: top-k over a vector spanning the whole sequence (-inf elsewhere), so
+diff --git a/src/models/llada_wrapper.py b/src/models/llada_wrapper.py
+index 8bc14b5..12146f4 100644
+--- a/src/models/llada_wrapper.py
++++ b/src/models/llada_wrapper.py
+@@ -220,8 +220,10 @@ class LLaDAWrapper(BaseDLMWrapper):
+         allow_end_from=None,
+         confidence_eos_eot_inf=True,
+         select_fn=None,
++        ban=None,
+     ) -> GenerationResult:
+-
++        """ban: optional {response position: [token ids]} that may not be predicted there (the remask loop uses it
++        to forbid an answer label the verifier rejected)."""
+         start_time = time.time()
+         temperature = 0.0 if temperature is None else temperature
+         if self.use_chat_template:
+@@ -258,6 +260,10 @@ class LLaDAWrapper(BaseDLMWrapper):
+             if allow_end_from is not None:
+                 banned = remaining < allow_end_from
+                 logits[:, end_ids] = torch.where(banned[:, None], -torch.inf, logits[:, end_ids])
++            if ban:
++                for row, p in enumerate(remaining.tolist()):
++                    if p in ban:
++                        logits[row, list(ban[p])] = -torch.inf
+             pred = torch.argmax(add_gumbel_noise(logits, temperature), dim=-1)
+             scored = logits.float()
+             if confidence_eos_eot_inf:
+diff --git a/src/verify/registry.py b/src/verify/registry.py
+index e68bdbb..030a351 100644
+--- a/src/verify/registry.py
++++ b/src/verify/registry.py
+@@ -3,6 +3,66 @@ def graph_arithmetic(cfg: dict):
+     return GraphArithmeticVerifier(check_grounding=cfg.get("check_grounding", True)).verify_graph
+ 
+ 
++ANSWER_LABEL_RE = None
++
++
++def answer_label(text: str):
++    """The last True / False / Unknown stated in an answer line, or None."""
++    import re
++    global ANSWER_LABEL_RE
++    if ANSWER_LABEL_RE is None:
++        ANSWER_LABEL_RE = re.compile(r"\b(true|false|unknown)\b", re.I)
++    found = ANSWER_LABEL_RE.findall(text)
++    return found[-1].capitalize() if found else None
++
++
++def answer_support_verdicts(graph, verdicts: dict) -> dict:
++    """Open-world check of the answer lines against the trace's own verified steps (never the gold label):
++    True needs a verified step that asserts the hypothesis, False one that asserts its negation, and Unknown is
++    contradicted by either. Asserted means a `fact` or `inference` step marked valid that is not a hypothetical
++    "if ... then" application. Returns {answer node id: INVALID verdict} for answer lines that fail; the label is
++    kept in the check's detail so the remask loop can forbid it."""
++    from src.graph.build_logic import _problem_parts
++    from src.verify.base import INVALID, VALID, Check, Verdict
++    from src.verify.causal import sentences, split_causal
++    from src.verify.logic import parse_atom, parse_theory
++
++    problem = graph.nodes[0].text
++    theory, hyp = _problem_parts(problem, [])
++    th = parse_theory(theory)
++    h = parse_atom(hyp, th.verbs) if hyp else None
++    if h is None:
++        return {}
++    pos_t, neg_t = h.text(), h.negated().text()
++    proves = disproves = False
++    for n in graph.nodes:
++        if n.kind not in ("fact", "inference"):
++            continue
++        v = verdicts.get(n.node_id)
++        if v is None or v.status != VALID:
++            continue
++        if any(split_causal(x).cue == "if" for x in sentences(n.text)):
++            continue
++        proves |= pos_t in n.values_produced
++        disproves |= neg_t in n.values_produced
++    out = {}
++    for n in graph.nodes:
++        if n.kind != "answer":
++            continue
++        label = answer_label(n.text)
++        why = None
++        if label == "True" and not proves:
++            why = "True, but no verified step derives the hypothesis"
++        elif label == "False" and not disproves:
++            why = "False, but no verified step derives its negation"
++        elif label == "Unknown" and (proves or disproves):
++            why = "Unknown, but a verified step settles the hypothesis"
++        if why:
++            out[n.node_id] = Verdict(INVALID, 1.0, "answer_support", error_type="unsupported_answer",
++                                     checks=[Check("answer_support", False, label)])
++    return out
++
++
+ def graph_logic(cfg: dict):
+     """ProofWriter: the symbolic verifier on every graph step, with all earlier steps as premises (as in
+     scripts/verify_generations.py). Steps whose kind is in skip_kinds are left out: by default `meta`, the lines
+@@ -14,10 +74,15 @@ def graph_logic(cfg: dict):
+     verifier = SymbolicLogicVerifier()
+     skip = set(cfg.get("skip_kinds", ["meta"]))
+ 
++    check_answer = bool(cfg.get("check_answer", False))
++
+     def verify_graph(graph) -> dict:
+         kind = {n.node_id: n.kind for n in graph.nodes}
+-        return {s.step_id: verifier.verify(s) for s in graph_step_inputs(graph, use_all_earlier=True)
+-                if kind.get(s.step_id) not in skip}
++        verdicts = {s.step_id: verifier.verify(s) for s in graph_step_inputs(graph, use_all_earlier=True)
++                    if kind.get(s.step_id) not in skip}
++        if check_answer:
++            verdicts.update(answer_support_verdicts(graph, verdicts))
++        return verdicts
+     return verify_graph
+ 
+ 
+diff --git a/tests/test_graph_remask_proofwriter.py b/tests/test_graph_remask_proofwriter.py
+index c301b4a..857d7d5 100644
+--- a/tests/test_graph_remask_proofwriter.py
++++ b/tests/test_graph_remask_proofwriter.py
+@@ -103,3 +103,97 @@ def test_scorer_reads_labels():
+     score = make_scorer("proofwriter_depth3", "label")
+     assert score(DRAFT, "True") == ("Unknown", False)
+     assert score(FIXED, "True") == ("True", True)
++
++
++# ---------------------------------------------------------------- answer-support check + label ban
++
++from src.methods.graph_remask import label_token_ids  # noqa: E402
++from src.verify.registry import answer_label  # noqa: E402
++
++# the trace derives the hypothesis, yet the answer says Unknown
++DRAFT2 = "Fiona is red.\nRed things are young.\nSo Fiona is young.\nThe answer is: Unknown"
++FIX2 = "Fiona is red.\nRed things are young.\nSo Fiona is young.\nThe answer is: True   "
++assert len(DRAFT2) == len(FIX2)
++
++
++class EncTokenizer(CharTokenizer):
++    def encode(self, text, add_special_tokens=False):
++        return [ord(c) for c in text]
++
++
++class StubbornModel(FakeModel):
++    """Rewrites a remasked answer line with the same label unless that label is banned (what LLaDA did)."""
++    tokenizer = EncTokenizer()
++
++    def __init__(self):
++        super().__init__()
++        self.repair, self.bans = encode(FIX2), []
++
++    def generate(self, prompt, max_new_tokens, num_denoising_steps, **kw):
++        return GenerationResult(prompt, DRAFT2, num_denoising_steps, 0.0, num_denoising_steps, token_ids=encode(DRAFT2))
++
++    def refine(self, prompt, token_ids, remask_positions, ban=None, **kw):
++        self.calls.append(sorted(remask_positions))
++        self.bans.append(ban)
++        out = list(token_ids)
++        if ban and any(token_ids[p] in ids for p, ids in ban.items()):
++            for p in remask_positions:
++                out[p] = self.repair[p]
++        text = "".join(chr(i) for i in out if i > 1)
++        return GenerationResult(prompt, text, len(remask_positions), 0.0, len(remask_positions),
++                                num_remasked_tokens=len(remask_positions), token_ids=out)
++
++
++def graph_of(gen):
++    return build_graph({"example_id": "pw", "dataset": "proofwriter", "prompt": PROMPT, "generation": gen})
++
++
++def test_answer_label():
++    assert answer_label("The answer is: Unknown.") == "Unknown"
++    assert answer_label("Since Bob is big, the hypothesis is false.") == "False"
++    assert answer_label("Therefore the hypothesis can be proved.") is None
++
++
++def test_answer_check_is_off_by_default():
++    v = make_verify_fn("proofwriter")(graph_of(DRAFT2))
++    assert not any(x.error_type == "unsupported_answer" for x in v.values())
++
++
++def test_answer_check_rules():
++    vf = make_verify_fn("proofwriter", {"check_answer": True})
++    bad = lambda gen: [k for k, x in vf(graph_of(gen)).items() if x.error_type == "unsupported_answer"]
++    assert bad(DRAFT2) == ["4"]                                              # derived, but answered Unknown
++    assert bad("Fiona is red.\nSo Fiona is young.\nThe answer is: True") == []
++    assert bad("Bob is big.\nThe answer is: True") == ["2"]                  # True with nothing derived
++    assert bad("Bob is big.\nThe answer is: False") == ["2"]                 # False needs the negation derived
++    assert bad("Bob is big.\nThe answer is: Unknown") == []
++    # a hedge or a hypothetical "if ... then" does not assert the hypothesis
++    assert bad("We cannot prove that Fiona is young.\nThe answer is: True") == ["2"]
++    assert bad("If Fiona is red then Fiona is young.\nThe answer is: True") == ["2"]
++
++
++def test_label_tokens():
++    ids = label_token_ids(EncTokenizer(), "Unknown")
++    assert set(ids) == {ord("U"), ord("u")}
++
++
++def test_without_ban_the_label_survives():
++    m = StubbornModel()
++    res = GraphRemasker(m, make_verify_fn("proofwriter", {"check_answer": True}),
++                        RemaskConfig(mode="graph", max_rounds=3)).run(EXAMPLE, GEN_CFG)
++    assert res.final_text == DRAFT2 and m.bans == [None]   # remasked once, came back identical, stopped
++
++
++def test_ban_rewrites_only_the_answer_line():
++    m = StubbornModel()
++    res = GraphRemasker(m, make_verify_fn("proofwriter", {"check_answer": True}),
++                        RemaskConfig(mode="graph", max_rounds=3, ban_flagged_label=True)).run(EXAMPLE, GEN_CFG)
++    answer_start = DRAFT2.index("The answer")
++    assert min(m.calls[0]) == answer_start                 # steps 1-3 untouched
++    ban = m.bans[0]
++    assert ban and min(ban) >= answer_start and all(set(v) == {ord("U"), ord("u")} for v in ban.values())
++    assert set(range(len(DRAFT2), L)) <= set(ban)          # the freed tail after the answer is covered too
++    assert res.final_text == FIX2.strip() and res.flags_after == 0
++    assert res.rounds[0].banned_labels == ["Unknown"]
++    from scripts.run_graph_method import make_scorer
++    assert make_scorer("proofwriter_depth3", "label")(res.final_text, "True") == ("True", True)

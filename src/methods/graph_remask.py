@@ -25,7 +25,7 @@ def token_char_spans(tokenizer, ids: list):
     text = full.strip()
     spans, prev = [], 0
     for i in range(len(ids)):
-        piece = tokenizer.decode(ids[: i + 1], skip_special_tokens=True).rstrip("�")  # half a UTF-8 char
+        piece = tokenizer.decode(ids[: i + 1], skip_special_tokens=True).rstrip("�")
         end = max(prev, len(piece))
         s, e = min(max(prev - lead, 0), len(text)), min(max(end - lead, 0), len(text))
         spans.append((s, e))
@@ -50,7 +50,7 @@ class RemaskConfig:
     stop_if_unchanged: bool = True
     schedule: bool = False
     tokens_per_unit: int = 1
-    
+
     def __post_init__(self):
         if self.mode not in ("graph", "full"):
             raise ValueError(f"mode must be 'graph' or 'full', got {self.mode!r}")
@@ -153,7 +153,7 @@ class GraphRemasker:
         return Inspection(text, len(answer_ids), graph, verdicts, bad, time.perf_counter() - t0)
 
     def plan(self, state: Inspection, token_ids: list):
-        """(positions to remask, allow_end_from, affected step ids)."""
+
         stop = self.model.stop_token_ids
         L = state.n_tokens
         if self.cfg.mode == "full":

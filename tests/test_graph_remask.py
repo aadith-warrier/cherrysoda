@@ -1,8 +1,4 @@
-"""Offline tests for the localized remasking loop (no GPU, no torch, no sympy needed).
 
-Run with `python -m tests.test_graph_remask` or `pytest tests/test_graph_remask.py`.
-The verifier used here is the float-based `equation_holds`; the real run uses GraphArithmeticVerifier (sympy).
-"""
 import json
 import os
 import sys
@@ -22,7 +18,7 @@ STOP, MASK, L = 0, 1, 80
 
 
 class CharTokenizer:
-    """One token per character; id 0 = end of text (skipped when decoding), id 1 = [MASK]."""
+
 
     def decode(self, ids, skip_special_tokens=True):
         return "".join(chr(i) for i in ids if i > 1)
@@ -48,14 +44,14 @@ def encode(text):
 PROMPT = ("Question: Tom has 2 bags with 3 apples each and 4 boxes with 5 oranges each. "
           "How many fruits does he have?\nLet's think step by step\nAnswer:")
 EXAMPLE = {"example_id": "t0", "prompt": PROMPT, "metadata": {"dataset": "gsm8k"}, "reference_answer": "26"}
-# step 1 is wrong (2*3=6); step 2 is independent; step 3 uses the wrong value; step 4 states the answer
+
 DRAFT = "2 * 3 = 7\n4 * 5 = 20\n7 + 20 = 27\nThe answer is 27"
 FIXED = "2 * 3 = 6\n4 * 5 = 20\n6 + 20 = 26\nThe answer is 26"
 assert len(DRAFT) == len(FIXED)
 
 
 class FakeModel:
-    """generate() returns DRAFT; refine() 'repairs' masked positions from FIXED and records what it was asked."""
+
 
     stop_token_ids = {STOP}
     tokenizer = CharTokenizer()
@@ -71,7 +67,7 @@ class FakeModel:
                allow_end_from=None, confidence_eos_eot_inf=True, select_fn=None):
         self.calls.append({"positions": sorted(remask_positions), "allow_end_from": allow_end_from})
         out, passes = list(token_ids), len(remask_positions)
-        self.commit_pass = {}                     # position -> forward pass in which it was committed
+        self.commit_pass = {}
         if select_fn is not None:
             remaining, passes = sorted(remask_positions), 0
             while remaining:
@@ -101,7 +97,7 @@ def test_token_char_spans_roundtrip():
 
 
 def test_affected_subgraph_figure1():
-    """Paper Fig. 1 (gsm8k_00026): steps 5 and 9 are wrong, 13 is independent, 15 and 16 consume the wrong values."""
+
     path = os.path.join(ROOT, "outputs/analysis_paper_noblock_250/generations.jsonl")
     record = next(json.loads(l) for l in open(path) if json.loads(l)["example_id"] == "gsm8k_00026")
     graph = build_graph(record)
@@ -122,16 +118,16 @@ def test_localized_remask_keeps_independent_step():
     masked = set(model.calls[0]["positions"])
     line2 = range(DRAFT.index("4 * 5"), DRAFT.index("4 * 5") + len("4 * 5 = 20"))
     assert not masked & set(line2), "the independent step 4*5=20 must stay fixed"
-    # steps 1, 3 and 4 are remasked; the tail after the answer is remasked too (the answer is rewritten)
+
     assert all(p in masked for p in range(0, 9))
     assert all(p in masked for p in range(len(DRAFT), L))
-    # the kept "\n" before the answer line is the last kept token; the end-of-text ban lifts right after it
+
     assert model.calls[0]["allow_end_from"] == DRAFT.index("The answer")
 
     r = res.rounds[0]
     assert r.flagged == ["1"] and r.affected == ["1", "3", "4"]
     assert abs(r.affected_ratio - 3 / 4) < 1e-9
-    assert r.n_remasked == len("2 * 3 = 7") + len("7 + 20 = 27") + len("The answer is 27")  # newlines stay
+    assert r.n_remasked == len("2 * 3 = 7") + len("7 + 20 = 27") + len("The answer is 27")
 
 
 def test_nfe_counts_draft_and_refine():
@@ -154,11 +150,11 @@ def test_no_flags_no_remask():
 
 
 def test_stops_when_greedy_refine_reproduces_the_draft():
-    model = FakeModel(repair=DRAFT)  # the model re-predicts the same wrong text
+    model = FakeModel(repair=DRAFT)
     res = GraphRemasker(model, eq_verifier, RemaskConfig(max_rounds=5)).run(EXAMPLE, GEN_CFG)
     assert len(model.calls) == 1 and res.flags_after == 1 and not res.rounds[0].changed
     res = GraphRemasker(FakeModel(repair=DRAFT), eq_verifier, RemaskConfig(max_rounds=3, temperature=0.5)).run(EXAMPLE, GEN_CFG)
-    assert len(res.rounds) == 3  # with sampling a repeat is not a fixed point
+    assert len(res.rounds) == 3
 
 
 def test_scheduled_correction_keeps_independent_step_and_orders_dependents():
@@ -168,7 +164,7 @@ def test_scheduled_correction_keeps_independent_step_and_orders_dependents():
     masked = set(model.calls[0]["positions"])
     line2 = range(DRAFT.index("4 * 5"), DRAFT.index("4 * 5") + len("4 * 5 = 20"))
     assert not masked & set(line2), "the independent step must stay fixed"
-    # step 3 ("7 + 20 = 27") uses step 1's value, so it must not start before step 1 is fully committed
+
     s1 = range(0, len("2 * 3 = 7"))
     s3 = range(DRAFT.index("7 + 20"), DRAFT.index("7 + 20") + len("7 + 20 = 27"))
     assert max(model.commit_pass[p] for p in s1) < min(model.commit_pass[p] for p in s3)
@@ -229,7 +225,7 @@ def test_runner_statistics_and_cache(tmp_path=None):
         c.put("a", GenerationResult(None, "x", 7, 0.5, 7, token_ids=[5, 6]))
         got = DraftCache(d, {"k": 1}).get("a")
         assert got.token_ids == [5, 6] and got.num_forward_passes == 7
-        assert DraftCache(d, {"k": 2}).get("a") is None  # different decoding settings -> different cache file
+        assert DraftCache(d, {"k": 2}).get("a") is None
 
 
 if __name__ == "__main__":
@@ -239,7 +235,7 @@ if __name__ == "__main__":
         try:
             fn()
             print(f"PASS {name}")
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             failed += 1
             print(f"FAIL {name}: {type(e).__name__}: {e}")
     sys.exit(1 if failed else 0)

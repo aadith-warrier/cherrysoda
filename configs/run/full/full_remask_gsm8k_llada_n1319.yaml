@@ -3,7 +3,7 @@ run_id: "full_remask_gsm8k_llada_n1319"
 method: remask
 model_config: "configs/model/llada_8b.yaml"
 dataset_config: "configs/dataset/gsm8k_paper.yaml"
-sample_size: full           # the whole test set (1,319)
+sample_size: full
 
 generation:
   max_new_tokens: 256

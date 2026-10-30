@@ -3,7 +3,7 @@ run_id: "graph_remask_gsm8k_dream_n1319"
 method: remask
 model_config: "configs/model/dream_7b.yaml"
 dataset_config: "configs/dataset/gsm8k_paper.yaml"
-sample_size: full
+sample_size: full           # the whole test set (1,319)
 seed: 42
 
 generation:

@@ -2,9 +2,9 @@ run_id: "dapd_svamp_dream"
 
 model_config: "configs/model/dapd_dream.yaml"
 dataset_config: "configs/dataset/svamp.yaml"
-baseline: "vanilla"         # the method lives in the official DAPD sampler
+baseline: "vanilla"
 
-sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+sample_size: "full"
 seed: 42
 
 generation_overrides: {}

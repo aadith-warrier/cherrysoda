@@ -2,9 +2,9 @@ run_id: "proseco_svamp"
 
 model_config: "configs/model/proseco_llada_sft.yaml"
 dataset_config: "configs/dataset/svamp.yaml"
-baseline: "vanilla"         # the method lives in the model and its official sampler
+baseline: "vanilla"
 
-sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+sample_size: "full"
 seed: 42
 
 generation_overrides: {}

@@ -4,10 +4,10 @@ model_config: "configs/model/llada_8b.yaml"
 dataset_config: "configs/dataset/svamp.yaml"
 baseline: "temporal_vote"
 
-sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+sample_size: "full"
 seed: 42
 
-# Paper defaults; everything else matches the vanilla run.
+
 generation_overrides: {vote_weighting: exp, vote_alpha: 5.0}
 
 logging:

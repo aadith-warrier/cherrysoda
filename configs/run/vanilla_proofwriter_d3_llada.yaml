@@ -4,11 +4,11 @@ model_config: "configs/model/llada_8b.yaml"
 dataset_config: "configs/dataset/proofwriter_depth3.yaml"
 baseline: "vanilla"
 
-sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+sample_size: "full"
 seed: 42
 
-# Optional per-run overrides of the model's generation block, e.g.
-# generation_overrides: {remasking_strategy: low_confidence}
+
+
 generation_overrides: {}
 
 logging:

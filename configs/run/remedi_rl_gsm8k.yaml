@@ -2,9 +2,9 @@ run_id: "remedi_rl_gsm8k"
 
 model_config: "configs/model/remedi_rl.yaml"
 dataset_config: "configs/dataset/gsm8k.yaml"
-baseline: "vanilla"         # the method lives in the model and its official sampler
+baseline: "vanilla"
 
-sample_size: "full"         # "full" | null (= prelim_sample_size) | an integer
+sample_size: "full"
 seed: 42
 
 generation_overrides: {}

@@ -19,7 +19,7 @@ DREAM_ALG = {
     "random": "origin",
 }
 DREAM_STOP_TOKENS = ("<|im_end|>", "<|endoftext|>")
-DREAM_EPS = 1e-3   # diffusion_generate's default final timestep
+DREAM_EPS = 1e-3
 
 
 def _top_p_logits(logits, top_p):
@@ -33,13 +33,12 @@ def _top_p_logits(logits, top_p):
 
 
 def dream_sample_tokens(logits, temperature, top_p, alg):
-    """Dream's token sampler: (confidence, token) for every row of `logits`, as in diffusion_generate.
-    `alg` is Dream's name for the ordering: maskgit_plus (top-1 prob), topk_margin, entropy (negative entropy)."""
+
     if temperature > 0:
         logits = logits / temperature
     if top_p is not None and top_p < 1:
         logits = _top_p_logits(logits, top_p)
-    probs = torch.softmax(logits, dim=-1)      # in the logits' dtype (bf16), as Dream does: its ties matter for ordering
+    probs = torch.softmax(logits, dim=-1)
     if temperature > 0:
         try:
             x0 = torch.distributions.Categorical(probs=probs).sample()
@@ -85,12 +84,7 @@ class DreamWrapper(BaseDLMWrapper):
 
     @staticmethod
     def _load_model(repo_id, dtype):
-        """AutoModel.from_pretrained, with a guard for a transformers / Dream remote-code mismatch: Dream's own
-        from_pretrained calls `super().from_pretrained(..., weights_only=...)`, and some transformers versions pass
-        that argument on to the model constructor ("DreamModel.__init__() got an unexpected keyword argument
-        'weights_only'"). On exactly that error, loading is retried with PreTrainedModel.from_pretrained temporarily
-        dropping `weights_only` (weights are safetensors, so nothing else changes). Dream's own from_pretrained still
-        runs, so its generation config is still set."""
+
         try:
             return AutoModel.from_pretrained(repo_id, torch_dtype=dtype, trust_remote_code=True)
         except TypeError as e:
@@ -147,7 +141,7 @@ class DreamWrapper(BaseDLMWrapper):
         prompt_len = input_ids.shape[1]
 
         gen_params = self.config.get("generation", {})
-        if temperature is None:  # default: the model config's sampling temperature
+        if temperature is None:
             temperature = gen_params.get("temperature", 0.0)
         temperature = temperature or 0.0
         top_p = gen_params.get("top_p") if temperature > 0 else None
@@ -165,7 +159,7 @@ class DreamWrapper(BaseDLMWrapper):
         mask_id = self.mask_token_id
         if step_observer is not None:
             def _tokens_hook(step, x, logits):
-                if step is None or logits is None:  # initial call before the first step
+                if step is None or logits is None:
                     return x
                 gen = x[0, prompt_len:]
                 guess = torch.where(gen == mask_id, logits[0, prompt_len:].argmax(dim=-1), gen)
@@ -213,7 +207,7 @@ class DreamWrapper(BaseDLMWrapper):
         return GenerationResult(
             prompt=prompt,
             generated_text=generated_text,
-            num_forward_passes=num_denoising_steps,  # diffusion_generate runs exactly `steps` forward passes
+            num_forward_passes=num_denoising_steps,
             wall_time_sec=wall_time,
             num_denoising_steps_used=num_denoising_steps,
             num_remasked_tokens=0,
@@ -224,7 +218,7 @@ class DreamWrapper(BaseDLMWrapper):
                 "answer_num_tokens": len(answer_ids),
                 "answer_tokens": len(answer_ids),
                 "hit_length_limit": len(answer_ids) == len(gen_token_ids),
-                # First tokens undecoded: lets you diagnose empty outputs without rerunning.
+
                 "raw_head": self.tokenizer.decode(gen_token_ids[:24]) if not answer_ids else None,
             },
         )
@@ -232,18 +226,11 @@ class DreamWrapper(BaseDLMWrapper):
     @torch.no_grad()
     def _refine_native(self, prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature, top_p, alg,
                        allow_end_from, start_time):
-        """Re-denoise `positions` with Dream's own `diffusion_generate`, unchanged.
 
-        diffusion_generate fills a window of [MASK] tokens after the prompt; a tokens hook called once before the first
-        step (`step is None`) may return a modified window, so we write the draft's kept tokens into it and leave only
-        the positions to rewrite masked. Dream's sampler then runs exactly as in generate() on that state: same
-        timestep grid, same ordering, same temperature and top-p. A logits hook keeps end-of-text out of rewritten
-        spans (allow_end_from), the one addition that mirrors LLaDAWrapper.refine.
-        """
         prompt_len, L = prompt_ids.shape[1], len(token_ids)
         n = len(positions)
         gen_params = self.config.get("generation", {})
-        if n == 0:   # nothing to rewrite
+        if n == 0:
             answer_ids = truncate_at_stop(list(token_ids), self.stop_token_ids)
             return GenerationResult(prompt=prompt, generated_text=self.tokenizer.decode(answer_ids, skip_special_tokens=True).strip(),
                                     num_forward_passes=0, wall_time_sec=time.time() - start_time,
@@ -257,11 +244,11 @@ class DreamWrapper(BaseDLMWrapper):
         ban_rows = None
         if allow_end_from is not None and allow_end_from > 0:
             rows = torch.arange(min(allow_end_from, L), device=self.device)
-            ban_rows = (prompt_len + rows[~keep[rows]])         # rewritten positions before the allowed tail
+            ban_rows = (prompt_len + rows[~keep[rows]])
         eot_id = self.endoftext_id if gen_params.get("suppress_endoftext", False) else None
 
         def tokens_hook(step, x, logits):
-            if step is None:                                    # initial state, before the first denoising step
+            if step is None:
                 window = x[0, prompt_len:prompt_len + L]
                 x[0, prompt_len:prompt_len + L] = torch.where(keep, fixed, window)
             return x
@@ -293,7 +280,7 @@ class DreamWrapper(BaseDLMWrapper):
         return GenerationResult(
             prompt=prompt,
             generated_text=self.tokenizer.decode(answer_ids, skip_special_tokens=True).strip(),
-            num_forward_passes=steps,       # diffusion_generate runs exactly `steps` forward passes
+            num_forward_passes=steps,
             wall_time_sec=time.time() - start_time,
             num_denoising_steps_used=steps,
             num_remasked_tokens=n,
@@ -306,8 +293,7 @@ class DreamWrapper(BaseDLMWrapper):
         )
 
     def _sample(self, logits, temperature, top_p, alg):
-        """Dream's own `sample_tokens` (from the model's generation_utils.py) when it can be found, so refine() ranks
-        positions exactly the way diffusion_generate does; otherwise the local re-implementation."""
+
         if not hasattr(self, "_native_sample"):
             module = inspect.getmodule(type(self.model).diffusion_generate)
             self._native_sample = getattr(module, "sample_tokens", None)
@@ -325,18 +311,11 @@ class DreamWrapper(BaseDLMWrapper):
         num_denoising_steps=None,
         temperature=None,
         allow_end_from=None,
-        confidence_eos_eot_inf=True,   # LLaDA-only option; accepted and ignored so both wrappers share a signature
+        confidence_eos_eot_inf=True,
         select_fn=None,
-        trace=None,                    # debugging: a list that receives one dict per forward pass (see below)
+        trace=None,
     ) -> GenerationResult:
-        """Reset `remask_positions` of an existing response to [MASK] and re-denoise just those; every other position
-        stays fixed as context. Mirrors LLaDAWrapper.refine (see there for allow_end_from).
 
-        Without select_fn this runs Dream's own `diffusion_generate` unchanged (see _refine_native), starting from the
-        draft with only the chosen positions masked, so the sampler is exactly the one that produced the draft. With
-        every position remasked it is generate() itself. With select_fn (the dependency scheduler decides which
-        positions to commit in each pass) the loop below is used; it ranks tokens with Dream's own `sample_tokens`.
-        """
         start_time = time.time()
         gen_params = self.config.get("generation", {})
         if temperature is None:
@@ -351,7 +330,7 @@ class DreamWrapper(BaseDLMWrapper):
         if any(p < 0 or p >= len(token_ids) for p in positions):
             raise ValueError("remask_positions out of range of token_ids")
         if select_fn is None:
-            # Dream's own sampler, unchanged: see _refine_native
+
             return self._refine_native(prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature,
                                        top_p, alg, allow_end_from, start_time)
         gen_ids = torch.tensor([token_ids], dtype=torch.long, device=self.device)
@@ -361,8 +340,8 @@ class DreamWrapper(BaseDLMWrapper):
 
         n = len(positions)
         steps = max(1, min(num_denoising_steps or n, n)) if n else 0
-        # float32 tensors on the model's device, exactly like diffusion_generate: in float64 the product below lands on
-        # the other side of an integer for some steps, which shifts how many tokens each step commits
+
+
         grid = torch.linspace(1, DREAM_EPS, steps + 1, device=self.device) if n else None
         end_ids = sorted(self.stop_token_ids)
         num_forward_passes, i = 0, 0
@@ -378,7 +357,7 @@ class DreamWrapper(BaseDLMWrapper):
                 i += 1
                 if k <= 0:
                     continue
-            # Dream predicts position j from the output at j-1, so the logits are shifted right by one.
+
             logits = self.model(input_ids=input_ids, attention_mask="full", position_ids=None).logits
             logits = torch.cat([logits[:, :1], logits[:, :-1]], dim=1)[0, prompt_len:][remaining]
             num_forward_passes += 1
@@ -387,15 +366,15 @@ class DreamWrapper(BaseDLMWrapper):
                 logits[:, end_ids] = torch.where(banned[:, None], torch.finfo(logits.dtype).min, logits[:, end_ids])
             conf, pred = self._sample(logits, temperature, top_p, alg)
             if select_fn is None:
-                # same as diffusion_generate: top-k over a vector spanning the whole sequence (-inf elsewhere), so
-                # ties between equal confidences are resolved the way the native sampler resolves them
+
+
                 full_conf = torch.full((1, input_ids.shape[1]), -torch.inf, dtype=conf.dtype, device=self.device)
                 full_conf[0, prompt_len + remaining] = conf
                 chosen = torch.topk(full_conf, min(k, m)).indices[0]
                 full_pred = torch.full((input_ids.shape[1],), self.mask_token_id, dtype=torch.long, device=self.device)
                 full_pred[prompt_len + remaining] = pred
                 input_ids[0, chosen] = full_pred[chosen]
-                if trace is not None:   # step = index on Dream's timestep grid, comparable to diffusion_generate's history
+                if trace is not None:
                     trace.append({"step": i - 1, "chosen": sorted((chosen - prompt_len).tolist()),
                                   "tokens": {int(c) - prompt_len: int(full_pred[c]) for c in chosen},
                                   "conf": dict(zip(remaining.tolist(), conf.float().tolist()))})

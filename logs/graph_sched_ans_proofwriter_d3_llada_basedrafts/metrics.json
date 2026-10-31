@@ -1,0 +1,81 @@
+{
+  "num_examples": 600,
+  "method": "remask",
+  "mode": "graph",
+  "draft_accuracy": 0.675,
+  "accuracy": 0.7666666666666667,
+  "delta_accuracy": 0.09166666666666667,
+  "delta_ci95": [
+    0.051666666666666666,
+    0.13166666666666665
+  ],
+  "fixed": 109,
+  "broken": 54,
+  "mcnemar_p": 1.975326073723018e-05,
+  "reasoning_consistency_before": 0.4866666666666667,
+  "reasoning_consistency_after": 0.7083333333333334,
+  "frac_examples_remasked": 0.5133333333333333,
+  "mean_rounds_when_remasked": 2.1525974025974026,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 305.31,
+  "mean_nfe_overhead": 49.31,
+  "mean_remask_ratio_per_round": 0.20319365820103502,
+  "mean_remask_ratio_cumulative": 0.43739414086781286,
+  "mean_affected_subgraph_ratio": 0.2370844491851361,
+  "flagged_draft_wrong": 170,
+  "flagged_draft_right": 138,
+  "unchanged_after_remask": 7,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 32.543726307153705,
+  "format_rate_draft": 0.9966666666666667,
+  "format_rate": 0.975,
+  "accuracy_among_formatted_draft": 0.6739130434782609,
+  "accuracy_among_formatted": 0.7794871794871795,
+  "mean_graph_steps": 13.968333333333334,
+  "graph_parse_clean_rate": 1.0,
+  "flag_type_counts": {
+    "missed_inference": 45,
+    "unsupported_answer": 362,
+    "contradiction": 19,
+    "false_premise": 9,
+    "unsupported": 204,
+    "unsupported_premise": 71,
+    "hallucinated_rule": 61
+  },
+  "flag_precision_draft_wrong": 0.551948051948052,
+  "wrong_drafts_not_flagged": 25,
+  "wrong_drafts_flagged_still_wrong": 61,
+  "mean_tokens_draft": 240.52666666666667,
+  "mean_tokens_final": 241.655,
+  "mean_tokens_regenerated": 54.748333333333335,
+  "mean_sec_generate": 29.187002089420954,
+  "mean_sec_refine": 3.356724217732747,
+  "mean_sec_parse_verify": 0.012380238384842717,
+  "mean_sec_total": 32.55610654553855,
+  "by_graph_size": {
+    "<= 12 steps": {
+      "n": 221,
+      "draft_accuracy": 0.6561085972850679,
+      "accuracy": 0.6832579185520362,
+      "fixed": 41,
+      "broken": 35
+    },
+    "13-16 steps": {
+      "n": 213,
+      "draft_accuracy": 0.6901408450704225,
+      "accuracy": 0.8075117370892019,
+      "fixed": 36,
+      "broken": 11
+    },
+    "> 16 steps": {
+      "n": 166,
+      "draft_accuracy": 0.6807228915662651,
+      "accuracy": 0.8253012048192772,
+      "fixed": 32,
+      "broken": 8
+    }
+  },
+  "peak_gpu_gib": 15.26837158203125,
+  "total_minutes": 33.808728285630544
+}

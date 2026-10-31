@@ -1,0 +1,7 @@
+nohup: ignoring input
+[dapd_gsm8k_llada_onebl] Loading dataset: configs/dataset/gsm8k_paper.yaml
+[dapd_gsm8k_llada_onebl] Loaded 1319 examples
+[dapd_gsm8k_llada_onebl] Resuming: 1014 already done
+[dapd_gsm8k_llada_onebl] Loading model: dapd_llada on cuda:2
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  7.12it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  8.31it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  8.45it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00,  8.69it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00,  8.79it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  8.98it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  8.68it/s]
+dapd_gsm8k_llada_onebl:   0%|          | 0/305 [00:00<?, ?it/s]dapd_gsm8k_llada_onebl:   0%|          | 1/305 [00:16<1:22:31, 16.29s/it]

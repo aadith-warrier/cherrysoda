@@ -1,0 +1,37 @@
+nohup: ignoring input
+[dapd_gsm8k_llada_onebl] Loading dataset: configs/dataset/gsm8k_paper.yaml
+[dapd_gsm8k_llada_onebl] Loaded 1319 examples
+[dapd_gsm8k_llada_onebl] Resuming: 1014 already done
+[dapd_gsm8k_llada_onebl] Loading model: dapd_llada on cuda:1
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  7.05it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  7.06it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  6.37it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00,  6.30it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00,  6.56it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  6.86it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  6.71it/s]
+dapd_gsm8k_llada_onebl:   0%|          | 0/305 [00:00<?, ?it/s]dapd_gsm8k_llada_onebl:   0%|          | 0/305 [00:02<?, ?it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/sriharinim/cherrysoda/scripts/run_baseline.py", line 208, in <module>
+    main()
+  File "/home/sriharinim/cherrysoda/scripts/run_baseline.py", line 152, in main
+    result = baseline_module.run(model, example, gen_cfg)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/cherrysoda/baselines/vanilla.py", line 13, in run
+    return model.generate(
+           ^^^^^^^^^^^^^^^
+  File "/home/sriharinim/miniconda3/envs/code-halu/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/cherrysoda/src/models/dapd_wrapper.py", line 65, in generate
+    output, stats = self._dapd.generate_dapd(**kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/miniconda3/envs/code-halu/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/cherrysoda/third_party/DAPD/dapd/generation.py", line 192, in generate_dapd
+    attention = _compute_attention(hook=hook, layer_ratio=layer_ratio)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/cherrysoda/third_party/DAPD/dapd/generation.py", line 59, in _compute_attention
+    return hook.compute_attention_weights(layer_ratio=layer_ratio)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sriharinim/cherrysoda/third_party/DAPD/dapd/core.py", line 203, in compute_attention_weights
+    scores = torch.matmul(q.float(), k.float().transpose(-2, -1)) / math.sqrt(d_k)
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 400.00 MiB. GPU 1 has a total capacity of 31.50 GiB of which 148.75 MiB is free. Process 1587786 has 13.48 GiB memory in use. Including non-PyTorch memory, this process has 17.86 GiB memory in use. Of the allocated memory 17.29 GiB is allocated by PyTorch, and 217.09 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

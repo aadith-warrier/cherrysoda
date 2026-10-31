@@ -1,0 +1,48 @@
+nohup: ignoring input
+Loading llada_8b on cuda:1  |  remask on gsm8k
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:00,  8.10it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  8.55it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  7.52it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00,  7.02it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00,  6.73it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  6.79it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:00<00:00,  7.07it/s]
+[graph_sched_gsm8k_llada_zs_limit20] 1/20 ok    flags 0->0 rounds 0 nfe 256 | acc 1->1/1
+[graph_sched_gsm8k_llada_zs_limit20] 2/20 ok    flags 0->0 rounds 0 nfe 256 | acc 2->2/2
+[graph_sched_gsm8k_llada_zs_limit20] 3/20 bad   flags 0->0 rounds 0 nfe 256 | acc 2->2/3
+[graph_sched_gsm8k_llada_zs_limit20] 4/20 ok    flags 0->0 rounds 0 nfe 256 | acc 3->3/4
+[graph_sched_gsm8k_llada_zs_limit20] 5/20 ok    flags 0->0 rounds 0 nfe 256 | acc 4->4/5
+[graph_sched_gsm8k_llada_zs_limit20] 6/20 ok    flags 0->0 rounds 0 nfe 256 | acc 5->5/6
+[graph_sched_gsm8k_llada_zs_limit20] 7/20 ok    flags 0->0 rounds 0 nfe 256 | acc 6->6/7
+[graph_sched_gsm8k_llada_zs_limit20] 8/20 bad   flags 0->0 rounds 0 nfe 256 | acc 6->6/8
+[graph_sched_gsm8k_llada_zs_limit20] 9/20 bad   flags 1->1 rounds 1 nfe 284 | acc 6->6/9
+[graph_sched_gsm8k_llada_zs_limit20] 10/20 ok    flags 0->0 rounds 0 nfe 256 | acc 7->7/10
+[graph_sched_gsm8k_llada_zs_limit20] 11/20 ok    flags 0->0 rounds 0 nfe 256 | acc 8->8/11
+[graph_sched_gsm8k_llada_zs_limit20] 12/20 ok    flags 0->0 rounds 0 nfe 256 | acc 9->9/12
+[graph_sched_gsm8k_llada_zs_limit20] 13/20 bad   flags 0->0 rounds 0 nfe 256 | acc 9->9/13
+[graph_sched_gsm8k_llada_zs_limit20] 14/20 ok    flags 0->0 rounds 0 nfe 256 | acc 10->10/14
+[graph_sched_gsm8k_llada_zs_limit20] 15/20 ok    flags 0->0 rounds 0 nfe 256 | acc 11->11/15
+[graph_sched_gsm8k_llada_zs_limit20] 16/20 bad   flags 0->0 rounds 0 nfe 256 | acc 11->11/16
+[graph_sched_gsm8k_llada_zs_limit20] 17/20 ok    flags 0->0 rounds 0 nfe 256 | acc 12->12/17
+[graph_sched_gsm8k_llada_zs_limit20] 18/20 ok    flags 0->0 rounds 0 nfe 256 | acc 13->13/18
+[graph_sched_gsm8k_llada_zs_limit20] 19/20 ok    flags 0->0 rounds 0 nfe 256 | acc 14->14/19
+[graph_sched_gsm8k_llada_zs_limit20] 20/20 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/20
+# graph_sched_gsm8k_llada_zs_limit20
+
+llada_8b, method `remask`, mode `graph`, max_rounds 3, temperature 0.0, n = 20
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 70.0% | 70.0% (+0.0%, 95% CI [+0.0%, +0.0%]) |
+| reasoning consistency (no flagged step) | 95.0% | 95.0% |
+| mean NFE | 256 | 257 (+1) |
+
+fixed 0, broken 0 (exact McNemar p = 1.000)
+
+- examples with a flagged step: 1 wrong, 0 right drafts
+- no answer 0.0%, hit token limit 0.0%, 16.2 s/problem
+- answer format ('The answer is'): draft 95.0%, final 95.0%; accuracy among formatted 73.7% -> 73.7%
+- verifier in situ: graphs parsed cleanly 100.0%, 9.1 steps per answer; a flag means a wrong draft 100.0% of the time; 5 wrong drafts never flagged, 1 flagged but still wrong; flags by type {'arithmetic': 1}
+- tokens: draft 219, final 219, re-denoised 1 per problem
+- time per problem: draft 16.1 s + refine 0.1 s + parse/verify 0.09 s = 16.3 s
+- <= 8 steps (n=8): 50% -> 50% (fixed 0, broken 0)
+- 9-11 steps (n=8): 75% -> 75% (fixed 0, broken 0)
+- > 11 steps (n=4): 100% -> 100% (fixed 0, broken 0)
+- remasked: 5.0% of examples, 1.00 rounds on average; 1 came back identical
+- remask ratio |M|/L: 10.6% per round, 10.6% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 22.2%
+

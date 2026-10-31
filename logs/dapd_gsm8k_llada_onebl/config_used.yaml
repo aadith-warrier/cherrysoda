@@ -3,7 +3,7 @@ run:
   model_config: configs/model/dapd_llada.yaml
   dataset_config: configs/dataset/gsm8k_paper.yaml
   baseline: vanilla
-  sample_size: 200
+  sample_size: full
   seed: 42
   generation_overrides:
     block_length: null
@@ -17,7 +17,7 @@ model:
   wrapper: dapd
   base: llada
   hf_repo_id: GSAI-ML/LLaDA-8B-Instruct
-  device: cuda:0
+  device: cuda:2
   generation:
     max_new_tokens: 256
     num_denoising_steps: 256

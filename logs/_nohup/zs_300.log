@@ -1,0 +1,328 @@
+nohup: ignoring input
+Loading llada_8b on cuda:2  |  remask on gsm8k
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:01,  4.49it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:00,  5.47it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:00<00:00,  5.28it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:00<00:00,  5.63it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:00<00:00,  5.87it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:01<00:00,  5.75it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:01<00:00,  5.59it/s]
+[graph_sched_gsm8k_llada_zs] 1/300 ok    flags 0->0 rounds 0 nfe 256 | acc 1->1/1
+[graph_sched_gsm8k_llada_zs] 2/300 ok    flags 0->0 rounds 0 nfe 256 | acc 2->2/2
+[graph_sched_gsm8k_llada_zs] 3/300 bad   flags 0->0 rounds 0 nfe 256 | acc 2->2/3
+[graph_sched_gsm8k_llada_zs] 4/300 ok    flags 0->0 rounds 0 nfe 256 | acc 3->3/4
+[graph_sched_gsm8k_llada_zs] 5/300 ok    flags 0->0 rounds 0 nfe 256 | acc 4->4/5
+[graph_sched_gsm8k_llada_zs] 6/300 ok    flags 0->0 rounds 0 nfe 256 | acc 5->5/6
+[graph_sched_gsm8k_llada_zs] 7/300 ok    flags 0->0 rounds 0 nfe 256 | acc 6->6/7
+[graph_sched_gsm8k_llada_zs] 8/300 bad   flags 0->0 rounds 0 nfe 256 | acc 6->6/8
+[graph_sched_gsm8k_llada_zs] 9/300 bad   flags 1->1 rounds 1 nfe 284 | acc 6->6/9
+[graph_sched_gsm8k_llada_zs] 10/300 ok    flags 0->0 rounds 0 nfe 256 | acc 7->7/10
+[graph_sched_gsm8k_llada_zs] 11/300 ok    flags 0->0 rounds 0 nfe 256 | acc 8->8/11
+[graph_sched_gsm8k_llada_zs] 12/300 ok    flags 0->0 rounds 0 nfe 256 | acc 9->9/12
+[graph_sched_gsm8k_llada_zs] 13/300 bad   flags 0->0 rounds 0 nfe 256 | acc 9->9/13
+[graph_sched_gsm8k_llada_zs] 14/300 ok    flags 0->0 rounds 0 nfe 256 | acc 10->10/14
+[graph_sched_gsm8k_llada_zs] 15/300 ok    flags 0->0 rounds 0 nfe 256 | acc 11->11/15
+[graph_sched_gsm8k_llada_zs] 16/300 bad   flags 0->0 rounds 0 nfe 256 | acc 11->11/16
+[graph_sched_gsm8k_llada_zs] 17/300 ok    flags 0->0 rounds 0 nfe 256 | acc 12->12/17
+[graph_sched_gsm8k_llada_zs] 18/300 ok    flags 0->0 rounds 0 nfe 256 | acc 13->13/18
+[graph_sched_gsm8k_llada_zs] 19/300 ok    flags 0->0 rounds 0 nfe 256 | acc 14->14/19
+[graph_sched_gsm8k_llada_zs] 20/300 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/20
+[graph_sched_gsm8k_llada_zs] 21/300 bad   flags 1->0 rounds 1 nfe 327 | acc 14->14/21
+[graph_sched_gsm8k_llada_zs] 22/300 bad   flags 0->0 rounds 0 nfe 256 | acc 14->14/22
+[graph_sched_gsm8k_llada_zs] 23/300 ok    flags 1->1 rounds 2 nfe 376 | acc 15->15/23
+[graph_sched_gsm8k_llada_zs] 24/300 ok    flags 0->0 rounds 0 nfe 256 | acc 16->16/24
+[graph_sched_gsm8k_llada_zs] 25/300 ok    flags 0->0 rounds 0 nfe 256 | acc 17->17/25
+[graph_sched_gsm8k_llada_zs] 26/300 ok    flags 0->0 rounds 0 nfe 256 | acc 18->18/26
+[graph_sched_gsm8k_llada_zs] 27/300 ok    flags 0->0 rounds 0 nfe 256 | acc 19->19/27
+[graph_sched_gsm8k_llada_zs] 28/300 ok    flags 0->0 rounds 0 nfe 256 | acc 20->20/28
+[graph_sched_gsm8k_llada_zs] 29/300 ok    flags 0->0 rounds 0 nfe 256 | acc 21->21/29
+[graph_sched_gsm8k_llada_zs] 30/300 ok    flags 0->0 rounds 0 nfe 256 | acc 22->22/30
+[graph_sched_gsm8k_llada_zs] 31/300 ok    flags 0->0 rounds 0 nfe 256 | acc 23->23/31
+[graph_sched_gsm8k_llada_zs] 32/300 ok    flags 0->0 rounds 0 nfe 256 | acc 24->24/32
+[graph_sched_gsm8k_llada_zs] 33/300 ok    flags 0->0 rounds 0 nfe 256 | acc 25->25/33
+[graph_sched_gsm8k_llada_zs] 34/300 ok    flags 0->0 rounds 0 nfe 256 | acc 26->26/34
+[graph_sched_gsm8k_llada_zs] 35/300 ok    flags 0->0 rounds 0 nfe 256 | acc 27->27/35
+[graph_sched_gsm8k_llada_zs] 36/300 ok    flags 0->0 rounds 0 nfe 256 | acc 28->28/36
+[graph_sched_gsm8k_llada_zs] 37/300 ok    flags 0->0 rounds 0 nfe 256 | acc 29->29/37
+[graph_sched_gsm8k_llada_zs] 38/300 ok    flags 0->0 rounds 0 nfe 256 | acc 30->30/38
+[graph_sched_gsm8k_llada_zs] 39/300 bad   flags 0->0 rounds 0 nfe 256 | acc 30->30/39
+[graph_sched_gsm8k_llada_zs] 40/300 ok    flags 0->0 rounds 0 nfe 256 | acc 31->31/40
+[graph_sched_gsm8k_llada_zs] 41/300 ok    flags 0->0 rounds 0 nfe 256 | acc 32->32/41
+[graph_sched_gsm8k_llada_zs] 42/300 ok    flags 0->0 rounds 0 nfe 256 | acc 33->33/42
+[graph_sched_gsm8k_llada_zs] 43/300 ok    flags 0->0 rounds 0 nfe 256 | acc 34->34/43
+[graph_sched_gsm8k_llada_zs] 44/300 bad   flags 2->1 rounds 3 nfe 489 | acc 34->34/44
+[graph_sched_gsm8k_llada_zs] 45/300 ok    flags 0->0 rounds 0 nfe 256 | acc 35->35/45
+[graph_sched_gsm8k_llada_zs] 46/300 ok    flags 0->0 rounds 0 nfe 256 | acc 36->36/46
+[graph_sched_gsm8k_llada_zs] 47/300 bad   flags 1->1 rounds 3 nfe 371 | acc 36->36/47
+[graph_sched_gsm8k_llada_zs] 48/300 ok    flags 0->0 rounds 0 nfe 256 | acc 37->37/48
+[graph_sched_gsm8k_llada_zs] 49/300 ok    flags 0->0 rounds 0 nfe 256 | acc 38->38/49
+[graph_sched_gsm8k_llada_zs] 50/300 ok    flags 0->0 rounds 0 nfe 256 | acc 39->39/50
+[graph_sched_gsm8k_llada_zs] 51/300 ok    flags 0->0 rounds 0 nfe 256 | acc 40->40/51
+[graph_sched_gsm8k_llada_zs] 52/300 bad   flags 0->0 rounds 0 nfe 256 | acc 40->40/52
+[graph_sched_gsm8k_llada_zs] 53/300 ok    flags 0->0 rounds 0 nfe 256 | acc 41->41/53
+[graph_sched_gsm8k_llada_zs] 54/300 ok    flags 0->0 rounds 0 nfe 256 | acc 42->42/54
+[graph_sched_gsm8k_llada_zs] 55/300 ok    flags 0->0 rounds 0 nfe 256 | acc 43->43/55
+[graph_sched_gsm8k_llada_zs] 56/300 ok    flags 0->0 rounds 0 nfe 256 | acc 44->44/56
+[graph_sched_gsm8k_llada_zs] 57/300 ok    flags 0->0 rounds 0 nfe 256 | acc 45->45/57
+[graph_sched_gsm8k_llada_zs] 58/300 ok    flags 0->0 rounds 0 nfe 256 | acc 46->46/58
+[graph_sched_gsm8k_llada_zs] 59/300 ok    flags 0->0 rounds 0 nfe 256 | acc 47->47/59
+[graph_sched_gsm8k_llada_zs] 60/300 ok    flags 0->0 rounds 0 nfe 256 | acc 48->48/60
+[graph_sched_gsm8k_llada_zs] 61/300 ok    flags 0->0 rounds 0 nfe 256 | acc 49->49/61
+[graph_sched_gsm8k_llada_zs] 62/300 ok    flags 0->0 rounds 0 nfe 256 | acc 50->50/62
+[graph_sched_gsm8k_llada_zs] 63/300 bad   flags 0->0 rounds 0 nfe 256 | acc 50->50/63
+[graph_sched_gsm8k_llada_zs] 64/300 ok    flags 0->0 rounds 0 nfe 256 | acc 51->51/64
+[graph_sched_gsm8k_llada_zs] 65/300 ok    flags 0->0 rounds 0 nfe 256 | acc 52->52/65
+[graph_sched_gsm8k_llada_zs] 66/300 ok    flags 0->0 rounds 0 nfe 256 | acc 53->53/66
+[graph_sched_gsm8k_llada_zs] 67/300 ok    flags 0->0 rounds 0 nfe 256 | acc 54->54/67
+[graph_sched_gsm8k_llada_zs] 68/300 ok    flags 0->0 rounds 0 nfe 256 | acc 55->55/68
+[graph_sched_gsm8k_llada_zs] 69/300 ok    flags 0->0 rounds 0 nfe 256 | acc 56->56/69
+[graph_sched_gsm8k_llada_zs] 70/300 ok    flags 0->0 rounds 0 nfe 256 | acc 57->57/70
+[graph_sched_gsm8k_llada_zs] 71/300 ok    flags 0->0 rounds 0 nfe 256 | acc 58->58/71
+[graph_sched_gsm8k_llada_zs] 72/300 ok    flags 0->0 rounds 0 nfe 256 | acc 59->59/72
+[graph_sched_gsm8k_llada_zs] 73/300 ok    flags 0->0 rounds 0 nfe 256 | acc 60->60/73
+[graph_sched_gsm8k_llada_zs] 74/300 ok    flags 0->0 rounds 0 nfe 256 | acc 61->61/74
+[graph_sched_gsm8k_llada_zs] 75/300 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/75
+[graph_sched_gsm8k_llada_zs] 76/300 bad   flags 0->0 rounds 0 nfe 256 | acc 61->61/76
+[graph_sched_gsm8k_llada_zs] 77/300 ok    flags 0->0 rounds 0 nfe 256 | acc 62->62/77
+[graph_sched_gsm8k_llada_zs] 78/300 ok    flags 0->0 rounds 0 nfe 256 | acc 63->63/78
+[graph_sched_gsm8k_llada_zs] 79/300 ok    flags 0->0 rounds 0 nfe 256 | acc 64->64/79
+[graph_sched_gsm8k_llada_zs] 80/300 ok    flags 0->0 rounds 0 nfe 256 | acc 65->65/80
+[graph_sched_gsm8k_llada_zs] 81/300 ok    flags 0->0 rounds 0 nfe 256 | acc 66->66/81
+[graph_sched_gsm8k_llada_zs] 82/300 ok    flags 0->0 rounds 0 nfe 256 | acc 67->67/82
+[graph_sched_gsm8k_llada_zs] 83/300 bad   flags 1->1 rounds 2 nfe 278 | acc 67->67/83
+[graph_sched_gsm8k_llada_zs] 84/300 ok    flags 0->0 rounds 0 nfe 256 | acc 68->68/84
+[graph_sched_gsm8k_llada_zs] 85/300 ok    flags 0->0 rounds 0 nfe 256 | acc 69->69/85
+[graph_sched_gsm8k_llada_zs] 86/300 ok    flags 0->0 rounds 0 nfe 256 | acc 70->70/86
+[graph_sched_gsm8k_llada_zs] 87/300 ok    flags 0->0 rounds 0 nfe 256 | acc 71->71/87
+[graph_sched_gsm8k_llada_zs] 88/300 bad   flags 0->0 rounds 0 nfe 256 | acc 71->71/88
+[graph_sched_gsm8k_llada_zs] 89/300 ok    flags 0->0 rounds 0 nfe 256 | acc 72->72/89
+[graph_sched_gsm8k_llada_zs] 90/300 ok    flags 0->0 rounds 0 nfe 256 | acc 73->73/90
+[graph_sched_gsm8k_llada_zs] 91/300 ok    flags 0->0 rounds 0 nfe 256 | acc 74->74/91
+[graph_sched_gsm8k_llada_zs] 92/300 ok    flags 0->0 rounds 0 nfe 256 | acc 75->75/92
+[graph_sched_gsm8k_llada_zs] 93/300 ok    flags 0->0 rounds 0 nfe 256 | acc 76->76/93
+[graph_sched_gsm8k_llada_zs] 94/300 ok    flags 0->0 rounds 0 nfe 256 | acc 77->77/94
+[graph_sched_gsm8k_llada_zs] 95/300 ok    flags 0->0 rounds 0 nfe 256 | acc 78->78/95
+[graph_sched_gsm8k_llada_zs] 96/300 ok    flags 0->0 rounds 0 nfe 256 | acc 79->79/96
+[graph_sched_gsm8k_llada_zs] 97/300 ok    flags 0->0 rounds 0 nfe 256 | acc 80->80/97
+[graph_sched_gsm8k_llada_zs] 98/300 ok    flags 0->0 rounds 0 nfe 256 | acc 81->81/98
+[graph_sched_gsm8k_llada_zs] 99/300 bad   flags 0->0 rounds 0 nfe 256 | acc 81->81/99
+[graph_sched_gsm8k_llada_zs] 100/300 ok    flags 0->0 rounds 0 nfe 256 | acc 82->82/100
+[graph_sched_gsm8k_llada_zs] 101/300 ok    flags 0->0 rounds 0 nfe 256 | acc 83->83/101
+[graph_sched_gsm8k_llada_zs] 102/300 ok    flags 0->0 rounds 0 nfe 256 | acc 84->84/102
+[graph_sched_gsm8k_llada_zs] 103/300 bad   flags 1->1 rounds 1 nfe 305 | acc 84->84/103
+[graph_sched_gsm8k_llada_zs] 104/300 ok    flags 0->0 rounds 0 nfe 256 | acc 85->85/104
+[graph_sched_gsm8k_llada_zs] 105/300 ok    flags 0->0 rounds 0 nfe 256 | acc 86->86/105
+[graph_sched_gsm8k_llada_zs] 106/300 ok    flags 0->0 rounds 0 nfe 256 | acc 87->87/106
+[graph_sched_gsm8k_llada_zs] 107/300 ok    flags 0->0 rounds 0 nfe 256 | acc 88->88/107
+[graph_sched_gsm8k_llada_zs] 108/300 ok    flags 0->0 rounds 0 nfe 256 | acc 89->89/108
+[graph_sched_gsm8k_llada_zs] 109/300 ok    flags 0->0 rounds 0 nfe 256 | acc 90->90/109
+[graph_sched_gsm8k_llada_zs] 110/300 ok    flags 1->1 rounds 1 nfe 312 | acc 91->91/110
+[graph_sched_gsm8k_llada_zs] 111/300 ok    flags 0->0 rounds 0 nfe 256 | acc 92->92/111
+[graph_sched_gsm8k_llada_zs] 112/300 FIXED flags 1->0 rounds 1 nfe 402 | acc 92->93/112
+[graph_sched_gsm8k_llada_zs] 113/300 ok    flags 0->0 rounds 0 nfe 256 | acc 93->94/113
+[graph_sched_gsm8k_llada_zs] 114/300 ok    flags 0->0 rounds 0 nfe 256 | acc 94->95/114
+[graph_sched_gsm8k_llada_zs] 115/300 bad   flags 0->0 rounds 0 nfe 256 | acc 94->95/115
+[graph_sched_gsm8k_llada_zs] 116/300 ok    flags 0->0 rounds 0 nfe 256 | acc 95->96/116
+[graph_sched_gsm8k_llada_zs] 117/300 ok    flags 0->0 rounds 0 nfe 256 | acc 96->97/117
+[graph_sched_gsm8k_llada_zs] 118/300 ok    flags 0->0 rounds 0 nfe 256 | acc 97->98/118
+[graph_sched_gsm8k_llada_zs] 119/300 ok    flags 0->0 rounds 0 nfe 256 | acc 98->99/119
+[graph_sched_gsm8k_llada_zs] 120/300 ok    flags 0->0 rounds 0 nfe 256 | acc 99->100/120
+[graph_sched_gsm8k_llada_zs] 121/300 ok    flags 0->0 rounds 0 nfe 256 | acc 100->101/121
+[graph_sched_gsm8k_llada_zs] 122/300 ok    flags 0->0 rounds 0 nfe 256 | acc 101->102/122
+[graph_sched_gsm8k_llada_zs] 123/300 ok    flags 0->0 rounds 0 nfe 256 | acc 102->103/123
+[graph_sched_gsm8k_llada_zs] 124/300 ok    flags 0->0 rounds 0 nfe 256 | acc 103->104/124
+[graph_sched_gsm8k_llada_zs] 125/300 ok    flags 0->0 rounds 0 nfe 256 | acc 104->105/125
+[graph_sched_gsm8k_llada_zs] 126/300 ok    flags 0->0 rounds 0 nfe 256 | acc 105->106/126
+[graph_sched_gsm8k_llada_zs] 127/300 ok    flags 0->0 rounds 0 nfe 256 | acc 106->107/127
+[graph_sched_gsm8k_llada_zs] 128/300 ok    flags 0->0 rounds 0 nfe 256 | acc 107->108/128
+[graph_sched_gsm8k_llada_zs] 129/300 ok    flags 0->0 rounds 0 nfe 256 | acc 108->109/129
+[graph_sched_gsm8k_llada_zs] 130/300 bad   flags 1->1 rounds 1 nfe 294 | acc 108->109/130
+[graph_sched_gsm8k_llada_zs] 131/300 ok    flags 0->0 rounds 0 nfe 256 | acc 109->110/131
+[graph_sched_gsm8k_llada_zs] 132/300 ok    flags 0->0 rounds 0 nfe 256 | acc 110->111/132
+[graph_sched_gsm8k_llada_zs] 133/300 ok    flags 0->0 rounds 0 nfe 256 | acc 111->112/133
+[graph_sched_gsm8k_llada_zs] 134/300 ok    flags 0->0 rounds 0 nfe 256 | acc 112->113/134
+[graph_sched_gsm8k_llada_zs] 135/300 ok    flags 0->0 rounds 0 nfe 256 | acc 113->114/135
+[graph_sched_gsm8k_llada_zs] 136/300 ok    flags 0->0 rounds 0 nfe 256 | acc 114->115/136
+[graph_sched_gsm8k_llada_zs] 137/300 ok    flags 0->0 rounds 0 nfe 256 | acc 115->116/137
+[graph_sched_gsm8k_llada_zs] 138/300 ok    flags 0->0 rounds 0 nfe 256 | acc 116->117/138
+[graph_sched_gsm8k_llada_zs] 139/300 bad   flags 0->0 rounds 0 nfe 256 | acc 116->117/139
+[graph_sched_gsm8k_llada_zs] 140/300 ok    flags 0->0 rounds 0 nfe 256 | acc 117->118/140
+[graph_sched_gsm8k_llada_zs] 141/300 ok    flags 1->1 rounds 1 nfe 272 | acc 118->119/141
+[graph_sched_gsm8k_llada_zs] 142/300 ok    flags 0->0 rounds 0 nfe 256 | acc 119->120/142
+[graph_sched_gsm8k_llada_zs] 143/300 ok    flags 0->0 rounds 0 nfe 256 | acc 120->121/143
+[graph_sched_gsm8k_llada_zs] 144/300 bad   flags 0->0 rounds 0 nfe 256 | acc 120->121/144
+[graph_sched_gsm8k_llada_zs] 145/300 ok    flags 0->0 rounds 0 nfe 256 | acc 121->122/145
+[graph_sched_gsm8k_llada_zs] 146/300 ok    flags 0->0 rounds 0 nfe 256 | acc 122->123/146
+[graph_sched_gsm8k_llada_zs] 147/300 ok    flags 0->0 rounds 0 nfe 256 | acc 123->124/147
+[graph_sched_gsm8k_llada_zs] 148/300 bad   flags 0->0 rounds 0 nfe 256 | acc 123->124/148
+[graph_sched_gsm8k_llada_zs] 149/300 ok    flags 0->0 rounds 0 nfe 256 | acc 124->125/149
+[graph_sched_gsm8k_llada_zs] 150/300 ok    flags 0->0 rounds 0 nfe 256 | acc 125->126/150
+[graph_sched_gsm8k_llada_zs] 151/300 ok    flags 0->0 rounds 0 nfe 256 | acc 126->127/151
+[graph_sched_gsm8k_llada_zs] 152/300 ok    flags 0->0 rounds 0 nfe 256 | acc 127->128/152
+[graph_sched_gsm8k_llada_zs] 153/300 ok    flags 0->0 rounds 0 nfe 256 | acc 128->129/153
+[graph_sched_gsm8k_llada_zs] 154/300 bad   flags 0->0 rounds 0 nfe 256 | acc 128->129/154
+[graph_sched_gsm8k_llada_zs] 155/300 bad   flags 0->0 rounds 0 nfe 256 | acc 128->129/155
+[graph_sched_gsm8k_llada_zs] 156/300 bad   flags 1->0 rounds 1 nfe 290 | acc 128->129/156
+[graph_sched_gsm8k_llada_zs] 157/300 ok    flags 0->0 rounds 0 nfe 256 | acc 129->130/157
+[graph_sched_gsm8k_llada_zs] 158/300 bad   flags 0->0 rounds 0 nfe 256 | acc 129->130/158
+[graph_sched_gsm8k_llada_zs] 159/300 ok    flags 0->0 rounds 0 nfe 256 | acc 130->131/159
+[graph_sched_gsm8k_llada_zs] 160/300 ok    flags 0->0 rounds 0 nfe 256 | acc 131->132/160
+[graph_sched_gsm8k_llada_zs] 161/300 ok    flags 0->0 rounds 0 nfe 256 | acc 132->133/161
+[graph_sched_gsm8k_llada_zs] 162/300 ok    flags 0->0 rounds 0 nfe 256 | acc 133->134/162
+[graph_sched_gsm8k_llada_zs] 163/300 bad   flags 0->0 rounds 0 nfe 256 | acc 133->134/163
+[graph_sched_gsm8k_llada_zs] 164/300 ok    flags 0->0 rounds 0 nfe 256 | acc 134->135/164
+[graph_sched_gsm8k_llada_zs] 165/300 ok    flags 0->0 rounds 0 nfe 256 | acc 135->136/165
+[graph_sched_gsm8k_llada_zs] 166/300 ok    flags 0->0 rounds 0 nfe 256 | acc 136->137/166
+[graph_sched_gsm8k_llada_zs] 167/300 ok    flags 0->0 rounds 0 nfe 256 | acc 137->138/167
+[graph_sched_gsm8k_llada_zs] 168/300 ok    flags 0->0 rounds 0 nfe 256 | acc 138->139/168
+[graph_sched_gsm8k_llada_zs] 169/300 ok    flags 0->0 rounds 0 nfe 256 | acc 139->140/169
+[graph_sched_gsm8k_llada_zs] 170/300 ok    flags 1->1 rounds 1 nfe 313 | acc 140->141/170
+[graph_sched_gsm8k_llada_zs] 171/300 ok    flags 1->1 rounds 1 nfe 332 | acc 141->142/171
+[graph_sched_gsm8k_llada_zs] 172/300 ok    flags 0->0 rounds 0 nfe 256 | acc 142->143/172
+[graph_sched_gsm8k_llada_zs] 173/300 ok    flags 0->0 rounds 0 nfe 256 | acc 143->144/173
+[graph_sched_gsm8k_llada_zs] 174/300 ok    flags 0->0 rounds 0 nfe 256 | acc 144->145/174
+[graph_sched_gsm8k_llada_zs] 175/300 bad   flags 0->0 rounds 0 nfe 256 | acc 144->145/175
+[graph_sched_gsm8k_llada_zs] 176/300 ok    flags 0->0 rounds 0 nfe 256 | acc 145->146/176
+[graph_sched_gsm8k_llada_zs] 177/300 ok    flags 0->0 rounds 0 nfe 256 | acc 146->147/177
+[graph_sched_gsm8k_llada_zs] 178/300 ok    flags 0->0 rounds 0 nfe 256 | acc 147->148/178
+[graph_sched_gsm8k_llada_zs] 179/300 ok    flags 0->0 rounds 0 nfe 256 | acc 148->149/179
+[graph_sched_gsm8k_llada_zs] 180/300 ok    flags 0->0 rounds 0 nfe 256 | acc 149->150/180
+[graph_sched_gsm8k_llada_zs] 181/300 ok    flags 0->0 rounds 0 nfe 256 | acc 150->151/181
+[graph_sched_gsm8k_llada_zs] 182/300 ok    flags 0->0 rounds 0 nfe 256 | acc 151->152/182
+[graph_sched_gsm8k_llada_zs] 183/300 bad   flags 0->0 rounds 0 nfe 256 | acc 151->152/183
+[graph_sched_gsm8k_llada_zs] 184/300 ok    flags 0->0 rounds 0 nfe 256 | acc 152->153/184
+[graph_sched_gsm8k_llada_zs] 185/300 bad   flags 0->0 rounds 0 nfe 256 | acc 152->153/185
+[graph_sched_gsm8k_llada_zs] 186/300 ok    flags 0->0 rounds 0 nfe 256 | acc 153->154/186
+[graph_sched_gsm8k_llada_zs] 187/300 bad   flags 0->0 rounds 0 nfe 256 | acc 153->154/187
+[graph_sched_gsm8k_llada_zs] 188/300 ok    flags 0->0 rounds 0 nfe 256 | acc 154->155/188
+[graph_sched_gsm8k_llada_zs] 189/300 ok    flags 0->0 rounds 0 nfe 256 | acc 155->156/189
+[graph_sched_gsm8k_llada_zs] 190/300 bad   flags 0->0 rounds 0 nfe 256 | acc 155->156/190
+[graph_sched_gsm8k_llada_zs] 191/300 ok    flags 0->0 rounds 0 nfe 256 | acc 156->157/191
+[graph_sched_gsm8k_llada_zs] 192/300 bad   flags 0->0 rounds 0 nfe 256 | acc 156->157/192
+[graph_sched_gsm8k_llada_zs] 193/300 ok    flags 0->0 rounds 0 nfe 256 | acc 157->158/193
+[graph_sched_gsm8k_llada_zs] 194/300 ok    flags 0->0 rounds 0 nfe 256 | acc 158->159/194
+[graph_sched_gsm8k_llada_zs] 195/300 bad   flags 0->0 rounds 0 nfe 256 | acc 158->159/195
+[graph_sched_gsm8k_llada_zs] 196/300 ok    flags 0->0 rounds 0 nfe 256 | acc 159->160/196
+[graph_sched_gsm8k_llada_zs] 197/300 ok    flags 0->0 rounds 0 nfe 256 | acc 160->161/197
+[graph_sched_gsm8k_llada_zs] 198/300 ok    flags 0->0 rounds 0 nfe 256 | acc 161->162/198
+[graph_sched_gsm8k_llada_zs] 199/300 ok    flags 0->0 rounds 0 nfe 256 | acc 162->163/199
+[graph_sched_gsm8k_llada_zs] 200/300 bad   flags 1->1 rounds 2 nfe 404 | acc 162->163/200
+[graph_sched_gsm8k_llada_zs] 201/300 ok    flags 0->0 rounds 0 nfe 256 | acc 163->164/201
+[graph_sched_gsm8k_llada_zs] 202/300 FIXED flags 1->0 rounds 1 nfe 319 | acc 163->165/202
+[graph_sched_gsm8k_llada_zs] 203/300 ok    flags 0->0 rounds 0 nfe 256 | acc 164->166/203
+[graph_sched_gsm8k_llada_zs] 204/300 ok    flags 0->0 rounds 0 nfe 256 | acc 165->167/204
+[graph_sched_gsm8k_llada_zs] 205/300 ok    flags 0->0 rounds 0 nfe 256 | acc 166->168/205
+[graph_sched_gsm8k_llada_zs] 206/300 bad   flags 0->0 rounds 0 nfe 256 | acc 166->168/206
+[graph_sched_gsm8k_llada_zs] 207/300 ok    flags 0->0 rounds 0 nfe 256 | acc 167->169/207
+[graph_sched_gsm8k_llada_zs] 208/300 ok    flags 0->0 rounds 0 nfe 256 | acc 168->170/208
+[graph_sched_gsm8k_llada_zs] 209/300 ok    flags 0->0 rounds 0 nfe 256 | acc 169->171/209
+[graph_sched_gsm8k_llada_zs] 210/300 bad   flags 0->0 rounds 0 nfe 256 | acc 169->171/210
+[graph_sched_gsm8k_llada_zs] 211/300 ok    flags 0->0 rounds 0 nfe 256 | acc 170->172/211
+[graph_sched_gsm8k_llada_zs] 212/300 ok    flags 2->2 rounds 1 nfe 280 | acc 171->173/212
+[graph_sched_gsm8k_llada_zs] 213/300 ok    flags 0->0 rounds 0 nfe 256 | acc 172->174/213
+[graph_sched_gsm8k_llada_zs] 214/300 ok    flags 0->0 rounds 0 nfe 256 | acc 173->175/214
+[graph_sched_gsm8k_llada_zs] 215/300 bad   flags 0->0 rounds 0 nfe 256 | acc 173->175/215
+[graph_sched_gsm8k_llada_zs] 216/300 ok    flags 0->0 rounds 0 nfe 256 | acc 174->176/216
+[graph_sched_gsm8k_llada_zs] 217/300 ok    flags 0->0 rounds 0 nfe 256 | acc 175->177/217
+[graph_sched_gsm8k_llada_zs] 218/300 ok    flags 0->0 rounds 0 nfe 256 | acc 176->178/218
+[graph_sched_gsm8k_llada_zs] 219/300 ok    flags 0->0 rounds 0 nfe 256 | acc 177->179/219
+[graph_sched_gsm8k_llada_zs] 220/300 ok    flags 0->0 rounds 0 nfe 256 | acc 178->180/220
+[graph_sched_gsm8k_llada_zs] 221/300 ok    flags 0->0 rounds 0 nfe 256 | acc 179->181/221
+[graph_sched_gsm8k_llada_zs] 222/300 ok    flags 0->0 rounds 0 nfe 256 | acc 180->182/222
+[graph_sched_gsm8k_llada_zs] 223/300 ok    flags 0->0 rounds 0 nfe 256 | acc 181->183/223
+[graph_sched_gsm8k_llada_zs] 224/300 ok    flags 0->0 rounds 0 nfe 256 | acc 182->184/224
+[graph_sched_gsm8k_llada_zs] 225/300 ok    flags 0->0 rounds 0 nfe 256 | acc 183->185/225
+[graph_sched_gsm8k_llada_zs] 226/300 ok    flags 0->0 rounds 0 nfe 256 | acc 184->186/226
+[graph_sched_gsm8k_llada_zs] 227/300 ok    flags 0->0 rounds 0 nfe 256 | acc 185->187/227
+[graph_sched_gsm8k_llada_zs] 228/300 ok    flags 0->0 rounds 0 nfe 256 | acc 186->188/228
+[graph_sched_gsm8k_llada_zs] 229/300 ok    flags 0->0 rounds 0 nfe 256 | acc 187->189/229
+[graph_sched_gsm8k_llada_zs] 230/300 ok    flags 0->0 rounds 0 nfe 256 | acc 188->190/230
+[graph_sched_gsm8k_llada_zs] 231/300 ok    flags 0->0 rounds 0 nfe 256 | acc 189->191/231
+[graph_sched_gsm8k_llada_zs] 232/300 ok    flags 0->0 rounds 0 nfe 256 | acc 190->192/232
+[graph_sched_gsm8k_llada_zs] 233/300 ok    flags 0->0 rounds 0 nfe 256 | acc 191->193/233
+[graph_sched_gsm8k_llada_zs] 234/300 bad   flags 0->0 rounds 0 nfe 256 | acc 191->193/234
+[graph_sched_gsm8k_llada_zs] 235/300 bad   flags 0->0 rounds 0 nfe 256 | acc 191->193/235
+[graph_sched_gsm8k_llada_zs] 236/300 ok    flags 0->0 rounds 0 nfe 256 | acc 192->194/236
+[graph_sched_gsm8k_llada_zs] 237/300 bad   flags 0->0 rounds 0 nfe 256 | acc 192->194/237
+[graph_sched_gsm8k_llada_zs] 238/300 ok    flags 0->0 rounds 0 nfe 256 | acc 193->195/238
+[graph_sched_gsm8k_llada_zs] 239/300 ok    flags 0->0 rounds 0 nfe 256 | acc 194->196/239
+[graph_sched_gsm8k_llada_zs] 240/300 ok    flags 0->0 rounds 0 nfe 256 | acc 195->197/240
+[graph_sched_gsm8k_llada_zs] 241/300 ok    flags 0->0 rounds 0 nfe 256 | acc 196->198/241
+[graph_sched_gsm8k_llada_zs] 242/300 bad   flags 0->0 rounds 0 nfe 256 | acc 196->198/242
+[graph_sched_gsm8k_llada_zs] 243/300 ok    flags 0->0 rounds 0 nfe 256 | acc 197->199/243
+[graph_sched_gsm8k_llada_zs] 244/300 ok    flags 0->0 rounds 0 nfe 256 | acc 198->200/244
+[graph_sched_gsm8k_llada_zs] 245/300 ok    flags 0->0 rounds 0 nfe 256 | acc 199->201/245
+[graph_sched_gsm8k_llada_zs] 246/300 bad   flags 0->0 rounds 0 nfe 256 | acc 199->201/246
+[graph_sched_gsm8k_llada_zs] 247/300 ok    flags 0->0 rounds 0 nfe 256 | acc 200->202/247
+[graph_sched_gsm8k_llada_zs] 248/300 ok    flags 0->0 rounds 0 nfe 256 | acc 201->203/248
+[graph_sched_gsm8k_llada_zs] 249/300 ok    flags 0->0 rounds 0 nfe 256 | acc 202->204/249
+[graph_sched_gsm8k_llada_zs] 250/300 bad   flags 0->0 rounds 0 nfe 256 | acc 202->204/250
+[graph_sched_gsm8k_llada_zs] 251/300 bad   flags 0->0 rounds 0 nfe 256 | acc 202->204/251
+[graph_sched_gsm8k_llada_zs] 252/300 ok    flags 0->0 rounds 0 nfe 256 | acc 203->205/252
+[graph_sched_gsm8k_llada_zs] 253/300 bad   flags 0->0 rounds 0 nfe 256 | acc 203->205/253
+[graph_sched_gsm8k_llada_zs] 254/300 ok    flags 0->0 rounds 0 nfe 256 | acc 204->206/254
+[graph_sched_gsm8k_llada_zs] 255/300 ok    flags 0->0 rounds 0 nfe 256 | acc 205->207/255
+[graph_sched_gsm8k_llada_zs] 256/300 bad   flags 0->0 rounds 0 nfe 256 | acc 205->207/256
+[graph_sched_gsm8k_llada_zs] 257/300 bad   flags 1->0 rounds 1 nfe 273 | acc 205->207/257
+[graph_sched_gsm8k_llada_zs] 258/300 ok    flags 1->0 rounds 2 nfe 427 | acc 206->208/258
+[graph_sched_gsm8k_llada_zs] 259/300 ok    flags 0->0 rounds 0 nfe 256 | acc 207->209/259
+[graph_sched_gsm8k_llada_zs] 260/300 ok    flags 0->0 rounds 0 nfe 256 | acc 208->210/260
+[graph_sched_gsm8k_llada_zs] 261/300 bad   flags 0->0 rounds 0 nfe 256 | acc 208->210/261
+[graph_sched_gsm8k_llada_zs] 262/300 ok    flags 0->0 rounds 0 nfe 256 | acc 209->211/262
+[graph_sched_gsm8k_llada_zs] 263/300 ok    flags 0->0 rounds 0 nfe 256 | acc 210->212/263
+[graph_sched_gsm8k_llada_zs] 264/300 ok    flags 0->0 rounds 0 nfe 256 | acc 211->213/264
+[graph_sched_gsm8k_llada_zs] 265/300 ok    flags 0->0 rounds 0 nfe 256 | acc 212->214/265
+[graph_sched_gsm8k_llada_zs] 266/300 ok    flags 4->4 rounds 2 nfe 482 | acc 213->215/266
+[graph_sched_gsm8k_llada_zs] 267/300 ok    flags 6->6 rounds 1 nfe 361 | acc 214->216/267
+[graph_sched_gsm8k_llada_zs] 268/300 bad   flags 0->0 rounds 0 nfe 256 | acc 214->216/268
+[graph_sched_gsm8k_llada_zs] 269/300 ok    flags 0->0 rounds 0 nfe 256 | acc 215->217/269
+[graph_sched_gsm8k_llada_zs] 270/300 ok    flags 0->0 rounds 0 nfe 256 | acc 216->218/270
+[graph_sched_gsm8k_llada_zs] 271/300 ok    flags 0->0 rounds 0 nfe 256 | acc 217->219/271
+[graph_sched_gsm8k_llada_zs] 272/300 ok    flags 0->0 rounds 0 nfe 256 | acc 218->220/272
+[graph_sched_gsm8k_llada_zs] 273/300 ok    flags 0->0 rounds 0 nfe 256 | acc 219->221/273
+[graph_sched_gsm8k_llada_zs] 274/300 ok    flags 0->0 rounds 0 nfe 256 | acc 220->222/274
+[graph_sched_gsm8k_llada_zs] 275/300 ok    flags 0->0 rounds 0 nfe 256 | acc 221->223/275
+[graph_sched_gsm8k_llada_zs] 276/300 ok    flags 0->0 rounds 0 nfe 256 | acc 222->224/276
+[graph_sched_gsm8k_llada_zs] 277/300 ok    flags 0->0 rounds 0 nfe 256 | acc 223->225/277
+[graph_sched_gsm8k_llada_zs] 278/300 bad   flags 0->0 rounds 0 nfe 256 | acc 223->225/278
+[graph_sched_gsm8k_llada_zs] 279/300 ok    flags 0->0 rounds 0 nfe 256 | acc 224->226/279
+[graph_sched_gsm8k_llada_zs] 280/300 ok    flags 0->0 rounds 0 nfe 256 | acc 225->227/280
+[graph_sched_gsm8k_llada_zs] 281/300 ok    flags 0->0 rounds 0 nfe 256 | acc 226->228/281
+[graph_sched_gsm8k_llada_zs] 282/300 ok    flags 0->0 rounds 0 nfe 256 | acc 227->229/282
+[graph_sched_gsm8k_llada_zs] 283/300 ok    flags 0->0 rounds 0 nfe 256 | acc 228->230/283
+[graph_sched_gsm8k_llada_zs] 284/300 ok    flags 0->0 rounds 0 nfe 256 | acc 229->231/284
+[graph_sched_gsm8k_llada_zs] 285/300 ok    flags 0->0 rounds 0 nfe 256 | acc 230->232/285
+[graph_sched_gsm8k_llada_zs] 286/300 ok    flags 0->0 rounds 0 nfe 256 | acc 231->233/286
+[graph_sched_gsm8k_llada_zs] 287/300 ok    flags 0->0 rounds 0 nfe 256 | acc 232->234/287
+[graph_sched_gsm8k_llada_zs] 288/300 ok    flags 0->0 rounds 0 nfe 256 | acc 233->235/288
+[graph_sched_gsm8k_llada_zs] 289/300 ok    flags 0->0 rounds 0 nfe 256 | acc 234->236/289
+[graph_sched_gsm8k_llada_zs] 290/300 ok    flags 0->0 rounds 0 nfe 256 | acc 235->237/290
+[graph_sched_gsm8k_llada_zs] 291/300 ok    flags 0->0 rounds 0 nfe 256 | acc 236->238/291
+[graph_sched_gsm8k_llada_zs] 292/300 ok    flags 0->0 rounds 0 nfe 256 | acc 237->239/292
+[graph_sched_gsm8k_llada_zs] 293/300 bad   flags 0->0 rounds 0 nfe 256 | acc 237->239/293
+[graph_sched_gsm8k_llada_zs] 294/300 bad   flags 0->0 rounds 0 nfe 256 | acc 237->239/294
+[graph_sched_gsm8k_llada_zs] 295/300 ok    flags 0->0 rounds 0 nfe 256 | acc 238->240/295
+[graph_sched_gsm8k_llada_zs] 296/300 ok    flags 0->0 rounds 0 nfe 256 | acc 239->241/296
+[graph_sched_gsm8k_llada_zs] 297/300 ok    flags 0->0 rounds 0 nfe 256 | acc 240->242/297
+[graph_sched_gsm8k_llada_zs] 298/300 ok    flags 0->0 rounds 0 nfe 256 | acc 241->243/298
+[graph_sched_gsm8k_llada_zs] 299/300 bad   flags 0->0 rounds 0 nfe 256 | acc 241->243/299
+[graph_sched_gsm8k_llada_zs] 300/300 bad   flags 0->0 rounds 0 nfe 256 | acc 241->243/300
+# graph_sched_gsm8k_llada_zs
+
+llada_8b, method `remask`, mode `graph`, max_rounds 3, temperature 0.0, n = 300
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 80.3% | 81.0% (+0.7%, 95% CI [+0.0%, +1.7%]) |
+| reasoning consistency (no flagged step) | 93.0% | 95.0% |
+| mean NFE | 256 | 262 (+6) |
+
+fixed 2, broken 0 (exact McNemar p = 0.500)
+
+- examples with a flagged step: 12 wrong, 9 right drafts
+- no answer 0.0%, hit token limit 0.0%, 16.3 s/problem
+- answer format ('The answer is'): draft 94.3%, final 94.0%; accuracy among formatted 80.6% -> 81.6%
+- verifier in situ: graphs parsed cleanly 99.0%, 9.4 steps per answer; a flag means a wrong draft 57.1% of the time; 47 wrong drafts never flagged, 10 flagged but still wrong; flags by type {'arithmetic': 14, 'ungrounded_operand': 17}
+- tokens: draft 221, final 221, re-denoised 7 per problem
+- time per problem: draft 15.9 s + refine 0.4 s + parse/verify 0.10 s = 16.4 s
+- <= 8 steps (n=111): 85% -> 85% (fixed 0, broken 0)
+- 9-11 steps (n=127): 79% -> 80% (fixed 2, broken 0)
+- > 11 steps (n=62): 76% -> 76% (fixed 0, broken 0)
+- remasked: 7.0% of examples, 1.43 rounds on average; 9 came back identical
+- remask ratio |M|/L: 27.2% per round, 38.8% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 33.3%
+

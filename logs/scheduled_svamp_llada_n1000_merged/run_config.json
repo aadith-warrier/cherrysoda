@@ -1,0 +1,43 @@
+{
+  "config": {
+    "run_id": "scheduled_svamp_llada_n1000",
+    "method": "scheduled",
+    "model_config": "configs/model/llada_8b.yaml",
+    "dataset_config": "configs/dataset/svamp.yaml",
+    "sample_size": "full",
+    "generation": {
+      "max_new_tokens": 256,
+      "num_denoising_steps": 256,
+      "block_length": 256,
+      "temperature": 0.0,
+      "remasking_strategy": "low_confidence",
+      "confidence_eos_eot_inf": true,
+      "logits_eos_inf": false
+    },
+    "verifier": {
+      "name": "graph_arithmetic",
+      "check_grounding": true
+    },
+    "schedule": {
+      "tokens_per_unit": 1,
+      "temperature": 0.0
+    },
+    "draft_cache": "logs/draft_cache"
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 256,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "defer_eos_eot": false,
+    "confidence_eos_eot_inf": true,
+    "logits_eos_inf": false
+  },
+  "method": "scheduled",
+  "method_settings": {
+    "tokens_per_unit": 1,
+    "temperature": 0.0
+  },
+  "n": 390
+}

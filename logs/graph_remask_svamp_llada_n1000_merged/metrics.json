@@ -1,0 +1,74 @@
+{
+  "num_examples": 1000,
+  "method": "remask",
+  "mode": "graph",
+  "draft_accuracy": 0.84,
+  "accuracy": 0.858,
+  "delta_accuracy": 0.018000000000000016,
+  "delta_ci95": [
+    0.008,
+    0.028
+  ],
+  "fixed": 22,
+  "broken": 4,
+  "mcnemar_p": 0.0005335211753845215,
+  "reasoning_consistency_before": 0.851,
+  "reasoning_consistency_after": 0.9,
+  "frac_examples_remasked": 0.149,
+  "mean_rounds_when_remasked": 1.4161073825503356,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 269.055,
+  "mean_nfe_overhead": 13.055,
+  "mean_remask_ratio_per_round": 0.22349959282450776,
+  "mean_remask_ratio_cumulative": 0.3164994233957795,
+  "mean_affected_subgraph_ratio": 0.3693647240378494,
+  "flagged_draft_wrong": 94,
+  "flagged_draft_right": 55,
+  "unchanged_after_remask": 43,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.0,
+  "mean_sec_per_problem": 54.14577050614357,
+  "format_rate_draft": 0.995,
+  "format_rate": 0.995,
+  "accuracy_among_formatted_draft": 0.8402010050251256,
+  "accuracy_among_formatted": 0.8582914572864322,
+  "mean_graph_steps": 8.372,
+  "graph_parse_clean_rate": 0.951,
+  "flag_type_counts": {
+    "arithmetic": 141,
+    "ungrounded_operand": 65
+  },
+  "flag_precision_draft_wrong": 0.6308724832214765,
+  "wrong_drafts_not_flagged": 66,
+  "wrong_drafts_flagged_still_wrong": 72,
+  "mean_tokens_draft": 188.912,
+  "mean_tokens_final": 188.913,
+  "mean_tokens_regenerated": 11.678,
+  "mean_sec_generate": 52.052593138456345,
+  "mean_sec_refine": 2.0931773676872254,
+  "mean_sec_parse_verify": 0.025761672500520943,
+  "mean_sec_total": 54.17153217864409,
+  "by_graph_size": {
+    "<= 7 steps": {
+      "n": 414,
+      "draft_accuracy": 0.9323671497584541,
+      "accuracy": 0.9444444444444444,
+      "fixed": 5,
+      "broken": 0
+    },
+    "8-9 steps": {
+      "n": 260,
+      "draft_accuracy": 0.823076923076923,
+      "accuracy": 0.8423076923076923,
+      "fixed": 6,
+      "broken": 1
+    },
+    "> 9 steps": {
+      "n": 326,
+      "draft_accuracy": 0.7361963190184049,
+      "accuracy": 0.7607361963190185,
+      "fixed": 11,
+      "broken": 3
+    }
+  }
+}

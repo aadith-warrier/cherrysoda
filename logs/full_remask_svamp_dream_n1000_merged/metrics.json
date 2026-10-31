@@ -1,0 +1,74 @@
+{
+  "num_examples": 1000,
+  "method": "remask",
+  "mode": "full",
+  "draft_accuracy": 0.847,
+  "accuracy": 0.847,
+  "delta_accuracy": 0.0,
+  "delta_ci95": [
+    0.0,
+    0.0
+  ],
+  "fixed": 0,
+  "broken": 0,
+  "mcnemar_p": 1.0,
+  "reasoning_consistency_before": 0.944,
+  "reasoning_consistency_after": 0.945,
+  "frac_examples_remasked": 0.056,
+  "mean_rounds_when_remasked": 2.982142857142857,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 298.752,
+  "mean_nfe_overhead": 42.752,
+  "mean_remask_ratio_per_round": 1.0,
+  "mean_remask_ratio_cumulative": 2.982142857142857,
+  "mean_affected_subgraph_ratio": 1.0,
+  "flagged_draft_wrong": 39,
+  "flagged_draft_right": 17,
+  "unchanged_after_remask": 42,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.001,
+  "mean_sec_per_problem": 62.20890044403076,
+  "format_rate_draft": 0.971,
+  "format_rate": 0.971,
+  "accuracy_among_formatted_draft": 0.8568486096807415,
+  "accuracy_among_formatted": 0.8568486096807415,
+  "mean_graph_steps": 6.232,
+  "graph_parse_clean_rate": 0.939,
+  "flag_type_counts": {
+    "ungrounded_operand": 18,
+    "arithmetic": 58
+  },
+  "flag_precision_draft_wrong": 0.6964285714285714,
+  "wrong_drafts_not_flagged": 114,
+  "wrong_drafts_flagged_still_wrong": 39,
+  "mean_tokens_draft": 111.626,
+  "mean_tokens_final": 111.626,
+  "mean_tokens_regenerated": 25.27,
+  "mean_sec_generate": 55.589298439741135,
+  "mean_sec_refine": 6.619602004289627,
+  "mean_sec_parse_verify": 0.19582387717440725,
+  "mean_sec_total": 62.404724321205165,
+  "by_graph_size": {
+    "<= 4 steps": {
+      "n": 349,
+      "draft_accuracy": 0.836676217765043,
+      "accuracy": 0.836676217765043,
+      "fixed": 0,
+      "broken": 0
+    },
+    "5-7 steps": {
+      "n": 365,
+      "draft_accuracy": 0.873972602739726,
+      "accuracy": 0.873972602739726,
+      "fixed": 0,
+      "broken": 0
+    },
+    "> 7 steps": {
+      "n": 286,
+      "draft_accuracy": 0.8251748251748252,
+      "accuracy": 0.8251748251748252,
+      "fixed": 0,
+      "broken": 0
+    }
+  }
+}

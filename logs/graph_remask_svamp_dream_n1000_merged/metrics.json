@@ -1,0 +1,74 @@
+{
+  "num_examples": 1000,
+  "method": "remask",
+  "mode": "graph",
+  "draft_accuracy": 0.847,
+  "accuracy": 0.854,
+  "delta_accuracy": 0.007000000000000006,
+  "delta_ci95": [
+    0.002,
+    0.013
+  ],
+  "fixed": 7,
+  "broken": 0,
+  "mcnemar_p": 0.015625,
+  "reasoning_consistency_before": 0.944,
+  "reasoning_consistency_after": 0.959,
+  "frac_examples_remasked": 0.056,
+  "mean_rounds_when_remasked": 2.482142857142857,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 273.465,
+  "mean_nfe_overhead": 17.465,
+  "mean_remask_ratio_per_round": 0.34470058373046186,
+  "mean_remask_ratio_cumulative": 0.8555960917595409,
+  "mean_affected_subgraph_ratio": 0.42996240370341093,
+  "flagged_draft_wrong": 39,
+  "flagged_draft_right": 17,
+  "unchanged_after_remask": 19,
+  "no_answer_rate": 0.0,
+  "hit_length_limit_rate": 0.001,
+  "mean_sec_per_problem": 59.11112543773651,
+  "format_rate_draft": 0.971,
+  "format_rate": 0.971,
+  "accuracy_among_formatted_draft": 0.8568486096807415,
+  "accuracy_among_formatted": 0.8640576725025747,
+  "mean_graph_steps": 6.232,
+  "graph_parse_clean_rate": 0.939,
+  "flag_type_counts": {
+    "ungrounded_operand": 18,
+    "arithmetic": 58
+  },
+  "flag_precision_draft_wrong": 0.6964285714285714,
+  "wrong_drafts_not_flagged": 114,
+  "wrong_drafts_flagged_still_wrong": 32,
+  "mean_tokens_draft": 111.626,
+  "mean_tokens_final": 112.05,
+  "mean_tokens_regenerated": 7.021,
+  "mean_sec_generate": 55.73036881995201,
+  "mean_sec_refine": 3.3807566177845003,
+  "mean_sec_parse_verify": 0.24903314968198537,
+  "mean_sec_total": 59.360158587418496,
+  "by_graph_size": {
+    "<= 4 steps": {
+      "n": 349,
+      "draft_accuracy": 0.836676217765043,
+      "accuracy": 0.8452722063037249,
+      "fixed": 3,
+      "broken": 0
+    },
+    "5-7 steps": {
+      "n": 365,
+      "draft_accuracy": 0.873972602739726,
+      "accuracy": 0.8794520547945206,
+      "fixed": 2,
+      "broken": 0
+    },
+    "> 7 steps": {
+      "n": 286,
+      "draft_accuracy": 0.8251748251748252,
+      "accuracy": 0.8321678321678322,
+      "fixed": 2,
+      "broken": 0
+    }
+  }
+}

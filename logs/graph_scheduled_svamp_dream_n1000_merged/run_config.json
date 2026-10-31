@@ -1,0 +1,50 @@
+{
+  "config": {
+    "run_id": "graph_scheduled_svamp_dream_n1000",
+    "method": "remask",
+    "model_config": "configs/model/dream_7b.yaml",
+    "dataset_config": "configs/dataset/svamp.yaml",
+    "sample_size": "full",
+    "seed": 42,
+    "generation": {
+      "max_new_tokens": 256,
+      "num_denoising_steps": 256,
+      "block_length": null
+    },
+    "verifier": {
+      "name": "graph_arithmetic",
+      "check_grounding": true
+    },
+    "remask": {
+      "mode": "graph",
+      "schedule": true,
+      "tokens_per_unit": 1,
+      "max_rounds": 3,
+      "steps_per_round": null,
+      "temperature": null
+    },
+    "draft_cache": "logs/draft_cache"
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": null,
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "alg_temp": 0.0,
+    "remasking_strategy": "entropy",
+    "suppress_endoftext": false
+  },
+  "method": "remask",
+  "method_settings": {
+    "mode": "graph",
+    "max_rounds": 3,
+    "steps_per_round": null,
+    "temperature": null,
+    "confidence_eos_eot_inf": true,
+    "stop_if_unchanged": true,
+    "schedule": true,
+    "tokens_per_unit": 1
+  },
+  "n": 390
+}

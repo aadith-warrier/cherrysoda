@@ -1,0 +1,78 @@
+{
+  "num_examples": 1319,
+  "method": "scheduled",
+  "mode": "scheduled",
+  "draft_accuracy": 0.6383623957543594,
+  "accuracy": 0.645185746777862,
+  "delta_accuracy": 0.006823351023502622,
+  "delta_ci95": [
+    -0.02122820318423048,
+    0.0356330553449583
+  ],
+  "fixed": 193,
+  "broken": 184,
+  "mcnemar_p": 0.6803797383630665,
+  "reasoning_consistency_before": 0.734647460197119,
+  "reasoning_consistency_after": 0.7194844579226687,
+  "frac_examples_remasked": 0.0,
+  "mean_rounds_when_remasked": 0.0,
+  "mean_nfe_draft": 256.0,
+  "mean_nfe_total": 361.5716451857468,
+  "mean_nfe_overhead": 105.57164518574677,
+  "mean_remask_ratio_per_round": 0.0,
+  "mean_remask_ratio_cumulative": 0.0,
+  "mean_affected_subgraph_ratio": 0.0,
+  "flagged_draft_wrong": 301,
+  "flagged_draft_right": 49,
+  "unchanged_after_remask": 0,
+  "no_answer_rate": 0.000758150113722517,
+  "hit_length_limit_rate": 0.000758150113722517,
+  "mean_sec_per_problem": 131.07448074418184,
+  "format_rate_draft": 0.6391205458680819,
+  "format_rate": 0.8597422289613343,
+  "accuracy_among_formatted_draft": 0.5931198102016607,
+  "accuracy_among_formatted": 0.626984126984127,
+  "mean_graph_steps": 9.6565579984837,
+  "graph_parse_clean_rate": 0.9840788476118272,
+  "flag_type_counts": {
+    "arithmetic": 360,
+    "ungrounded_operand": 80
+  },
+  "flag_precision_draft_wrong": 0.86,
+  "wrong_drafts_not_flagged": 176,
+  "wrong_drafts_flagged_still_wrong": 168,
+  "mean_tokens_draft": 253.2934040940106,
+  "mean_tokens_final": 254.22365428354814,
+  "mean_tokens_regenerated": 256.0,
+  "mean_sec_generate": 66.99325013576447,
+  "mean_sec_refine": 64.08123060841737,
+  "mean_sec_parse_verify": 0.04728809703731736,
+  "mean_sec_total": 131.12176884121916,
+  "by_graph_size": {
+    "<= 9 steps": {
+      "n": 647,
+      "draft_accuracy": 0.652241112828439,
+      "accuracy": 0.6661514683153014,
+      "fixed": 93,
+      "broken": 84
+    },
+    "10-11 steps": {
+      "n": 398,
+      "draft_accuracy": 0.6306532663316583,
+      "accuracy": 0.6407035175879398,
+      "fixed": 59,
+      "broken": 55
+    },
+    "> 11 steps": {
+      "n": 274,
+      "draft_accuracy": 0.6167883211678832,
+      "accuracy": 0.6021897810218978,
+      "fixed": 41,
+      "broken": 45
+    }
+  },
+  "mean_nfe_schedule": 105.57164518574677,
+  "mean_levels": 5.586050037907506,
+  "mean_tokens_per_pass": 2.6469701380420125,
+  "num_skipped": 0
+}

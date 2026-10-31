@@ -10,3 +10,4 @@ venv/
 .pixi/*
 !.pixi/config.toml
 CLAUDE.md
+*.log

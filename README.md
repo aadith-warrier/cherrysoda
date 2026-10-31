@@ -197,6 +197,27 @@ NLI temperature / threshold: `configs/verifier/nli.yaml`. Results: `results/veri
   judge) it catches 72% of invalid steps but only 14% of its flags are invalid, and it flags 46% of valid
   steps. Use the symbolic verifier for ProofWriter; NLI only as a fallback for steps it cannot parse.
 
+### ProofWriter graphs
+
+`src/graph/build_logic.py` builds the ProofWriter dependency graph (registered as `proofwriter` in
+`src/graph/registry.py`, same `ReasoningGraph` schema as the maths graphs). Literals ("Fiona is young")
+and rules play the role numbers play in maths: a step links to the most recent earlier step that produced a
+literal or stated a rule it uses (`value_flow`, `rule_flow`), else to the theory (`P`). Answer lines, which
+the verifier cannot judge, link to the step that settled or discussed the hypothesis (`hypothesis`), so a
+flagged step can reach the answer it corrupted; reasoning that never touches the hypothesis falls back to
+the last step (`answer_fallback`). The literal and rule reader is the symbolic verifier's.
+
+```bash
+python -m scripts.build_graphs --generations logs/vanilla_proofwriter_d3_llada/generations.jsonl --show 3
+python -m scripts.check_logic_graphs --generations logs/vanilla_proofwriter_d3_llada/generations.jsonl
+```
+
+On the vanilla runs (600 answers each) every answer parses without warnings and 0.2% (LLaDA) / 0.8% (Dream)
+of steps get no incoming edge. Among wrong answers with a flagged step, the flagged steps reach the final
+answer line in 88.5% (LLaDA) / 95.2% (Dream) of cases; their descendants cover 24% / 65% of steps on
+average. 15% of the symbolic verifier's LLaDA flags fall on lines that only restate the hypothesis under a
+"Hypothesis:" header (graph kind `meta`); these are not errors and do not reach the answer.
+
 Known limitation: `src/graph/extract.py` reads "3r + 5r + 10 = 42" as arithmetic (only x/y/n and capitals
 count as variables), so both `equation_holds` and the sympy check flag it.
 
@@ -217,6 +238,7 @@ WandB project: [`cherrysoda`](https://forge.coreweave.com/wandb/cherry-soda/cher
 | RemeDi / ProSeCo baselines 
 | Oracle baseline (GSM8K/SVAMP) 
 | Gold graph annotation 
+| ProofWriter graph builder — done (`src/graph/build_logic.py`)
 | Deterministic verifier — done (`src/verify/graph_math.py`, `arithmetic.py`, `logic.py`)
 | NLI verifier + calibration — done (`src/verify/nli.py`, `configs/verifier/nli.yaml`)
 | Dependency-aware scheduler

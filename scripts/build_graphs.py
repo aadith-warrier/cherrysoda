@@ -22,9 +22,13 @@ def main():
             record = json.loads(line)
             graph = build_graph(record)
             stats = graph_stats(graph)
-            pred = extract_final_number(record["generation"])
-            ref = normalize_reference(record["reference_answer"])
-            correct = pred is not None and ref is not None and abs(pred - ref) < 1e-4
+            if record.get("dataset") in ("gsm8k", "svamp"):
+                pred = extract_final_number(record["generation"])
+                ref = normalize_reference(record["reference_answer"])
+                correct = pred is not None and ref is not None and abs(pred - ref) < 1e-4
+            else:  # label answers (ProofWriter): use the run's own scoring
+                pred, ref = record.get("predicted"), record.get("reference_answer")
+                correct = bool(record.get("correct"))
             f_out.write(json.dumps({**graph.to_dict(), "correct": correct, "stats": stats}) + "\n")
             rows.append({**stats, "correct": correct})
             reasons.update(e.reason for e in graph.edges)

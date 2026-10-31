@@ -1,0 +1,34 @@
+# Answer-support check + label ban (ProofWriter), all 600 questions: the first 150 are the design half (the idea
+# came from their error analysis), 150-599 are held out. Report them separately:
+# scripts/split_report.py.
+run_id: "graph_sched_ans_proofwriter_d3_llada_basedrafts"
+
+method: remask
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+sample_size: "full"         # all 600: 0-149 design half, 150-599 held out (450)
+seed: 42
+
+# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_llada), so the draft accuracy is the baseline.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 32
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+verifier:
+  name: graph_logic
+  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
+  check_answer: true        # flag answer lines whose label contradicts the verified steps
+
+remask:
+  mode: graph
+  max_rounds: 3
+  steps_per_round: null
+  temperature: 0.0
+  confidence_eos_eot_inf: true
+  ban_flagged_label: true   # a rejected label may not be written again on that line
+  schedule: true            # re-denoise the remasked steps in dependency order (the main method)
+  tokens_per_unit: 1
+
+draft_cache: "logs/draft_cache_baseline"   # filled by scripts/drafts_from_baseline.py from vanilla_proofwriter_d3_llada

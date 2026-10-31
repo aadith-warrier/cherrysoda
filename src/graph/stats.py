@@ -1,7 +1,9 @@
 from src.graph.schema import PROBLEM_NODE_ID, ReasoningGraph
 
 
-def fmt_value(v: float) -> str:
+def fmt_value(v) -> str:
+    if isinstance(v, str):  # ProofWriter graphs carry literals and rules as text
+        return v
     return str(int(v)) if float(v).is_integer() else f"{v:g}"
 
 
@@ -9,7 +11,7 @@ def unsourced_values(graph: ReasoningGraph) -> list:
     """(node_id, value) for numbers a step uses that no earlier step or the problem provided."""
     out = []
     for n in graph.nodes:
-        if n.kind not in ("calc", "claim"):
+        if n.kind in ("problem", "header"):
             continue
         evidence = set()
         for e in graph.edges:
@@ -20,7 +22,7 @@ def unsourced_values(graph: ReasoningGraph) -> list:
 
 
 def graph_stats(graph: ReasoningGraph) -> dict:
-    steps = [n for n in graph.nodes if n.kind in ("calc", "claim")]
+    steps = [n for n in graph.nodes if n.kind not in ("problem", "header")]
     has_incoming = {e.dst for e in graph.edges}
     return {
         "graph_steps": len(steps),

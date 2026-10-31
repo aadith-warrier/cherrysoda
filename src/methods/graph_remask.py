@@ -51,6 +51,10 @@ class RemaskConfig:
     schedule: bool = False
     tokens_per_unit: int = 1
 
+    # ProofWriter: when the answer-support check rejects an answer line's label, forbid that label (and any label
+    # rejected in an earlier round) at the answer line's positions, so the line cannot be rewritten unchanged
+    ban_flagged_label: bool = False
+
     def __post_init__(self):
         if self.mode not in ("graph", "full"):
             raise ValueError(f"mode must be 'graph' or 'full', got {self.mode!r}")
@@ -69,7 +73,7 @@ class Inspection:
 
     @property
     def n_steps(self) -> int:
-        return sum(1 for n in self.graph.nodes if n.kind in ("calc", "claim"))
+        return sum(1 for n in self.graph.nodes if n.kind not in ("problem", "header"))  # maths: calc/claim; ProofWriter: all step kinds
 
     @property
     def flag_types(self) -> dict:
@@ -87,6 +91,7 @@ class RoundLog:
     nfe: int
     flagged_after: int
     changed: bool
+    banned_labels: list = field(default_factory=list)
 
 
 @dataclass
@@ -125,6 +130,41 @@ class RemaskResult:
         d.pop("draft_token_ids"), d.pop("final_token_ids")
         d["rounds"] = [asdict(r) if hasattr(r, "__dataclass_fields__") else r for r in self.rounds]
         return d
+
+
+LABEL_VARIANTS = ("{}", " {}", "{l}", " {l}", ":{}", ": {}", "**{}", "\"{}")
+
+
+def label_token_ids(tokenizer, label: str) -> list:
+    """First token of each way the label can be written, so banning them stops the label from being started."""
+    out = set()
+    for v in LABEL_VARIANTS:
+        text = v.format(label, l=label.lower())
+        try:
+            ids = tokenizer.encode(text, add_special_tokens=False)
+        except TypeError:
+            ids = tokenizer.encode(text)
+        if not ids:
+            continue
+        # skip leading pieces that are only punctuation/space ("**", ":"), ban the first piece of the word itself
+        for t in ids:
+            piece = tokenizer.decode([t], skip_special_tokens=True)
+            if any(ch.isalpha() for ch in piece):
+                out.add(int(t))
+                break
+    return sorted(out)
+
+
+def rejected_labels(state) -> set:
+    """Labels of answer lines the answer-support check rejected in this inspection."""
+    out = set()
+    for b in state.bad:
+        v = state.verdicts.get(b)
+        if v is not None and v.error_type == "unsupported_answer":
+            for c in v.checks:
+                if c.name == "answer_support" and c.detail:
+                    out.add(c.detail)
+    return out
 
 
 class GraphRemasker:
@@ -198,6 +238,7 @@ class GraphRemasker:
             skipped = "decoded token ids differ from the wrapper's generated_text"
             state = type(state)(state.text, state.n_tokens, state.graph, state.verdicts, [])
 
+        banned_labels = set()
         for r in range(1, max_rounds + 1):
             if not state.bad:
                 break
@@ -205,11 +246,23 @@ class GraphRemasker:
             if not positions:
                 skipped = "flagged steps could not be mapped to token positions"
                 break
+            ban = None
+            if self.cfg.ban_flagged_label:
+                banned_labels |= rejected_labels(state)
+                if banned_labels:
+                    _, spans = token_char_spans(self.model.tokenizer, ids[: state.n_tokens])
+                    answer_ranges = [(n.char_start, n.char_end) for n in state.graph.nodes if n.kind == "answer"]
+                    tok = sorted({t for lab in banned_labels for t in label_token_ids(self.model.tokenizer, lab)})
+                    in_answer = set(positions_overlapping(spans, answer_ranges)) & set(positions)
+                    if in_answer:   # also the freed tail after the response, where a shifted answer line can land
+                        in_answer |= {p for p in positions if p >= state.n_tokens}
+                    ban = {p: tok for p in sorted(in_answer)} or None
             select_fn = None
             if self.cfg.schedule:
                 from src.methods.scheduler import DependencyPlan
                 _, spans = token_char_spans(self.model.tokenizer, ids[: state.n_tokens])
                 select_fn = DependencyPlan(state.graph, spans, state.n_tokens, len(ids), self.cfg.tokens_per_unit).select
+            extra = {"ban": ban} if ban else {}   # only when needed: older wrappers/fakes have no `ban` argument
             res = self.model.refine(
                 example["prompt"], ids, positions,
                 num_denoising_steps=self.cfg.steps_per_round,
@@ -217,6 +270,7 @@ class GraphRemasker:
                 allow_end_from=allow_end_from,
                 confidence_eos_eot_inf=self.cfg.confidence_eos_eot_inf,
                 select_fn=select_fn,
+                **extra,
             )
             nfe += res.num_forward_passes
             wall += res.wall_time_sec
@@ -229,8 +283,9 @@ class GraphRemasker:
             rounds.append(RoundLog(
                 round=r, flagged=list(state.bad), affected=list(affected), n_remasked=content_n,
                 remask_ratio=content_n / max(1, state.n_tokens),
-                affected_ratio=len([a for a in affected if state.graph.node(a).kind in ("calc", "claim")]) / n_steps,
+                affected_ratio=len([a for a in affected if state.graph.node(a).kind not in ("problem", "header")]) / n_steps,
                 nfe=res.num_forward_passes, flagged_after=len(new_state.bad), changed=changed,
+                banned_labels=sorted(banned_labels) if ban else [],
             ))
             ids, state = new_ids, new_state
             parse_secs.append(new_state.seconds)

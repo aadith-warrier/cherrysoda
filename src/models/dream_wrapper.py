@@ -231,7 +231,7 @@ class DreamWrapper(BaseDLMWrapper):
 
     @torch.no_grad()
     def _refine_native(self, prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature, top_p, alg,
-                       allow_end_from, start_time):
+                       allow_end_from, start_time, ban=None):
         """Re-denoise `positions` with Dream's own `diffusion_generate`, unchanged.
 
         diffusion_generate fills a window of [MASK] tokens after the prompt; a tokens hook called once before the first
@@ -259,6 +259,8 @@ class DreamWrapper(BaseDLMWrapper):
             rows = torch.arange(min(allow_end_from, L), device=self.device)
             ban_rows = (prompt_len + rows[~keep[rows]])         # rewritten positions before the allowed tail
         eot_id = self.endoftext_id if gen_params.get("suppress_endoftext", False) else None
+        # forbidden tokens at rewritten positions, indexed like ban_rows (prompt_len + response position)
+        ban_cells = [(prompt_len + p, sorted(ids)) for p, ids in (ban or {}).items() if 0 <= p < L and not keep[p]]
 
         def tokens_hook(step, x, logits):
             if step is None:                                    # initial state, before the first denoising step
@@ -270,6 +272,8 @@ class DreamWrapper(BaseDLMWrapper):
             low = torch.finfo(logits.dtype).min
             if ban_rows is not None and ban_rows.numel():
                 logits[0][ban_rows[:, None], end_ids[None, :]] = low
+            for row, ids in ban_cells:
+                logits[0][row, ids] = low
             if eot_id is not None:
                 logits[..., eot_id] = float("-inf")
             return logits
@@ -328,6 +332,7 @@ class DreamWrapper(BaseDLMWrapper):
         confidence_eos_eot_inf=True,   # LLaDA-only option; accepted and ignored so both wrappers share a signature
         select_fn=None,
         trace=None,                    # debugging: a list that receives one dict per forward pass (see below)
+        ban=None,                      # {response position: [token ids]} that may not be predicted there
     ) -> GenerationResult:
         """Reset `remask_positions` of an existing response to [MASK] and re-denoise just those; every other position
         stays fixed as context. Mirrors LLaDAWrapper.refine (see there for allow_end_from).
@@ -353,7 +358,7 @@ class DreamWrapper(BaseDLMWrapper):
         if select_fn is None:
             # Dream's own sampler, unchanged: see _refine_native
             return self._refine_native(prompt, prompt_ids, token_ids, positions, num_denoising_steps, temperature,
-                                       top_p, alg, allow_end_from, start_time)
+                                       top_p, alg, allow_end_from, start_time, ban=ban)
         gen_ids = torch.tensor([token_ids], dtype=torch.long, device=self.device)
         pos_t = torch.tensor(positions, dtype=torch.long, device=self.device)
         gen_ids[0, pos_t] = self.mask_token_id
@@ -385,6 +390,10 @@ class DreamWrapper(BaseDLMWrapper):
             if allow_end_from is not None:
                 banned = remaining < allow_end_from
                 logits[:, end_ids] = torch.where(banned[:, None], torch.finfo(logits.dtype).min, logits[:, end_ids])
+            if ban:
+                for row, p in enumerate(remaining.tolist()):
+                    if p in ban:
+                        logits[row, list(ban[p])] = torch.finfo(logits.dtype).min
             conf, pred = self._sample(logits, temperature, top_p, alg)
             if select_fn is None:
                 # same as diffusion_generate: top-k over a vector spanning the whole sequence (-inf elsewhere), so

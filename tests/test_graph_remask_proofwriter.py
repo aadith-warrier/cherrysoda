@@ -103,3 +103,104 @@ def test_scorer_reads_labels():
     score = make_scorer("proofwriter_depth3", "label")
     assert score(DRAFT, "True") == ("Unknown", False)
     assert score(FIXED, "True") == ("True", True)
+
+
+# ---------------------------------------------------------------- answer-support check + label ban
+
+from src.methods.graph_remask import label_token_ids  # noqa: E402
+from src.verify.registry import answer_label  # noqa: E402
+
+# the trace derives the hypothesis, yet the answer says Unknown
+DRAFT2 = "Fiona is red.\nRed things are young.\nSo Fiona is young.\nThe answer is: Unknown"
+FIX2 = "Fiona is red.\nRed things are young.\nSo Fiona is young.\nThe answer is: True   "
+assert len(DRAFT2) == len(FIX2)
+
+
+class EncTokenizer(CharTokenizer):
+    def encode(self, text, add_special_tokens=False):
+        return [ord(c) for c in text]
+
+
+class StubbornModel(FakeModel):
+    """Rewrites a remasked answer line with the same label unless that label is banned (what LLaDA did)."""
+    tokenizer = EncTokenizer()
+
+    def __init__(self):
+        super().__init__()
+        self.repair, self.bans = encode(FIX2), []
+
+    def generate(self, prompt, max_new_tokens, num_denoising_steps, **kw):
+        return GenerationResult(prompt, DRAFT2, num_denoising_steps, 0.0, num_denoising_steps, token_ids=encode(DRAFT2))
+
+    def refine(self, prompt, token_ids, remask_positions, ban=None, **kw):
+        self.calls.append(sorted(remask_positions))
+        self.bans.append(ban)
+        out = list(token_ids)
+        if ban and any(token_ids[p] in ids for p, ids in ban.items()):
+            for p in remask_positions:
+                out[p] = self.repair[p]
+        text = "".join(chr(i) for i in out if i > 1)
+        return GenerationResult(prompt, text, len(remask_positions), 0.0, len(remask_positions),
+                                num_remasked_tokens=len(remask_positions), token_ids=out)
+
+
+def graph_of(gen):
+    return build_graph({"example_id": "pw", "dataset": "proofwriter", "prompt": PROMPT, "generation": gen})
+
+
+def test_answer_label():
+    assert answer_label("The answer is: Unknown.") == "Unknown"
+    assert answer_label("Since Bob is big, the hypothesis is false.") == "False"
+    assert answer_label("Therefore the hypothesis can be proved.") is None
+
+
+def test_answer_check_is_off_by_default():
+    v = make_verify_fn("proofwriter")(graph_of(DRAFT2))
+    assert not any(x.error_type == "unsupported_answer" for x in v.values())
+
+
+def test_answer_check_rules():
+    vf = make_verify_fn("proofwriter", {"check_answer": True})
+    bad = lambda gen: [k for k, x in vf(graph_of(gen)).items() if x.error_type == "unsupported_answer"]
+    assert bad(DRAFT2) == ["4"]                                              # derived, but answered Unknown
+    assert bad("Fiona is red.\nSo Fiona is young.\nThe answer is: True") == []
+    assert bad("Bob is big.\nThe answer is: True") == ["2"]                  # True with nothing derived
+    assert bad("Bob is big.\nThe answer is: False") == ["2"]                 # False needs the negation derived
+    assert bad("Bob is big.\nThe answer is: Unknown") == []
+    # a hedge or a hypothetical "if ... then" does not assert the hypothesis
+    assert bad("We cannot prove that Fiona is young.\nThe answer is: True") == ["2"]
+    assert bad("If Fiona is red then Fiona is young.\nThe answer is: True") == ["2"]
+
+
+def test_label_tokens():
+    ids = label_token_ids(EncTokenizer(), "Unknown")
+    assert set(ids) == {ord("U"), ord("u")}
+
+
+def test_without_ban_the_label_survives():
+    m = StubbornModel()
+    res = GraphRemasker(m, make_verify_fn("proofwriter", {"check_answer": True}),
+                        RemaskConfig(mode="graph", max_rounds=3)).run(EXAMPLE, GEN_CFG)
+    assert res.final_text == DRAFT2 and m.bans == [None]   # remasked once, came back identical, stopped
+
+
+def test_ban_rewrites_only_the_answer_line():
+    m = StubbornModel()
+    res = GraphRemasker(m, make_verify_fn("proofwriter", {"check_answer": True}),
+                        RemaskConfig(mode="graph", max_rounds=3, ban_flagged_label=True)).run(EXAMPLE, GEN_CFG)
+    answer_start = DRAFT2.index("The answer")
+    assert min(m.calls[0]) == answer_start                 # steps 1-3 untouched
+    ban = m.bans[0]
+    assert ban and min(ban) >= answer_start and all(set(v) == {ord("U"), ord("u")} for v in ban.values())
+    assert set(range(len(DRAFT2), L)) <= set(ban)          # the freed tail after the answer is covered too
+    assert res.final_text == FIX2.strip() and res.flags_after == 0
+    assert res.rounds[0].banned_labels == ["Unknown"]
+    from scripts.run_graph_method import make_scorer
+    assert make_scorer("proofwriter_depth3", "label")(res.final_text, "True") == ("True", True)
+
+
+def test_ban_also_works_with_the_scheduler():
+    m = StubbornModel()
+    res = GraphRemasker(m, make_verify_fn("proofwriter", {"check_answer": True}),
+                        RemaskConfig(mode="graph", max_rounds=3, ban_flagged_label=True, schedule=True)).run(EXAMPLE, GEN_CFG)
+    assert m.bans[0] and res.final_text == FIX2.strip()

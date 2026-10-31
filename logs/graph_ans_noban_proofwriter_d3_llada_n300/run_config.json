@@ -1,0 +1,53 @@
+{
+  "config": {
+    "run_id": "graph_ans_noban_proofwriter_d3_llada_n300",
+    "method": "remask",
+    "model_config": "configs/model/llada_8b.yaml",
+    "dataset_config": "configs/dataset/proofwriter_depth3.yaml",
+    "sample_size": 300,
+    "seed": 42,
+    "generation": {
+      "max_new_tokens": 256,
+      "num_denoising_steps": 256,
+      "block_length": 32,
+      "temperature": 0.0,
+      "remasking_strategy": "low_confidence"
+    },
+    "verifier": {
+      "name": "graph_logic",
+      "skip_kinds": [
+        "meta"
+      ],
+      "check_answer": true
+    },
+    "remask": {
+      "mode": "graph",
+      "max_rounds": 3,
+      "steps_per_round": null,
+      "temperature": 0.0,
+      "confidence_eos_eot_inf": true
+    },
+    "draft_cache": "logs/draft_cache"
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": 32,
+    "temperature": 0.0,
+    "remasking_strategy": "low_confidence",
+    "defer_eos_eot": false
+  },
+  "method": "remask",
+  "method_settings": {
+    "mode": "graph",
+    "max_rounds": 3,
+    "steps_per_round": null,
+    "temperature": 0.0,
+    "confidence_eos_eot_inf": true,
+    "stop_if_unchanged": true,
+    "schedule": false,
+    "tokens_per_unit": 1,
+    "ban_flagged_label": false
+  },
+  "n": 300
+}

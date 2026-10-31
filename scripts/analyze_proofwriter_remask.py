@@ -44,7 +44,7 @@ def report(run_dir):
           f"final {sum(r['correct'] for r in rs)}/{n})")
 
     print("\n1. Wrong drafts: gold -> predicted, flagged / not flagged")
-    conf = Counter((r["reference_answer"], r["draft_predicted"], r["flags_before"] > 0) for r in wrong)
+    conf = Counter((r["reference_answer"], str(r["draft_predicted"]), r["flags_before"] > 0) for r in wrong)  # None = no answer
     pairs = sorted({(g, p) for g, p, _ in conf})
     for g, p in pairs:
         print(f"   {g:>7} -> {str(p):<8} flagged {conf[(g, p, True)]:>3}   not flagged {conf[(g, p, False)]:>3}")

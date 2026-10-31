@@ -99,7 +99,7 @@ def test_new_diagnostics_and_comparison():
 
 def test_unknown_dataset_has_a_clear_error():
     try:
-        vreg.make_verify_fn("proofwriter")
+        vreg.make_verify_fn("no_such_dataset")  # proofwriter has a verifier now
     except ValueError as e:
         assert "src/verify/registry.py" in str(e)
     else:

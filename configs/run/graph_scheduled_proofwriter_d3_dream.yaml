@@ -1,0 +1,27 @@
+run_id: "graph_scheduled_proofwriter_d3_dream"
+
+method: remask
+model_config: "configs/model/dream_7b.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+sample_size: 150            # first 150 = 50 True / 50 False / 50 Unknown; "full" = all 600 (Table 2)
+seed: 42
+
+# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_dream), so the draft accuracy is the baseline.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: null
+verifier:
+  name: graph_logic
+  skip_kinds: [meta]        # lines that only restate the hypothesis: 15% of the logic verifier's LLaDA flags, all spurious
+
+remask:
+  mode: graph
+  max_rounds: 3
+  steps_per_round: null
+  temperature: null
+  confidence_eos_eot_inf: true
+  schedule: true            # re-denoise the remasked steps in dependency order (parents before children)
+  tokens_per_unit: 1
+
+draft_cache: "logs/draft_cache"

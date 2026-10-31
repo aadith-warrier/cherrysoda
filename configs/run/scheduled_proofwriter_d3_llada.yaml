@@ -1,0 +1,21 @@
+run_id: "scheduled_proofwriter_d3_llada"
+
+method: scheduled
+model_config: "configs/model/llada_8b.yaml"
+dataset_config: "configs/dataset/proofwriter_depth3.yaml"
+sample_size: 150            # first 150 = 50 True / 50 False / 50 Unknown; "full" = all 600 (Table 2)
+seed: 42
+
+# Drafts use the Table 2 baseline decoding (vanilla_proofwriter_d3_llada), so the draft accuracy is the baseline.
+generation:
+  max_new_tokens: 256
+  num_denoising_steps: 256
+  block_length: 32
+  temperature: 0.0
+  remasking_strategy: "low_confidence"
+
+schedule:
+  tokens_per_unit: 1
+  temperature: 0.0
+
+draft_cache: "logs/draft_cache"

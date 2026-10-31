@@ -217,8 +217,10 @@ class LLaDAWrapper(BaseDLMWrapper):
         allow_end_from=None,
         confidence_eos_eot_inf=True,
         select_fn=None,
+        ban=None,
     ) -> GenerationResult:
-
+        """ban: optional {response position: [token ids]} that may not be predicted there (the remask loop uses it
+        to forbid an answer label the verifier rejected)."""
         start_time = time.time()
         temperature = 0.0 if temperature is None else temperature
         if self.use_chat_template:
@@ -255,6 +257,10 @@ class LLaDAWrapper(BaseDLMWrapper):
             if allow_end_from is not None:
                 banned = remaining < allow_end_from
                 logits[:, end_ids] = torch.where(banned[:, None], -torch.inf, logits[:, end_ids])
+            if ban:
+                for row, p in enumerate(remaining.tolist()):
+                    if p in ban:
+                        logits[row, list(ban[p])] = -torch.inf
             pred = torch.argmax(add_gumbel_noise(logits, temperature), dim=-1)
             scored = logits.float()
             if confidence_eos_eot_inf:

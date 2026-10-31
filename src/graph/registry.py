@@ -1,9 +1,11 @@
+from src.graph.build_logic import build_logic_graph
 from src.graph.build_math import build_math_graph
 from src.graph.schema import ReasoningGraph
 
 GRAPH_BUILDER_REGISTRY = {
     "gsm8k": build_math_graph,
     "svamp": build_math_graph,
+    "proofwriter": build_logic_graph,
 }
 
 

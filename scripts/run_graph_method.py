@@ -296,6 +296,7 @@ def main():
     ap.add_argument("--shard", help="I/N: this process handles problems I, I+N, I+2N, ... (use with --drafts-only)")
     ap.add_argument("--range", help="START:END (0-based, END exclusive): correct only these problems, writing to <run_id>_r<START>-<END>; "
                     "run several ranges on several GPUs once the drafts are cached, then merge with scripts/merge_parts.py")
+    ap.add_argument("--oracle-labels", help="JSON {example_id: [step ids]} of hand-labelled wrong steps")
     ap.add_argument("--seed", type=int, help="override the run seed (writes to <run_id>_seed<N>); for Dream, report the mean over seeds")
     args = ap.parse_args()
 
@@ -327,10 +328,18 @@ def main():
     if args.range:
         rng = tuple(int(x) for x in args.range.split(":"))
         run_id += f"_r{rng[0]}-{rng[1]}"
+    oracle = None
+    if args.oracle_labels:
+        if method != "remask":
+            raise ValueError("--oracle-labels needs a remask config")
+        oracle = json.load(open(args.oracle_labels))
+        run_id += "_oracle"
     out_dir = os.path.join("logs", run_id)
     os.makedirs(out_dir, exist_ok=True)
 
     examples = load_dataset_unified(cfg["dataset_config"], sample_size=sample)
+    if oracle is not None:
+        examples = [e for e in examples if e["example_id"] in oracle]
     if rng:
         examples = examples[rng[0]:rng[1]]
     run_config = {"config": cfg, "generation": gen_cfg, "method": method, "method_settings": method_cfg.__dict__,
@@ -347,7 +356,7 @@ def main():
     print(f"Loading {model_cfg['name']} on {model_cfg.get('device')}  |  {method} on {dataset_cfg['name']}", flush=True)
     model = get_model_wrapper(model_cfg)
     verify_fn = make_verify_fn(dataset_cfg["name"], cfg.get("verifier", {}))
-    method_obj = GraphRemasker(model, verify_fn, remask_cfg) if method == "remask" \
+    method_obj = GraphRemasker(model, verify_fn, remask_cfg, oracle=oracle) if method == "remask" \
         else ScheduledDecoder(model, verify_fn, sched_cfg)
     score = make_scorer(dataset_cfg["name"], dataset_cfg.get("answer_type"))
     fmt_ok = make_format_check(dataset_cfg["name"], dataset_cfg.get("answer_type"))

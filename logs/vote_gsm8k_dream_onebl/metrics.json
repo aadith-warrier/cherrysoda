@@ -1,0 +1,31 @@
+{
+  "run_id": "vote_gsm8k_dream_onebl",
+  "model": "dream_7b",
+  "dataset": "gsm8k",
+  "baseline": "temporal_vote",
+  "generation": {
+    "max_new_tokens": 256,
+    "num_denoising_steps": 256,
+    "block_length": null,
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "alg_temp": 0.0,
+    "remasking_strategy": "entropy",
+    "suppress_endoftext": false,
+    "vote_weighting": "exp",
+    "vote_alpha": 5.0
+  },
+  "num_examples": 200,
+  "accuracy": 0.77,
+  "num_correct": 154,
+  "extraction_pattern": 0,
+  "extraction_vote": 198,
+  "extraction_fallback": 2,
+  "extraction_none": 0,
+  "empty_generations": 0,
+  "hit_length_limit": 0,
+  "avg_forward_passes": 256.0,
+  "avg_wall_time_sec": 56.397849266529086,
+  "avg_remasked_tokens": 0.0,
+  "avg_answer_tokens": 115.2
+}

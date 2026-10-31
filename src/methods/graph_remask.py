@@ -73,7 +73,7 @@ class Inspection:
 
     @property
     def flag_types(self) -> dict:
-        return dict(Counter(self.verdicts[b].error_type or "unspecified" for b in self.bad))
+        return dict(Counter((self.verdicts[b].error_type if b in self.verdicts else "oracle") or "unspecified" for b in self.bad))
 
 
 @dataclass
@@ -128,8 +128,10 @@ class RemaskResult:
 
 
 class GraphRemasker:
-    def __init__(self, model, verify_fn: Callable, cfg: RemaskConfig = None, graph_fn: Callable = build_graph):
+    def __init__(self, model, verify_fn: Callable, cfg: RemaskConfig = None, graph_fn: Callable = build_graph,
+            oracle: dict = None):
         self.model, self.verify_fn, self.cfg, self.graph_fn = model, verify_fn, cfg or RemaskConfig(), graph_fn
+        self.oracle = oracle
 
     def _deterministic(self) -> bool:
         t = self.cfg.temperature
@@ -186,11 +188,17 @@ class GraphRemasker:
         sec_refine = 0.0
         state = self.inspect(example, ids)
         first, rounds, skipped, parse_secs = state, [], "", []
+        max_rounds = self.cfg.max_rounds
+        if self.oracle is not None:
+            labelled = [str(x) for x in self.oracle.get(example["example_id"], [])]
+            state = type(state)(state.text, state.n_tokens, state.graph, state.verdicts, labelled)
+            first = state
+            max_rounds = 1
         if draft.generated_text and draft.generated_text != first.text:
             skipped = "decoded token ids differ from the wrapper's generated_text"
             state = type(state)(state.text, state.n_tokens, state.graph, state.verdicts, [])
 
-        for r in range(1, self.cfg.max_rounds + 1):
+        for r in range(1, max_rounds + 1):
             if not state.bad:
                 break
             positions, allow_end_from, affected = self.plan(state, ids)

@@ -33,9 +33,10 @@ class DAPDWrapper(BaseDLMWrapper):
         self.tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
-        self.model = AutoModel.from_pretrained(
-            repo_id, trust_remote_code=True, torch_dtype=torch.bfloat16).to(self.device).eval()
+        from src.models.dream_wrapper import DreamWrapper
+        self.model = DreamWrapper._load_model(repo_id, torch.bfloat16).to(self.device).eval()
         mask_id = getattr(self.tokenizer, "mask_token_id", None)
+        self.mask_id = int(mask_id) if mask_id is not None else LLADA1_MASK_TOKEN_ID
         self.mask_id = int(mask_id) if mask_id is not None else LLADA1_MASK_TOKEN_ID
  
     @torch.no_grad()
@@ -46,8 +47,8 @@ class DAPDWrapper(BaseDLMWrapper):
         g = self.config["generation"]
         start = time.time()
  
-        text = self.tokenizer.apply_chat_template(
-            [{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True)
+        messages = prompt if isinstance(prompt, list) else [{"role": "user", "content": prompt}]
+        text = self.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         context = self.tokenizer.encode(text, return_tensors="pt", add_special_tokens=False).to(self.device)
         block = int(block_length or 0)
         blockwise = 0 < block < max_new_tokens

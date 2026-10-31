@@ -1,0 +1,16 @@
+run_id: "dapd_gsm8k_llada_onebl"
+
+model_config: "configs/model/dapd_llada.yaml"
+dataset_config: "configs/dataset/gsm8k_paper.yaml"
+baseline: "vanilla"
+
+sample_size: "full"
+seed: 42
+
+generation_overrides: {block_length: null}
+
+logging:
+  save_generations: true
+  save_intermediate_states: false
+  wandb_project: "cherrysoda"
+  wandb_run_name: null

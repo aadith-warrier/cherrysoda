@@ -22,6 +22,30 @@ proofwriter dream dapd 600 44.3 62.0 +17.7 [+13.7,+21.3] 127/21 1.11e-19 26
 
 === 2. OUR VARIANTS (from each run's metrics.json) ===
 
+[graph_remask_gsm8k_dream_n1319] dataset=gsm8k model=dream method=remask mode=graph n=1319
+  draft_accuracy = 0.7847
+  accuracy = 0.7892
+  delta_accuracy = 0.0045
+  delta_ci95 = [-0.001516300227445034, 0.011372251705837756]
+  fixed = 13
+  broken = 7
+  mcnemar_p = 0.2632
+  mean_nfe_total = 324.1334
+  mean_nfe_overhead = 68.1334
+  mean_tokens_regenerated = 31.555
+  mean_remask_ratio_per_round = 0.7877
+  mean_remask_ratio_cumulative = 1.9622
+  mean_affected_subgraph_ratio = 0.7986
+  reasoning_consistency_before = 0.8719
+  reasoning_consistency_after = 0.9052
+  flagged_draft_wrong = 88
+  flagged_draft_right = 81
+  flag_precision_draft_wrong = 0.5207
+  wrong_drafts_not_flagged = 196
+  unchanged_after_remask = 78
+  frac_examples_remasked = 0.1281
+  mean_rounds_when_remasked = 2.4911
+
 [graph_remask_gsm8k_llada_n1319] dataset=gsm8k model=llada method=remask mode=graph n=1319
   draft_accuracy = 0.6384
   accuracy = 0.7483
@@ -45,6 +69,30 @@ proofwriter dream dapd 600 44.3 62.0 +17.7 [+13.7,+21.3] 127/21 1.11e-19 26
   unchanged_after_remask = 36
   frac_examples_remasked = 0.2654
   mean_rounds_when_remasked = 1.3743
+
+[graph_remask_gsm8k_llada_n1319_oracle] dataset=gsm8k model=llada method=remask mode=graph n=56
+  draft_accuracy = 0.0
+  accuracy = 0.5893
+  delta_accuracy = 0.5893
+  delta_ci95 = [0.4642857142857143, 0.7142857142857143]
+  fixed = 33
+  broken = 0
+  mcnemar_p = 0.0
+  mean_nfe_total = 341.375
+  mean_nfe_overhead = 85.375
+  mean_tokens_regenerated = 83.8393
+  mean_remask_ratio_per_round = 0.3294
+  mean_remask_ratio_cumulative = 0.3294
+  mean_affected_subgraph_ratio = 0.4472
+  reasoning_consistency_before = 0.0
+  reasoning_consistency_after = 0.6786
+  flagged_draft_wrong = 56
+  flagged_draft_right = 0
+  flag_precision_draft_wrong = 1.0
+  wrong_drafts_not_flagged = 0
+  unchanged_after_remask = 3
+  frac_examples_remasked = 1.0
+  mean_rounds_when_remasked = 1.0
 
 [graph_scheduled_gsm8k_dream_n1319] dataset=gsm8k model=dream method=remask mode=graph n=1319
   draft_accuracy = 0.7847
@@ -95,6 +143,7 @@ proofwriter dream dapd 600 44.3 62.0 +17.7 [+13.7,+21.3] 127/21 1.11e-19 26
   mean_rounds_when_remasked = 1.3171
 
 === 3. PAIRWISE COMPARISONS (same problems only) ===
+gsm8k dream n=1319  graph_remask_gsm8k_dream_n1319 vs graph_scheduled_gsm8k_dream_n1319: gap +0.2 [-0.8,+1.1] only-A 21 only-B 19 p=0.875
 gsm8k llada n=1319  graph_remask_gsm8k_llada_n1319 vs graph_scheduled_gsm8k_llada_n1319: gap -1.1 [-1.8,-0.4] only-A 5 only-B 19 p=0.00661
 
 === 4. ERROR ANALYSIS (Appendix E, RQ1) ===
@@ -104,3 +153,46 @@ svamp llada wrong=116 arith_slip=26.7% no_slip=57.8% unchecked=15.5% max_gain_pt
 svamp dream wrong=146 arith_slip=15.8% no_slip=61.0% unchecked=23.3% max_gain_pts=2.3
 
 === 5. PROOFWRITER BY DEPTH AND LABEL (our runs, draft vs final) ===
+    261 logs/full_resample_gsm8k_dream_n1319/generations.jsonl
+    169 logs/full_resample_gsm8k_llada_n1319/generations.jsonl
+     56 logs/graph_remask_gsm8k_llada_n1319_oracle/generations.jsonl
+    486 total
+all_comparisons.csv
+all_results.csv
+archive
+dapd_gsm8k_dream
+dapd_gsm8k_llada
+dapd_proofwriter_d3_dream
+dapd_proofwriter_d3_llada
+dapd_svamp_dream
+dapd_svamp_llada
+draft_cache
+full_remask_gsm8k_llada_n1319
+full_resample_gsm8k_dream_n1319
+full_resample_gsm8k_dream_n1319_r177-1319
+full_resample_gsm8k_llada_n1319
+graph_remask_gsm8k_dream_n1319
+graph_remask_gsm8k_llada_n1319
+graph_remask_gsm8k_llada_n1319_oracle
+graph_scheduled_gsm8k_dream_n1319
+graph_scheduled_gsm8k_llada_n1319
+probe_dream.txt
+probe_llada.txt
+proseco_gsm8k
+proseco_proofwriter_d3
+proseco_svamp
+remedi_rl_gsm8k
+remedi_rl_proofwriter_d3
+remedi_rl_svamp
+vanilla_gsm8k_dream
+vanilla_gsm8k_llada
+vanilla_proofwriter_d3_dream
+vanilla_proofwriter_d3_llada
+vanilla_svamp_dream
+vanilla_svamp_llada
+vote_gsm8k_dream
+vote_gsm8k_llada
+vote_proofwriter_d3_dream
+vote_proofwriter_d3_llada
+vote_svamp_dream
+vote_svamp_llada

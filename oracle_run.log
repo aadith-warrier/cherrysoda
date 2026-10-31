@@ -1,0 +1,64 @@
+Loading llada_8b on cuda:0  |  remask on gsm8k
+Loading checkpoint shards:   0%|          | 0/6 [00:00<?, ?it/s]Loading checkpoint shards:  17%|█▋        | 1/6 [00:00<00:01,  3.05it/s]Loading checkpoint shards:  33%|███▎      | 2/6 [00:00<00:01,  3.05it/s]Loading checkpoint shards:  50%|█████     | 3/6 [00:01<00:01,  2.90it/s]Loading checkpoint shards:  67%|██████▋   | 4/6 [00:01<00:00,  2.99it/s]Loading checkpoint shards:  83%|████████▎ | 5/6 [00:01<00:00,  3.15it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:01<00:00,  3.39it/s]Loading checkpoint shards: 100%|██████████| 6/6 [00:01<00:00,  3.19it/s]
+[graph_remask_gsm8k_llada_n1319_oracle] 20/56 FIXED flags 5->1 rounds 1 nfe 343 | acc 0->14/20
+[graph_remask_gsm8k_llada_n1319_oracle] 21/56 FIXED flags 3->0 rounds 1 nfe 311 | acc 0->15/21
+[graph_remask_gsm8k_llada_n1319_oracle] 22/56 FIXED flags 4->0 rounds 1 nfe 329 | acc 0->16/22
+[graph_remask_gsm8k_llada_n1319_oracle] 23/56 bad   flags 4->1 rounds 1 nfe 324 | acc 0->16/23
+[graph_remask_gsm8k_llada_n1319_oracle] 24/56 bad   flags 6->0 rounds 1 nfe 456 | acc 0->16/24
+[graph_remask_gsm8k_llada_n1319_oracle] 25/56 FIXED flags 3->0 rounds 1 nfe 308 | acc 0->17/25
+[graph_remask_gsm8k_llada_n1319_oracle] 26/56 bad   flags 4->1 rounds 1 nfe 348 | acc 0->17/26
+[graph_remask_gsm8k_llada_n1319_oracle] 27/56 FIXED flags 3->0 rounds 1 nfe 332 | acc 0->18/27
+[graph_remask_gsm8k_llada_n1319_oracle] 28/56 FIXED flags 3->0 rounds 1 nfe 300 | acc 0->19/28
+[graph_remask_gsm8k_llada_n1319_oracle] 29/56 bad   flags 3->0 rounds 1 nfe 341 | acc 0->19/29
+[graph_remask_gsm8k_llada_n1319_oracle] 30/56 bad   flags 3->1 rounds 1 nfe 303 | acc 0->19/30
+[graph_remask_gsm8k_llada_n1319_oracle] 31/56 bad   flags 4->1 rounds 1 nfe 366 | acc 0->19/31
+[graph_remask_gsm8k_llada_n1319_oracle] 32/56 FIXED flags 6->2 rounds 1 nfe 412 | acc 0->20/32
+[graph_remask_gsm8k_llada_n1319_oracle] 33/56 FIXED flags 3->0 rounds 1 nfe 305 | acc 0->21/33
+[graph_remask_gsm8k_llada_n1319_oracle] 34/56 bad   flags 10->0 rounds 1 nfe 389 | acc 0->21/34
+[graph_remask_gsm8k_llada_n1319_oracle] 35/56 bad   flags 4->0 rounds 1 nfe 331 | acc 0->21/35
+[graph_remask_gsm8k_llada_n1319_oracle] 36/56 FIXED flags 7->0 rounds 1 nfe 333 | acc 0->22/36
+[graph_remask_gsm8k_llada_n1319_oracle] 37/56 FIXED flags 5->1 rounds 1 nfe 321 | acc 0->23/37
+[graph_remask_gsm8k_llada_n1319_oracle] 38/56 FIXED flags 2->0 rounds 1 nfe 311 | acc 0->24/38
+[graph_remask_gsm8k_llada_n1319_oracle] 39/56 bad   flags 5->0 rounds 1 nfe 377 | acc 0->24/39
+[graph_remask_gsm8k_llada_n1319_oracle] 40/56 FIXED flags 6->0 rounds 1 nfe 339 | acc 0->25/40
+[graph_remask_gsm8k_llada_n1319_oracle] 41/56 FIXED flags 4->1 rounds 1 nfe 376 | acc 0->26/41
+[graph_remask_gsm8k_llada_n1319_oracle] 42/56 FIXED flags 3->1 rounds 1 nfe 302 | acc 0->27/42
+[graph_remask_gsm8k_llada_n1319_oracle] 43/56 bad   flags 3->0 rounds 1 nfe 298 | acc 0->27/43
+[graph_remask_gsm8k_llada_n1319_oracle] 44/56 bad   flags 6->0 rounds 1 nfe 366 | acc 0->27/44
+[graph_remask_gsm8k_llada_n1319_oracle] 45/56 bad   flags 6->1 rounds 1 nfe 431 | acc 0->27/45
+[graph_remask_gsm8k_llada_n1319_oracle] 46/56 bad   flags 6->1 rounds 1 nfe 314 | acc 0->27/46
+[graph_remask_gsm8k_llada_n1319_oracle] 47/56 FIXED flags 2->0 rounds 1 nfe 317 | acc 0->28/47
+[graph_remask_gsm8k_llada_n1319_oracle] 48/56 FIXED flags 4->0 rounds 1 nfe 294 | acc 0->29/48
+[graph_remask_gsm8k_llada_n1319_oracle] 49/56 FIXED flags 4->0 rounds 1 nfe 326 | acc 0->30/49
+[graph_remask_gsm8k_llada_n1319_oracle] 50/56 bad   flags 3->1 rounds 1 nfe 311 | acc 0->30/50
+[graph_remask_gsm8k_llada_n1319_oracle] 51/56 FIXED flags 3->0 rounds 1 nfe 310 | acc 0->31/51
+[graph_remask_gsm8k_llada_n1319_oracle] 52/56 bad   flags 6->0 rounds 1 nfe 472 | acc 0->31/52
+[graph_remask_gsm8k_llada_n1319_oracle] 53/56 bad   flags 3->1 rounds 1 nfe 307 | acc 0->31/53
+[graph_remask_gsm8k_llada_n1319_oracle] 54/56 bad   flags 5->0 rounds 1 nfe 334 | acc 0->31/54
+[graph_remask_gsm8k_llada_n1319_oracle] 55/56 FIXED flags 4->0 rounds 1 nfe 338 | acc 0->32/55
+[graph_remask_gsm8k_llada_n1319_oracle] 56/56 FIXED flags 3->0 rounds 1 nfe 360 | acc 0->33/56
+# graph_remask_gsm8k_llada_n1319_oracle
+
+llada_8b, method `remask`, mode `graph`, max_rounds 3, temperature 0.0, n = 56
+
+| | draft | after remasking |
+|---|---|---|
+| accuracy | 0.0% | 58.9% (+58.9%, 95% CI [+46.4%, +71.4%]) |
+| reasoning consistency (no flagged step) | 0.0% | 67.9% |
+| mean NFE | 256 | 341 (+85) |
+
+fixed 33, broken 0 (exact McNemar p = 0.000)
+
+- examples with a flagged step: 56 wrong, 0 right drafts
+- no answer 0.0%, hit token limit 0.0%, 88.4 s/problem
+- answer format ('The answer is'): draft 76.8%, final 76.8%; accuracy among formatted 0.0% -> 53.5%
+- verifier in situ: graphs parsed cleanly 94.6%, 9.8 steps per answer; a flag means a wrong draft 100.0% of the time; 0 wrong drafts never flagged, 23 flagged but still wrong; flags by type {'unspecified': 182, 'arithmetic': 41, 'ungrounded_operand': 5, 'oracle': 1}
+- tokens: draft 254, final 254, re-denoised 84 per problem
+- time per problem: draft 66.8 s + refine 21.6 s + parse/verify 0.18 s = 88.6 s; peak GPU memory 15.6 GiB
+- <= 9 steps (n=26): 0% -> 58% (fixed 15, broken 0)
+- 10-10 steps (n=12): 0% -> 58% (fixed 7, broken 0)
+- > 10 steps (n=18): 0% -> 61% (fixed 11, broken 0)
+- remasked: 100.0% of examples, 1.00 rounds on average; 3 came back identical
+- remask ratio |M|/L: 32.9% per round, 32.9% cumulative
+- affected-subgraph ratio |A(B)|/|V|: 44.7%
+

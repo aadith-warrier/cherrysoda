@@ -1,0 +1,8 @@
+run_id: vote_gsm8k_llada_onebl
+model_config: configs/model/llada_8b.yaml
+dataset_config: configs/dataset/gsm8k_paper.yaml
+baseline: temporal_vote
+sample_size: full
+seed: 42
+generation_overrides: {vote_weighting: exp, vote_alpha: 5.0, block_length: 256, temperature: 0.0, confidence_eos_eot_inf: true}
+logging: {save_generations: true, save_intermediate_states: false, wandb_project: cherrysoda, wandb_run_name: null}

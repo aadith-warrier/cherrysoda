@@ -3,7 +3,7 @@ run:
   model_config: configs/model/dream_7b.yaml
   dataset_config: configs/dataset/gsm8k_paper.yaml
   baseline: temporal_vote
-  sample_size: 250
+  sample_size: full
   seed: 42
   generation_overrides:
     vote_weighting: exp
